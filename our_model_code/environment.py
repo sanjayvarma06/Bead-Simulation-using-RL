@@ -1,9 +1,14 @@
 from __future__ import annotations
 
+import math
 import cv2
 import numpy as np
 from typing import Optional, Tuple
 from pathlib import Path
+
+
+class PathExtractionError(RuntimeError):
+    """Raised in strict mode when an image cannot be turned into a reference path."""
 
 
 class BeadEnvironment:
@@ -12,6 +17,9 @@ class BeadEnvironment:
     BEAD_R    = 0.15
     BOUNDARY  = ARENA - BEAD_R
     MAX_STEPS = 3500
+    # The step cap grows with path length so that a bead moving at its damping-limited
+    # terminal speed (Eq. 2) can traverse the path with this safety factor.
+    STEP_CAP_MARGIN = 1.5
 
     # Physics
     ACCEL     = 10.0
@@ -40,9 +48,16 @@ class BeadEnvironment:
     R_PARTIAL80   = 15.0
     R_INCOMPLETE  = -5.0
 
-    def __init__(self, image_path: Optional[str | list | tuple] = None, seed: int = 42):
-        np.random.seed(seed)
+    def __init__(self, image_path: Optional[str | list | tuple] = None, seed: int = 42,
+                 strict: bool = False, paths: Optional[list] = None):
+        # Per-instance generator: the original code called np.random.seed(seed), which
+        # silently reset the global stream for every other consumer in the process.
+        self.rng = np.random.default_rng(seed)
         self.seed = seed
+        self.strict = strict
+        self.path_source = "none"
+        self.path_pool: Optional[list] = None
+        self.max_steps = self.MAX_STEPS
 
         self.pos_x = self.pos_y = 0.0
         self.vel_x = self.vel_y = 0.0
@@ -61,14 +76,46 @@ class BeadEnvironment:
         self.no_progress_steps = 0
 
         self.image_paths = []
-        if image_path:
+        if paths:
+            self.set_path_pool(paths)
+        elif image_path:
             self._init_image_paths(image_path)
             if self.image_paths:
-                self.load_contours(str(np.random.choice(self.image_paths)))
+                self.load_contours(str(self._pick(self.image_paths)))
+            elif self.strict:
+                raise PathExtractionError(f"no readable image found for {image_path!r}")
             else:
                 self._create_default_path()
         else:
             self._create_default_path()
+
+    def _pick(self, items):
+        return items[int(self.rng.integers(len(items)))]
+
+    def set_path(self, points: np.ndarray, breaks=()):
+        """Install a precomputed reference path (e.g. from the path cache)."""
+        self.path_points = np.asarray(points, dtype=float)
+        self.path_breaks = set(int(b) for b in breaks)
+        self.path_source = "provided"
+        self._update_step_cap()
+
+    def set_path_pool(self, paths: list):
+        """Sample one of these (points, breaks) pairs at every reset."""
+        if not paths:
+            raise ValueError("empty path pool")
+        self.path_pool = list(paths)
+        self.set_path(*self._pick(self.path_pool))
+
+    @classmethod
+    def terminal_speed(cls) -> float:
+        """Steady speed under a sustained unit action along one axis, Eq. (2)."""
+        k = cls.FRICTION * cls.DT
+        return cls.ACCEL * cls.DT * (1.0 - k) / k
+
+    def _update_step_cap(self):
+        length = self._path_length(self.path_points)
+        needed = self.STEP_CAP_MARGIN * length / (self.terminal_speed() * self.DT)
+        self.max_steps = int(max(self.MAX_STEPS, math.ceil(needed)))
 
     def _resolve_candidate(self, p: str | Path) -> Optional[Path]:
         p = Path(p)
@@ -111,25 +158,33 @@ class BeadEnvironment:
         t = np.linspace(0, 2*np.pi, 120, endpoint=False)
         self.path_points = np.stack([4.0*np.cos(t), 4.0*np.sin(t)], 1).astype(float)
         self.path_breaks = set()
+        self.path_source = "default_circle"
+        self._update_step_cap()
+
+    def _fail(self, msg: str):
+        # Strict mode turns the legacy silent fallback into an error so that an
+        # evaluation can never score the default circle instead of the requested image.
+        if self.strict:
+            raise PathExtractionError(msg)
+        print(f"Warning: {msg}; using default circle")
+        self._create_default_path()
 
     def load_contours(self, image_path: str):
         p = Path(image_path)
-        
+
         # Resolve directory input by selecting a random image file from within it
         if p.is_dir():
             valid_images = []
             for ext in ('*.jpg', '*.jpeg', '*.png', '*.JPG', '*.PNG'):
                 valid_images.extend(list(p.glob(ext)))
             if not valid_images:
-                print(f"Warning: No valid images found in {image_path}")
-                self._create_default_path()
+                self._fail(f"no valid images found in {image_path}")
                 return
-            image_path = str(np.random.choice(valid_images))
+            image_path = str(self._pick(sorted(valid_images)))
 
         img = cv2.imread(image_path)
         if img is None:
-            print(f"Warning: cannot load {image_path}")
-            self._create_default_path()
+            self._fail(f"cannot load {image_path}")
             return
 
         img  = self._resize_img(img)
@@ -141,13 +196,13 @@ class BeadEnvironment:
         if not paths:
             paths = self._extract_contour_paths(fg)
         if not paths:
-            self._create_default_path(); return
+            self._fail(f"no stroke or contour extracted from {image_path}"); return
 
         infos = [(self._path_length(self._to_arena(p,w,h)), self._to_arena(p,w,h))
                  for p in paths]
         infos = [(l,p) for l,p in infos if l >= 0.1]
         if not infos:
-            self._create_default_path(); return
+            self._fail(f"all extracted components of {image_path} are shorter than 0.1 m"); return
 
         infos.sort(key=lambda x: x[0], reverse=True)
         total_len = sum(l for l,_ in infos)
@@ -160,6 +215,8 @@ class BeadEnvironment:
             resampled.append(rp)
 
         self.path_points = np.vstack(resampled).astype(float)
+        self.path_source = str(image_path)
+        self._update_step_cap()
 
     @staticmethod
     def _resize_img(img, max_dim=1200):
@@ -263,13 +320,17 @@ class BeadEnvironment:
         seg=np.where(cum[idx+1]-cum[idx]>0,(ts-cum[idx])/(cum[idx+1]-cum[idx]+1e-12),0)
         return pts[idx]+seg[:,None]*(pts[idx+1]-pts[idx])
 
-    def reset(self) -> Tuple[np.ndarray, dict]:
-        if len(self.image_paths) > 1:
-            self.load_contours(str(np.random.choice(self.image_paths)))
+    def reset(self, seed: Optional[int] = None) -> Tuple[np.ndarray, dict]:
+        if seed is not None:
+            self.rng = np.random.default_rng(seed)
+        if self.path_pool is not None and len(self.path_pool) > 1:
+            self.set_path(*self._pick(self.path_pool))
+        elif len(self.image_paths) > 1:
+            self.load_contours(str(self._pick(self.image_paths)))
 
         if len(self.path_points) > 0:
-            self.pos_x = float(self.path_points[0,0]) + np.random.uniform(-0.05,0.05)
-            self.pos_y = float(self.path_points[0,1]) + np.random.uniform(-0.05,0.05)
+            self.pos_x = float(self.path_points[0,0]) + self.rng.uniform(-0.05,0.05)
+            self.pos_y = float(self.path_points[0,1]) + self.rng.uniform(-0.05,0.05)
         else:
             self.pos_x = self.pos_y = 0.0
 
@@ -337,7 +398,7 @@ class BeadEnvironment:
         strict_coverage = len(self.strict_covered_points) / max(1, len(self.path_points))
         terminated = bool(coverage >= 0.99 and self.step_count > 100)
         stalled = self.no_progress_steps >= 400
-        truncated = bool((self.step_count >= self.MAX_STEPS or stalled) and not terminated)
+        truncated = bool((self.step_count >= self.max_steps or stalled) and not terminated)
 
         if terminated:
             ep_r = self.R_COMPLETION
@@ -368,6 +429,7 @@ class BeadEnvironment:
             "reward_components": components,
             "success": bool(coverage >= 0.80),
             "stalled": bool(stalled),
+            "hit_boundary": bool(self.hit_boundary),
             "no_progress_steps": int(self.no_progress_steps),
         }
         return self._observe(), float(reward), terminated, truncated, info

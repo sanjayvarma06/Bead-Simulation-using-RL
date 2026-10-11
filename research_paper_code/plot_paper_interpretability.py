@@ -6,6 +6,7 @@ Replicates Figures 6, 7, and 8 of:
 """
 
 from __future__ import annotations
+from typing import Optional
 import os
 import sys
 import argparse

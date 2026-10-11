@@ -1,0 +1,25 @@
+{
+ "n_episodes": 2940,
+ "controllers": [
+  "bead_dagger",
+  "bead_dagger_ppo",
+  "bead_ppo",
+  "bead_published",
+  "expert",
+  "pp_adaptive_original",
+  "pp_adaptive_tuned",
+  "pp_adaptive_tuned_matched",
+  "pp_fixed_original",
+  "pp_fixed_tuned",
+  "pp_fixed_tuned_matched",
+  "rlpp_joint",
+  "rlpp_joint_matched",
+  "rlpp_ld_only",
+  "rlpp_published"
+ ],
+ "refs_per_family": {
+  "circuit": 8,
+  "closed": 50,
+  "curve": 50
+ }
+}

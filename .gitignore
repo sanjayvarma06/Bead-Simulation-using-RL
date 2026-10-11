@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# LaTeX build output (compile paper/revised/main.tex; the released PDF is paper/Revised_Paper_Bead_Tracing.pdf)
+paper/revised/*.log
+paper/revised/*.aux
+paper/revised/*.out
+paper/revised/main.pdf
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/

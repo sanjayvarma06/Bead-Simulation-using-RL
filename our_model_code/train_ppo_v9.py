@@ -1,7 +1,16 @@
 """
-PPO Training Pipeline for Bead Tracing & Autonomous Track Trajectory Following
-Uses Proximal Policy Optimization (PPO) with Enhanced Gaussian Precision Centering Reward
-and Multi-Track Aggregation (Hockenheim, Montreal, Yas Marina, path1) to achieve >95% precision.
+LEGACY trainer that produced results/models/PPO_BTP_MODEL.zip (the published "Bead-PPO").
+
+Despite the file name, this script does NOT run PPO: `model.learn()` is never called. The actor
+of an SB3 PPO network is fitted by MSE regression onto the geometric expert (behaviour cloning)
+and then refined by DAgger. The critic and log_std are never trained and the environment reward
+is never used. It also trains and selects on the evaluation circuits.
+
+Kept for provenance. The corrected, split-aware pipeline (DAgger, genuine PPO, DAgger->PPO) is
+experiments/train_bead.py.
+
+Fixed here (2026-10-11): the best checkpoint used to be overwritten by the final model after the
+loop, and the save rule (`min improves OR mean > 0.96`) did not match Algorithm 1.
 """
 from __future__ import annotations
 import sys
@@ -279,7 +288,7 @@ def train_ppo_multi_track(
         for r in track_scores:
             print(f"    -> {r['track']:22s}: Geom@0.10 = {r['geom010']:.2%} | Geom@0.05 = {r['geom005']:.2%} | RMSE = {r['rmse']:.4f}m | Seq = {r['sequential']:.2%}")
 
-        if min_geom > best_min_precision or mean_geom > 0.96:
+        if min_geom > best_min_precision:   # Algorithm 1: checkpoint if the minimum improves
             best_min_precision = min_geom
             Path(save_path).parent.mkdir(parents=True, exist_ok=True)
             model.save(save_path)
@@ -289,9 +298,11 @@ def train_ppo_multi_track(
             print(f"\n[***] TARGET ACHIEVED: All tracks reached >= 95.0% precision! Finishing training.")
             break
 
-    Path(save_path).parent.mkdir(parents=True, exist_ok=True)
-    model.save(save_path)
-    print(f"\n[+] PPO Training Complete. Best model saved to: {save_path}")
+    # The best checkpoint stays at save_path; the last round is stored separately
+    # (previously it overwrote the best checkpoint here).
+    last_path = str(Path(save_path).with_name(Path(save_path).stem + "_last.zip"))
+    model.save(last_path)
+    print(f"\n[+] Training complete. Best checkpoint: {save_path} | last round: {last_path}")
     env.close()
 
 

@@ -1,105 +1,81 @@
-<<<<<<< HEAD
-# Autonomous Racing & Bead Tracing Benchmark Repository
+# Direct-Actuation Bead Tracing versus RL-Tuned Pure Pursuit
 
-This repository contains clean, modular implementations of **Our High-Precision PPO Trajectory Tracing Model**, the **Research Paper Baseline**, **Datasets**, and **Results**.
+Image → ordered reference path → 2-D point-mass ("bead") simulation → direct-action policy,
+compared against Pure Pursuit (PP) and RL-tuned PP [Elgouhary & El-Wakeel, arXiv:2602.18386]
+on held-out F1TENTH circuits and synthetic contours.
 
----
+**Status (2026-10-11):** the code, data split, training runs, test evaluation and revised paper in
+this repository were produced by an audit-and-correction pass. Start with
+`paper/Revised_Paper_Bead_Tracing.pdf`, then `docs/REPORT.md` and `docs/VERIFICATION.md`. Material
+from the earlier version (original PDF, its tables/figures/videos) is in `archive/original_version/`
+for provenance only: its "Bead-PPO" model was **not** PPO-trained (expert regression + DAgger) and
+was trained on its own evaluation circuits.
 
-## 📁 Repository Directory Structure
-
+## Repository layout
 ```
-├── our_model_code/               # Our High-Precision PPO Multi-Map Model Pipeline
-│   ├── environment.py            # Core physics, Gaussian centering reward & contour extraction
-│   ├── bead_gym_env.py           # Gymnasium wrapper with multi-track support
-│   ├── train_ppo_v9.py           # Multi-track PPO policy training pipeline
-│   ├── evaluate_ppo_all_maps.py  # 5-episode benchmark evaluator across all 3 tracks
-│   ├── visualize_all_maps.py     # Side-by-side trajectory comparison figure generator
-│   ├── render_ppo_video.py       # High-resolution MP4 video renderer with HUD telemetry
-│   ├── run_complete_pipeline.py  # Automated end-to-end PPO runner
-│   ├── simulate_trajectory.py    # Interactive simulator & animated GIF generator
-│   └── geometry_utils.py         # Point-to-polyline distance metrics
-│
-├── research_paper_code/          # Pure Pursuit & PPO RL tuning (Elgouhary & El-Wakeel, 2026)
-│   ├── pure_pursuit.py           # Geometric Pure Pursuit, Curvature & Friction Profiler
-│   ├── rl_pure_pursuit_env.py    # Gymnasium environment with 4 controller modes
-│   ├── train_rl_pure_pursuit.py  # PPO training pipeline
-│   ├── benchmark_paper_controllers.py # Benchmark suite replicating Tables II, III, IV
-│   ├── evaluate_lap_times.py     # Real-car lap times (vmax=6m/s) evaluator
-│   ├── plot_paper_interpretability.py # Interpretability telemetry generator
-│   ├── render_rl_pp_video.py     # MP4 video generator
-│   └── visualize_paper_tracks.py # Zero-shot track generalization visualizer
-│
-├── datasets/                     # Reference tracks, test images, and dataset generators
-│   ├── research_paper_tracks/    # F1TENTH Hockenheim, Montreal, YasMarina centerlines & maps
-│   ├── closed_shapes_dataset/    # Synthetic closed loop shapes
-│   ├── curve_dataset/            # Synthetic open/closed curve tracks
-│   ├── test_images/              # Racetrack PNGs, path1.jpeg, shapes
-│   └── dataset_generators/       # Dataset generators
-│
-├── results/                      # Checkpoints, logs, figures, and video animations
-│   ├── models/                   # PPO_BTP_MODEL.zip, RL_PP_JOINT_MODEL.zip
-│   ├── metrics_and_logs/         # CSV evaluations & JSON summary files
-│   ├── plots/                    # PNG telemetry plots, multi-map overlays
-│   └── videos/                   # MP4 trace videos and GIF animations
-│
-├── requirements.txt              # Required dependencies
-└── README.md                     # Repository documentation
+paper/
+  Revised_Paper_Bead_Tracing.pdf   the revised paper (10 pages)
+  revised/                         LaTeX source: main.tex, tables/ (generated), figures/ (generated)
+  scripts/                         make_figures_v2.py, make_tables_v2.py (built from raw records)
+docs/                              01_PHASE1_AUDIT, 02_PHASE2_PLAN, REPORT, VERIFICATION
+our_model_code/                    bead environment, Gym wrapper, metrics, geometry; legacy bead scripts
+research_paper_code/               Pure Pursuit, RL-PP environment; legacy RL-PP scripts
+experiments/                       corrected pipeline: prepare_data, tune_pp, train_bead, train_rlpp,
+                                   evaluate, analyze, verify_results, ppo_diagnostic, run_queue
+tests/                             45 automated tests
+datasets/
+  f1tenth_circuits/                23 public centerlines (commit b95c4ef) + rasterised images
+  closed_shapes_dataset/, curve_dataset/   synthetic images (700/150/150 each)
+  path_cache/                      extracted reference paths used by every experiment
+  split_manifest.json              train/val/test assignment of all 493 references, with reasons
+  research_paper_tracks/, test_images/, dataset_generators/   inputs of the original version
+runs/                              training outputs per run: config, logs, checkpoints (best.zip used)
+  queues/, logs/                   exact launch commands, stdout logs, exit codes
+results/
+  final/                           episodes.csv (2,940 test episodes), traj/ (raw trajectories),
+                                   tables/, verification/, controllers.json
+  models/                          checkpoints of the original version (re-evaluated in the paper)
+archive/original_version/          superseded paper, data, figures, plots, videos and metrics
 ```
 
----
+## Reproduce
+```bash
+pip install -r requirements.txt
+python -m pytest tests -q                                   # 45 tests
 
-## 🚀 Quick Start & Execution Commands
+python experiments/prepare_data.py                          # rasterise, extract, split manifest
+python experiments/expert_trainval_probe.py                 # expert on train/val -> v_match
+python experiments/tune_pp.py 6                             # PP grid search (training refs only)
 
-### 1. Research Paper Code (Elgouhary & El-Wakeel, 2026)
+# bead policies (seeds 0 and 1 were run)
+python experiments/train_bead.py --mode dagger --seed 0 --workers 4
+python experiments/train_bead.py --mode ppo --seed 0 --timesteps 400000 --eval_every 100000 --log_std_init=-0.5
+python experiments/train_bead.py --mode dagger_ppo --seed 0 --timesteps 400000 --eval_every 100000 --critic_warmup 50000 --log_std_init=-0.5
 
-#### Evaluate 5 Episodes & Compare Real-Car Lap Times ($v_{\max} = 6\,\text{m/s}$):
-```powershell
-python research_paper_code/evaluate_lap_times.py --image datasets/test_images/path1.jpeg --model results/models/RL_PP_JOINT_MODEL.zip --episodes 5 --vmax 6.0
+# RL-PP baseline (joint, Ld-only, matched speed)
+python experiments/train_rlpp.py --mode joint --seed 0 --timesteps 100000 --eval_every 25000
+python experiments/train_rlpp.py --mode ld_only --seed 0 --timesteps 100000 --eval_every 25000
+python experiments/train_rlpp.py --mode joint --matched --seed 0 --timesteps 100000 --eval_every 25000
+
+python experiments/evaluate.py --workers 18                 # single test-set evaluation
+python experiments/analyze.py                               # tables + pre-declared statistics
+python paper/scripts/make_figures_v2.py
+python paper/scripts/make_tables_v2.py                      # LaTeX tables + number macros
 ```
+The exact queue files used are in `runs/queues/`; per-run exit codes and wall times in
+`runs/logs/queue_status.jsonl`. The DAgger runs were stopped after 6 of 8 rounds (see
+`runs/bead/dagger/seed*/NOTE.txt`). Compile the paper with pdfLaTeX (e.g. Overleaf) from
+`paper/revised/`. To check the results: `python experiments/verify_results.py`.
 
-#### Run Full Benchmark (Fixed PP vs Adaptive PP vs RL-PP Ld-only vs RL-PP Joint):
-```powershell
-python research_paper_code/benchmark_paper_controllers.py --image datasets/test_images/path1.jpeg --model results/models/RL_PP_JOINT_MODEL.zip --episodes 5
-```
+## Main test-set result (8 held-out circuits; full tables in the paper)
+| Controller | RMSE [cm] | Lap time [s] |
+|---|---|---|
+| Geometric expert (non-learned, bead) | 1.07 | 42.5 |
+| Bead-DAgger (2 seeds) | 1.07 | 42.4 |
+| Bead-DAgger→PPO (2 seeds) | 3.31 | 40.8 |
+| Bead-PPO from scratch (2 seeds, 4e5 steps) | 7.40 | 50.0 |
+| Fixed PP, gains tuned on training circuits | 0.90 | 18.2 |
+| RL-PP joint, retrained (2 seeds) | 1.03 | 18.2 |
+| Fixed PP tuned, speed matched to bead | 0.77 | 41.6 |
 
-#### Generate Multi-Controller Interpretability Plots (Figures 6, 7, 8):
-```powershell
-python research_paper_code/plot_paper_interpretability.py --image datasets/test_images/hockenheim_track.png --model results/models/RL_PP_JOINT_MODEL.zip
-```
-
-#### Render Full Dashboard MP4 Video:
-```powershell
-python research_paper_code/render_rl_pp_video.py --image datasets/test_images/montreal_track.png --model results/models/RL_PP_JOINT_MODEL.zip --out results/videos/montreal_trace.mp4
-```
-
----
-
-### 2. Our Model Code (BTP Bead Tracing SAC / DAgger)
-
-#### Run Complete Pipeline:
-```powershell
-python our_model_code/run_complete_pipeline.py --image datasets/test_images/path1.jpeg --base results/models/FINAL_BTP_MODEL_95pct.zip
-```
-
-#### Evaluate Trained BTP Model:
-```powershell
-python our_model_code/evaluate_complete_v8.py --image datasets/test_images/path1.jpeg --model results/models/COMPLETE_BTP_MODEL.zip --episodes 5
-```
-
----
-
-## 📊 Summary of Benchmark Results
-
-### Lap Time Comparison ($v_{\max} = 6.0\,\text{m/s}$)
-
-| Controller | Mean (Current) | Mean (Paper) | Std (Current) | Std (Paper) | Min (Current) | Min (Paper) | Max (Current) | Max (Paper) |
-| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **RL–PP (joint $L_d, g$)** | **8.85 s** | **9.46 s** | **0.01 s** | **0.23 s** | **8.83 s** | **9.09 s** | **8.86 s** | **9.82 s** |
-| **RL–PP ($L_d$ only)** | 8.83 s | 9.61 s | 0.01 s | 0.58 s | 8.82 s | 8.94 s | 8.85 s | 10.51 s |
-| **Adaptive PP (linear $v \to L_d$)** | 8.58 s | 9.72 s | 0.01 s | 0.27 s | 8.56 s | 9.34 s | 8.59 s | 10.40 s |
-| **Fixed PP ($L_d$ fixed)** | 8.88 s | 9.85 s | 0.03 s | 0.43 s | 8.85 s | 9.32 s | 8.93 s | 10.55 s |
-| **MPC raceline tracker** | *N/A* | **15.42 s** | *N/A* | **0.47 s** | *N/A* | **14.48 s** | *N/A* | **16.10 s** |
-=======
-# Bead-Simluation-using-RL-
-Direct-Actuation Bead Tracing versus RL-Tuned Pure Pursuit for Contour and Racetrack Following
->>>>>>> 465f393cdba0058b79f8c468ef8f48998a32e276
+No pre-declared comparison is significant after Holm correction (n = 8 circuits, 2 seeds).

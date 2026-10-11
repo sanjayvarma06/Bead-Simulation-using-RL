@@ -1,0 +1,263 @@
+[
+ {
+  "name": "expert",
+  "track": "A+B",
+  "plant": "bead",
+  "kind": "bead",
+  "model": "expert",
+  "seed": null,
+  "learned": false
+ },
+ {
+  "name": "bead_dagger",
+  "track": "A+B",
+  "plant": "bead",
+  "kind": "bead",
+  "seed": 0,
+  "learned": true,
+  "model": "runs/bead/dagger/seed0/best.zip"
+ },
+ {
+  "name": "bead_dagger",
+  "track": "A+B",
+  "plant": "bead",
+  "kind": "bead",
+  "seed": 1,
+  "learned": true,
+  "model": "runs/bead/dagger/seed1/best.zip"
+ },
+ {
+  "name": "bead_ppo",
+  "track": "A+B",
+  "plant": "bead",
+  "kind": "bead",
+  "seed": 0,
+  "learned": true,
+  "model": "runs/bead/ppo/seed0/best.zip"
+ },
+ {
+  "name": "bead_ppo",
+  "track": "A+B",
+  "plant": "bead",
+  "kind": "bead",
+  "seed": 1,
+  "learned": true,
+  "model": "runs/bead/ppo/seed1/best.zip"
+ },
+ {
+  "name": "bead_dagger_ppo",
+  "track": "A+B",
+  "plant": "bead",
+  "kind": "bead",
+  "seed": 0,
+  "learned": true,
+  "model": "runs/bead/dagger_ppo/seed0/best.zip"
+ },
+ {
+  "name": "bead_dagger_ppo",
+  "track": "A+B",
+  "plant": "bead",
+  "kind": "bead",
+  "seed": 1,
+  "learned": true,
+  "model": "runs/bead/dagger_ppo/seed1/best.zip"
+ },
+ {
+  "name": "bead_published",
+  "track": "A+B",
+  "plant": "bead",
+  "kind": "bead",
+  "seed": null,
+  "learned": true,
+  "model": "results/models/PPO_BTP_MODEL.zip",
+  "note": "original checkpoint; trained and selected on Hockenheim/Montreal/YasMarina (test circuits)"
+ },
+ {
+  "name": "pp_fixed_original",
+  "track": "A",
+  "plant": "bicycle",
+  "kind": "pp",
+  "seed": null,
+  "learned": false,
+  "model": null,
+  "kw": {
+   "mode": "fixed",
+   "fixed_L": 0.55,
+   "fixed_g": 1.05
+  }
+ },
+ {
+  "name": "pp_adaptive_original",
+  "track": "A",
+  "plant": "bicycle",
+  "kind": "pp",
+  "seed": null,
+  "learned": false,
+  "model": null,
+  "kw": {
+   "mode": "adaptive",
+   "adapt_a": 0.35,
+   "adapt_b": 0.25,
+   "fixed_g": 1.05
+  }
+ },
+ {
+  "name": "pp_fixed_tuned",
+  "track": "A",
+  "plant": "bicycle",
+  "kind": "pp",
+  "seed": null,
+  "learned": false,
+  "model": null,
+  "kw": {
+   "mode": "fixed",
+   "v_cap": null,
+   "fixed_L": 0.25,
+   "fixed_g": 0.9
+  }
+ },
+ {
+  "name": "pp_adaptive_tuned",
+  "track": "A",
+  "plant": "bicycle",
+  "kind": "pp",
+  "seed": null,
+  "learned": false,
+  "model": null,
+  "kw": {
+   "mode": "adaptive",
+   "v_cap": null,
+   "adapt_a": 0.1,
+   "adapt_b": 0.0,
+   "fixed_g": 1.05
+  }
+ },
+ {
+  "name": "pp_fixed_tuned_matched",
+  "track": "B",
+  "plant": "bicycle",
+  "kind": "pp",
+  "seed": null,
+  "learned": false,
+  "model": null,
+  "kw": {
+   "mode": "fixed",
+   "v_cap": 1.256,
+   "fixed_L": 0.25,
+   "fixed_g": 1.0
+  }
+ },
+ {
+  "name": "pp_adaptive_tuned_matched",
+  "track": "B",
+  "plant": "bicycle",
+  "kind": "pp",
+  "seed": null,
+  "learned": false,
+  "model": null,
+  "kw": {
+   "mode": "adaptive",
+   "v_cap": 1.256,
+   "adapt_a": 0.1,
+   "adapt_b": 0.0,
+   "fixed_g": 1.05
+  }
+ },
+ {
+  "name": "rlpp_joint",
+  "track": "A",
+  "plant": "bicycle",
+  "kind": "pp",
+  "seed": 0,
+  "learned": true,
+  "model": "runs/rlpp/joint/seed0/best.zip",
+  "kw": {
+   "mode": "joint",
+   "v_cap": null,
+   "vecnorm": "runs/rlpp/joint/seed0/best_vecnorm.pkl"
+  }
+ },
+ {
+  "name": "rlpp_joint",
+  "track": "A",
+  "plant": "bicycle",
+  "kind": "pp",
+  "seed": 1,
+  "learned": true,
+  "model": "runs/rlpp/joint/seed1/best.zip",
+  "kw": {
+   "mode": "joint",
+   "v_cap": null,
+   "vecnorm": "runs/rlpp/joint/seed1/best_vecnorm.pkl"
+  }
+ },
+ {
+  "name": "rlpp_ld_only",
+  "track": "A",
+  "plant": "bicycle",
+  "kind": "pp",
+  "seed": 0,
+  "learned": true,
+  "model": "runs/rlpp/ld_only/seed0/best.zip",
+  "kw": {
+   "mode": "ld_only",
+   "v_cap": null,
+   "vecnorm": "runs/rlpp/ld_only/seed0/best_vecnorm.pkl"
+  }
+ },
+ {
+  "name": "rlpp_ld_only",
+  "track": "A",
+  "plant": "bicycle",
+  "kind": "pp",
+  "seed": 1,
+  "learned": true,
+  "model": "runs/rlpp/ld_only/seed1/best.zip",
+  "kw": {
+   "mode": "ld_only",
+   "v_cap": null,
+   "vecnorm": "runs/rlpp/ld_only/seed1/best_vecnorm.pkl"
+  }
+ },
+ {
+  "name": "rlpp_joint_matched",
+  "track": "B",
+  "plant": "bicycle",
+  "kind": "pp",
+  "seed": 0,
+  "learned": true,
+  "model": "runs/rlpp/joint_matched/seed0/best.zip",
+  "kw": {
+   "mode": "joint",
+   "v_cap": 1.256,
+   "vecnorm": "runs/rlpp/joint_matched/seed0/best_vecnorm.pkl"
+  }
+ },
+ {
+  "name": "rlpp_joint_matched",
+  "track": "B",
+  "plant": "bicycle",
+  "kind": "pp",
+  "seed": 1,
+  "learned": true,
+  "model": "runs/rlpp/joint_matched/seed1/best.zip",
+  "kw": {
+   "mode": "joint",
+   "v_cap": 1.256,
+   "vecnorm": "runs/rlpp/joint_matched/seed1/best_vecnorm.pkl"
+  }
+ },
+ {
+  "name": "rlpp_published",
+  "track": "A",
+  "plant": "bicycle",
+  "kind": "pp",
+  "seed": null,
+  "learned": true,
+  "model": "results/models/RL_PP_JOINT_MODEL.zip",
+  "kw": {
+   "mode": "joint"
+  },
+  "note": "original checkpoint (trained on path1.jpeg); evaluated on raw observations as in the paper because its VecNormalize statistics were never saved"
+ }
+]

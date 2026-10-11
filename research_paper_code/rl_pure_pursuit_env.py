@@ -6,6 +6,7 @@ Implements the hybrid RL-PP environment according to:
 """
 
 from __future__ import annotations
+from typing import Any, Dict, Optional, Tuple
 import os
 import cv2
 import numpy as np
@@ -41,13 +42,21 @@ class RLPurePursuitEnv(gym.Env):
         mode: str = "joint",  # "joint" (Ld, g), "ld_only" (Ld only, fixed g), "fixed", "adaptive"
         fixed_L: float = 0.55,
         fixed_g: float = 1.05,
+        paths: Optional[list] = None,
+        v_cap: Optional[float] = None,
+        strict: bool = False,
+        adapt_a: float = 0.35,
+        adapt_b: float = 0.25,
     ):
         super().__init__()
         self.seed_val = seed
-        np.random.seed(seed)
         self.mode = mode
         self.fixed_L = fixed_L
         self.fixed_g = fixed_g
+        # Optional ceiling on the reference speed profile, used for the matched-speed
+        # (controlled) comparison against the damping-limited bead.
+        self.v_cap = v_cap
+        self.adapt_a, self.adapt_b = adapt_a, adapt_b
 
         # Track list handling for diverse training across all paper datasets
         if isinstance(image_path, (list, tuple)):
@@ -61,7 +70,7 @@ class RLPurePursuitEnv(gym.Env):
             init_img = image_path
 
         # Core arena environment
-        self._env = BeadEnvironment(image_path=init_img, seed=seed)
+        self._env = BeadEnvironment(image_path=init_img, seed=seed, strict=strict, paths=paths)
         self.image_path = init_img
 
         # Pure Pursuit controller instance
@@ -134,20 +143,24 @@ class RLPurePursuitEnv(gym.Env):
             self.path_curvatures = np.zeros(max(1, N), dtype=np.float32)
             self.speed_profile = np.full(max(1, N), 3.5, dtype=np.float32)
             self.is_closed = False
+        if self.v_cap is not None:
+            self.speed_profile = np.minimum(self.speed_profile, self.v_cap).astype(np.float32)
 
     def reset(self, *, seed: Optional[int] = None, options=None) -> Tuple[np.ndarray, dict]:
         super().reset(seed=seed)
         if seed is not None:
             self.seed_val = seed
-            np.random.seed(seed)
+            self._env.rng = np.random.default_rng(seed)
 
         if len(self.track_pool) > 1:
-            chosen_track = str(np.random.choice(self.track_pool))
+            chosen_track = str(self._env._pick(self.track_pool))
             self.image_path = chosen_track
             self._env.load_contours(chosen_track)
 
         obs_core, _ = self._env.reset()
         self._refresh_path_geometry()
+        # Same path-length-dependent cap as the bead (was a fixed 2000 steps).
+        self.max_steps = self._env.max_steps
 
         pts = self._env.path_points
         if len(pts) > 1:
@@ -158,7 +171,7 @@ class RLPurePursuitEnv(gym.Env):
         else:
             self.heading = 0.0
 
-        self.speed = 2.5
+        self.speed = 2.5 if self.v_cap is None else min(2.5, self.v_cap)
         self.current_idx = 0
         self.prev_idx = 0
         self.step_count = 0
@@ -197,7 +210,7 @@ class RLPurePursuitEnv(gym.Env):
             L_d, g = self.controller.update_parameters(raw_L, self.fixed_g)
         elif self.mode == "adaptive":
             # Linear v -> L_d baseline from paper Table II
-            raw_L = float(np.clip(0.35 + 0.25 * self.speed, self.controller.L_min, self.controller.L_max))
+            raw_L = float(np.clip(self.adapt_a + self.adapt_b * self.speed, self.controller.L_min, self.controller.L_max))
             L_d, g = self.controller.update_parameters(raw_L, self.fixed_g)
         else:  # fixed
             L_d, g = self.controller.update_parameters(self.fixed_L, self.fixed_g)
@@ -350,6 +363,7 @@ class RLPurePursuitEnv(gym.Env):
         info["lookahead_distance"] = L_d
         info["steering_gain"] = g
         info["steering_angle"] = delta
+        info["hit_boundary"] = hit_boundary
 
         return obs, float(reward), terminated, truncated, info
 

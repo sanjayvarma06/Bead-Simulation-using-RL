@@ -9,6 +9,7 @@ Across evaluated images/shapes.
 """
 
 from __future__ import annotations
+from typing import Optional
 import os
 import csv
 import json
@@ -167,7 +168,8 @@ def main():
         print(f"\n[Saved] Detailed benchmark CSV -> {args.csv}")
 
     # Also save benchmark summary JSON
-    bench_json = "benchmark_summary.json"
+    # Written next to the CSV (previously into the current directory, overwriting earlier records).
+    bench_json = str(Path(args.csv).with_name("benchmark_summary.json"))
     Path(bench_json).write_text(json.dumps(summary_table, indent=2))
     print(f"[Saved] Benchmark summary JSON -> {bench_json}")
 

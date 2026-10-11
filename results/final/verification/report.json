@@ -1,0 +1,439 @@
+{
+ "A_accounting": {
+  "references_in_manifest": 493,
+  "extracted_ok": 493,
+  "references_by_split_family": {
+   "test": {
+    "f1tenth_circuit": 8,
+    "closed_shape": 150,
+    "open_curve": 150
+   },
+   "train": {
+    "f1tenth_circuit": 11,
+    "closed_shape": 60,
+    "open_curve": 60
+   },
+   "val": {
+    "f1tenth_circuit": 4,
+    "closed_shape": 25,
+    "open_curve": 25
+   }
+  },
+  "controller_instances": 21,
+  "episodes_per_instance": [
+   140
+  ],
+  "test_circuits": 8,
+  "eval_seeds_per_circuit": 5,
+  "test_synthetic_evaluated": 100,
+  "episodes_total": 2940,
+  "formula": "21 instances x (8 circuits x 5 seeds + 100 contours x 1) = 2940"
+ },
+ "B_C_records": {
+  "rows_checked": 2940,
+  "missing_trajectories": [],
+  "max_abs_diff_recomputed_vs_stored": {
+   "geom005": 1.1102230246251565e-16,
+   "geom010": 1.1102230246251565e-16,
+   "geom015": 1.1102230246251565e-16,
+   "rmse": 2.1529252349633543e-08,
+   "mean_err": 6.129274817486159e-08,
+   "p95": 4.5619295450938235e-07,
+   "max_err": 4.7557970717093667e-07,
+   "off_path_frac": 0.00020695364238410008,
+   "sequential": 1.1102230246251565e-16,
+   "ordered_cov": 1.1102230246251565e-16,
+   "steps": 0.0,
+   "time_s": 7.105427357601002e-15,
+   "distance_m": 9.919151509052426e-07,
+   "mean_speed": 1.1003624855732141e-07,
+   "peak_speed": 7.00983296171298e-05,
+   "rms_accel": 7.934388574737383e-05
+  },
+  "max_abs_diff_independent_code_vs_stored": {
+   "rmse": 2.1529252349633543e-08,
+   "geom010": 1.1102230246251565e-16
+  }
+ },
+ "E_tables_identical": {
+  "numbers.tex": true,
+  "tab_circuits.tex": true,
+  "tab_comparisons.tex": true,
+  "tab_paper_circuits.tex": true,
+  "tab_shapes.tex": true
+ },
+ "F_inventory": {
+  "runs": {
+   "bead/dagger/seed0": {
+    "dir": "runs/bead/dagger/seed0",
+    "best_ckpt_md5": "f39d5f209e8924ec3aa5f993914c9755",
+    "config": true,
+    "val_log_rows": 6,
+    "progress_rows": null,
+    "note": "Stopped after round 6 of 8 because of the 30-minute compute budget set by the user (2026-10-11). best.zip = best validation round (4). val_log.csv reconstructed from runs/logs/dagger_s0.log."
+   },
+   "bead/dagger/seed1": {
+    "dir": "runs/bead/dagger/seed1",
+    "best_ckpt_md5": "f04864619412417b9ca5bbc13daac493",
+    "config": true,
+    "val_log_rows": 6,
+    "progress_rows": null,
+    "note": "Stopped after round 6 of 8 because of the 30-minute compute budget set by the user (2026-10-11). best.zip = best validation round (6). val_log.csv reconstructed from runs/logs/dagger_s1.log."
+   },
+   "bead/ppo/seed0": {
+    "dir": "runs/bead/ppo/seed0",
+    "best_ckpt_md5": "2c9dcde34824d54e8a8822d2edda7a56",
+    "config": true,
+    "val_log_rows": 5,
+    "progress_rows": 49,
+    "note": null,
+    "final_timesteps": 401408
+   },
+   "bead/ppo/seed1": {
+    "dir": "runs/bead/ppo/seed1",
+    "best_ckpt_md5": "b1470f9310ccd8f38709dae0dc72b7a5",
+    "config": true,
+    "val_log_rows": 5,
+    "progress_rows": 49,
+    "note": null,
+    "final_timesteps": 401408
+   },
+   "bead/dagger_ppo/seed0": {
+    "dir": "runs/bead/dagger_ppo/seed0",
+    "best_ckpt_md5": "9a8e7ed1b7b33a1cb99601885fb678b0",
+    "config": true,
+    "val_log_rows": 5,
+    "progress_rows": 49,
+    "note": null,
+    "final_timesteps": 401408
+   },
+   "bead/dagger_ppo/seed1": {
+    "dir": "runs/bead/dagger_ppo/seed1",
+    "best_ckpt_md5": "b8b9f8437fc889dfb0f9372c136428d8",
+    "config": true,
+    "val_log_rows": 5,
+    "progress_rows": 49,
+    "note": null,
+    "final_timesteps": 401408
+   },
+   "rlpp/joint/seed0": {
+    "dir": "runs/rlpp/joint/seed0",
+    "best_ckpt_md5": "ba3cd6915e45fdf490a8d5aed641e506",
+    "config": true,
+    "val_log_rows": 5,
+    "progress_rows": 49,
+    "note": null,
+    "final_timesteps": 100352
+   },
+   "rlpp/joint/seed1": {
+    "dir": "runs/rlpp/joint/seed1",
+    "best_ckpt_md5": "c93c44af95bd8e57055331ea2f5aab1d",
+    "config": true,
+    "val_log_rows": 5,
+    "progress_rows": 49,
+    "note": null,
+    "final_timesteps": 100352
+   },
+   "rlpp/ld_only/seed0": {
+    "dir": "runs/rlpp/ld_only/seed0",
+    "best_ckpt_md5": "06758f4a3fd5aef1bfaef244ad636edb",
+    "config": true,
+    "val_log_rows": 5,
+    "progress_rows": 49,
+    "note": null,
+    "final_timesteps": 100352
+   },
+   "rlpp/ld_only/seed1": {
+    "dir": "runs/rlpp/ld_only/seed1",
+    "best_ckpt_md5": "553fb21d4fbda0a093293d2f5e24db7a",
+    "config": true,
+    "val_log_rows": 5,
+    "progress_rows": 49,
+    "note": null,
+    "final_timesteps": 100352
+   },
+   "rlpp/joint_matched/seed0": {
+    "dir": "runs/rlpp/joint_matched/seed0",
+    "best_ckpt_md5": "f11c4cf139bf749b7c250e9a166a63af",
+    "config": true,
+    "val_log_rows": 5,
+    "progress_rows": 49,
+    "note": null,
+    "final_timesteps": 100352
+   },
+   "rlpp/joint_matched/seed1": {
+    "dir": "runs/rlpp/joint_matched/seed1",
+    "best_ckpt_md5": "c873c63592f22bb93c3bdfbeb17f7d1c",
+    "config": true,
+    "val_log_rows": 5,
+    "progress_rows": 49,
+    "note": null,
+    "final_timesteps": 100352
+   },
+   "published/PPO_BTP_MODEL.zip": {
+    "md5": "007c3bc238e82114599e88955f573ad4"
+   },
+   "published/RL_PP_JOINT_MODEL.zip": {
+    "md5": "5af890e9454caa3576c0299affaa8f08"
+   }
+  },
+  "queue_exit_codes": {
+   "rlpp_joint_s0": {
+    "name": "rlpp_joint_s0",
+    "cmd": "python experiments/train_rlpp.py --mode joint --seed 0 --timesteps 100000 --eval_every 25000 --workers 2",
+    "exit": 0,
+    "wall_s": 240.1
+   },
+   "rlpp_joint_s1": {
+    "name": "rlpp_joint_s1",
+    "cmd": "python experiments/train_rlpp.py --mode joint --seed 1 --timesteps 100000 --eval_every 25000 --workers 2",
+    "exit": 0,
+    "wall_s": 240.1
+   },
+   "rlpp_ld_s0": {
+    "name": "rlpp_ld_s0",
+    "cmd": "python experiments/train_rlpp.py --mode ld_only --seed 0 --timesteps 100000 --eval_every 25000 --workers 2",
+    "exit": 0,
+    "wall_s": 240.0
+   },
+   "dagger_ppo_s1": {
+    "name": "dagger_ppo_s1",
+    "cmd": "python experiments/train_bead.py --mode dagger_ppo --seed 1 --timesteps 400000 --eval_every 100000 --critic_warmup 50000 --log_std_init=-0.5 --workers 3",
+    "exit": 0,
+    "wall_s": 500.1
+   },
+   "dagger_ppo_s0": {
+    "name": "dagger_ppo_s0",
+    "cmd": "python experiments/train_bead.py --mode dagger_ppo --seed 0 --timesteps 400000 --eval_every 100000 --critic_warmup 50000 --log_std_init=-0.5 --workers 3",
+    "exit": 0,
+    "wall_s": 505.2
+   },
+   "ppo_s0": {
+    "name": "ppo_s0",
+    "cmd": "python experiments/train_bead.py --mode ppo --seed 0 --timesteps 400000 --eval_every 100000 --log_std_init=-0.5 --workers 3",
+    "exit": 0,
+    "wall_s": 545.2
+   },
+   "ppo_s1": {
+    "name": "ppo_s1",
+    "cmd": "python experiments/train_bead.py --mode ppo --seed 1 --timesteps 400000 --eval_every 100000 --log_std_init=-0.5 --workers 3",
+    "exit": 0,
+    "wall_s": 545.2
+   },
+   "rlpp_ld_s1": {
+    "name": "rlpp_ld_s1",
+    "cmd": "python experiments/train_rlpp.py --mode ld_only --seed 1 --timesteps 100000 --eval_every 25000 --workers 2",
+    "exit": 0,
+    "wall_s": 235.1
+   },
+   "rlpp_jm_s0": {
+    "name": "rlpp_jm_s0",
+    "cmd": "python experiments/train_rlpp.py --mode joint --matched --seed 0 --timesteps 100000 --eval_every 25000 --workers 2",
+    "exit": 0,
+    "wall_s": 330.1
+   },
+   "rlpp_jm_s1": {
+    "name": "rlpp_jm_s1",
+    "cmd": "python experiments/train_rlpp.py --mode joint --matched --seed 1 --timesteps 100000 --eval_every 25000 --workers 2",
+    "exit": 0,
+    "wall_s": 330.1
+   }
+  }
+ },
+ "G_ppo_diagnostics": {
+  "ppo/seed0": {
+   "updates": 49,
+   "updates_actor_frozen": 0,
+   "approx_kl_while_frozen_max": null,
+   "approx_kl_first_last": [
+    0.0032,
+    0.0055
+   ],
+   "clip_fraction_first_last": [
+    0.0338,
+    0.0664
+   ],
+   "explained_variance_first_last": [
+    0.0356,
+    0.8236
+   ],
+   "action_std_first_last": [
+    0.6016,
+    0.4849
+   ],
+   "train_ep_reward_first_last": [
+    -40.6656,
+    413.5407
+   ],
+   "train_ep_len_first_last": [
+    452.2143,
+    3189.97
+   ],
+   "train_ep_progress_first_last": [
+    0.0057,
+    0.9293
+   ]
+  },
+  "ppo/seed1": {
+   "updates": 49,
+   "updates_actor_frozen": 0,
+   "approx_kl_while_frozen_max": null,
+   "approx_kl_first_last": [
+    0.0044,
+    0.0082
+   ],
+   "clip_fraction_first_last": [
+    0.0429,
+    0.0744
+   ],
+   "explained_variance_first_last": [
+    0.0122,
+    0.7058
+   ],
+   "action_std_first_last": [
+    0.6032,
+    0.4494
+   ],
+   "train_ep_reward_first_last": [
+    -17.7029,
+    428.2367
+   ],
+   "train_ep_len_first_last": [
+    479.9286,
+    2868.66
+   ],
+   "train_ep_progress_first_last": [
+    0.0078,
+    0.9914
+   ]
+  },
+  "dagger_ppo/seed0": {
+   "updates": 49,
+   "updates_actor_frozen": 6,
+   "approx_kl_while_frozen_max": -6.7666406e-10,
+   "approx_kl_first_last": [
+    -0.0,
+    0.0157
+   ],
+   "clip_fraction_first_last": [
+    0.0,
+    0.1789
+   ],
+   "explained_variance_first_last": [
+    0.5094,
+    0.9235
+   ],
+   "action_std_first_last": [
+    0.6065,
+    0.4559
+   ],
+   "train_ep_reward_first_last": [
+    446.8893,
+    516.3307
+   ],
+   "train_ep_len_first_last": [
+    1135.6667,
+    2103.44
+   ],
+   "train_ep_progress_first_last": [
+    0.9914,
+    0.9914
+   ]
+  },
+  "dagger_ppo/seed1": {
+   "updates": 49,
+   "updates_actor_frozen": 6,
+   "approx_kl_while_frozen_max": -6.91216e-10,
+   "approx_kl_first_last": [
+    -0.0,
+    0.0162
+   ],
+   "clip_fraction_first_last": [
+    0.0,
+    0.1833
+   ],
+   "explained_variance_first_last": [
+    0.7625,
+    0.8925
+   ],
+   "action_std_first_last": [
+    0.6065,
+    0.4731
+   ],
+   "train_ep_reward_first_last": [
+    431.6918,
+    531.0544
+   ],
+   "train_ep_len_first_last": [
+    1089.0,
+    2184.57
+   ],
+   "train_ep_progress_first_last": [
+    0.9914,
+    0.9914
+   ]
+  }
+ },
+ "D_rerun": {
+  "expert/seedNone": {
+   "episodes": 40,
+   "same_length": true,
+   "max_abs_position_diff_m": 0.0
+  },
+  "bead_dagger/seed0": {
+   "episodes": 40,
+   "same_length": true,
+   "max_abs_position_diff_m": 0.0
+  },
+  "bead_dagger/seed1": {
+   "episodes": 40,
+   "same_length": true,
+   "max_abs_position_diff_m": 0.0
+  },
+  "bead_ppo/seed0": {
+   "episodes": 40,
+   "same_length": true,
+   "max_abs_position_diff_m": 0.0
+  },
+  "bead_ppo/seed1": {
+   "episodes": 40,
+   "same_length": true,
+   "max_abs_position_diff_m": 0.0
+  },
+  "bead_dagger_ppo/seed0": {
+   "episodes": 40,
+   "same_length": true,
+   "max_abs_position_diff_m": 0.0
+  },
+  "bead_dagger_ppo/seed1": {
+   "episodes": 40,
+   "same_length": true,
+   "max_abs_position_diff_m": 0.0
+  },
+  "bead_published/seedNone": {
+   "episodes": 40,
+   "same_length": true,
+   "max_abs_position_diff_m": 0.0
+  },
+  "pp_fixed_tuned/seedNone": {
+   "episodes": 40,
+   "same_length": true,
+   "max_abs_position_diff_m": 0.0
+  },
+  "pp_fixed_tuned_matched/seedNone": {
+   "episodes": 40,
+   "same_length": true,
+   "max_abs_position_diff_m": 0.0
+  },
+  "rlpp_joint/seed0": {
+   "episodes": 40,
+   "same_length": true,
+   "max_abs_position_diff_m": 0.0
+  },
+  "rlpp_joint/seed1": {
+   "episodes": 40,
+   "same_length": true,
+   "max_abs_position_diff_m": 0.0
+  }
+ }
+}

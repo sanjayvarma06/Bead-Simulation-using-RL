@@ -60,10 +60,13 @@ def episode(model, image, seed):
 
 def main():
     p = argparse.ArgumentParser()
-    p.add_argument("--model", default="COMPLETE_BTP_MODEL.zip")
+    # COMPLETE_BTP_MODEL.zip was overwritten by the RL-PP trainer (8-D observations), so it cannot
+    # drive the 16-D bead environment; default to the bead checkpoint that exists.
+    p.add_argument("--model", default="results/models/PPO_BTP_MODEL.zip")
     p.add_argument("--image", default="path1.jpeg")
     p.add_argument("--episodes", type=int, default=5)
     p.add_argument("--csv", default="results/metrics_and_logs/complete_model_evaluation.csv")
+    p.add_argument("--json", default="results/metrics_and_logs/complete_model_summary.json")
     a = p.parse_args()
     model = load_agent(a.model)
     rows = []
@@ -94,7 +97,7 @@ def main():
         w = csv.DictWriter(f, fieldnames=rows[0].keys())
         w.writeheader()
         w.writerows(rows)
-    summary_path = Path("results/metrics_and_logs/complete_model_summary.json")
+    summary_path = Path(a.json)
     summary_path.parent.mkdir(parents=True, exist_ok=True)
     summary_path.write_text(json.dumps({k: ms(k)[0] for k in rows[0]}, indent=2))
     print(f"CSV -> {a.csv}")

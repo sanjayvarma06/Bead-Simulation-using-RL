@@ -10,9 +10,10 @@ OBS_DIM = 16
 class BeadTraceEnv(gym.Env):
     metadata = {"render_modes": []}
 
-    def __init__(self, image_path: str | list | tuple | None = None, seed: int = 42):
+    def __init__(self, image_path: str | list | tuple | None = None, seed: int = 42,
+                 paths: list | None = None, strict: bool = False):
         super().__init__()
-        self._env = BeadEnvironment(image_path=image_path, seed=seed)
+        self._env = BeadEnvironment(image_path=image_path, seed=seed, strict=strict, paths=paths)
         self._image_path = image_path
         self._seed = seed
         self.observation_space = spaces.Box(-1.0, 1.0, shape=(OBS_DIM,), dtype=np.float32)
@@ -20,7 +21,9 @@ class BeadTraceEnv(gym.Env):
 
     def reset(self, *, seed: int | None = None, options=None):
         super().reset(seed=seed)
-        obs, info = self._env.reset()
+        # The seed is forwarded so that path sampling and the start perturbation are
+        # reproducible through the standard Gymnasium API (it was ignored before).
+        obs, info = self._env.reset(seed=seed)
         return np.clip(obs, -1.0, 1.0).astype(np.float32), info
 
     def step(self, action):
@@ -30,7 +33,7 @@ class BeadTraceEnv(gym.Env):
     def render(self): pass
     def close(self): pass
 
-def make_env(image_path: str | list | tuple | None = None, seed: int = 42):
+def make_env(image_path: str | list | tuple | None = None, seed: int = 42, paths: list | None = None):
     def _init():
-        return BeadTraceEnv(image_path=image_path, seed=seed)
+        return BeadTraceEnv(image_path=image_path, seed=seed, paths=paths)
     return _init

@@ -54,7 +54,9 @@ class EvaluationAndCheckpointCallback(BaseCallback):
     def _on_step(self) -> bool:
         if self.n_calls % self.eval_freq == 0:
             env = self.eval_env_fn()
-            res = evaluate_policy(self.model, env, episodes=3)
+            # The policy is trained on VecNormalize-d observations, so evaluation must apply
+            # the same running statistics (previously raw observations were fed to it).
+            res = evaluate_policy(self.model, env, episodes=3, obs_norm=self.model.get_env().normalize_obs)
             env.close()
 
             sc = 0.70 * res["geom010"] + 0.20 * res["sequential"] - 0.10 * res["rmse"]
@@ -74,15 +76,14 @@ class EvaluationAndCheckpointCallback(BaseCallback):
                 self.best_geom10 = res["geom010"]
                 self.best_seq = res["sequential"]
                 self.model.save(self.save_path)
-                # Also mirror as COMPLETE_BTP_MODEL
-                self.model.save("COMPLETE_BTP_MODEL")
+                self.model.get_env().save(f"{self.save_path}_vecnormalize.pkl")
                 if self.verbose:
-                    print(f"--> Saved new best checkpoint to {self.save_path}.zip & COMPLETE_BTP_MODEL.zip (Score: {sc:.4f})")
+                    print(f"--> Saved new best checkpoint to {self.save_path}.zip (+ _vecnormalize.pkl) (Score: {sc:.4f})")
 
         return True
 
 
-def evaluate_policy(model, env: RLPurePursuitEnv, episodes: int = 5, seed_base: int = 20000) -> dict:
+def evaluate_policy(model, env: RLPurePursuitEnv, episodes: int = 5, seed_base: int = 20000, obs_norm=None) -> dict:
     """Evaluates the model across episodes and computes geometric and tracking metrics."""
     metrics = []
     for ep in range(episodes):
@@ -92,7 +93,7 @@ def evaluate_policy(model, env: RLPurePursuitEnv, episodes: int = 5, seed_base: 
         total_r = 0.0
 
         while not (done or trunc):
-            action, _ = model.predict(obs, deterministic=True)
+            action, _ = model.predict(obs_norm(obs) if obs_norm is not None else obs, deterministic=True)
             obs, r, done, trunc, info = env.step(action)
             total_r += float(r)
 
@@ -199,20 +200,20 @@ def main():
     if Path(best_model_path).exists():
         print(f"\nLoading best checkpoint: {best_model_path}")
         best_model = PPO.load(best_model_path, device="cpu")
+        stats = VecNormalize.load(f"{args.out}_vecnormalize.pkl", DummyVecEnv([env_creator]))
     else:
         best_model = model
         best_model.save(args.out)
-        best_model.save("COMPLETE_BTP_MODEL")
+        vec_env.save(f"{args.out}_vecnormalize.pkl")
+        stats = vec_env
 
     eval_env = env_creator()
-    final_results = evaluate_policy(best_model, eval_env, episodes=10)
+    final_results = evaluate_policy(best_model, eval_env, episodes=10, obs_norm=stats.normalize_obs)
     eval_env.close()
 
     # Save summary JSON
     summary_path = "rl_pp_training_summary.json"
     Path(summary_path).write_text(json.dumps(final_results, indent=2))
-    # Also update complete_model_summary.json for backward compatibility
-    Path("complete_model_summary.json").write_text(json.dumps(final_results, indent=2))
 
     print("\n" + "=" * 80)
     print("RL-PP FINAL TRAINING SUMMARY (10-Episode Mean)")
@@ -226,7 +227,7 @@ def main():
     print(f"Episode Reward      : {final_results['reward']:.2f}")
     print(f"Lookahead Ld Mean   : {final_results['lookahead_mean']:.3f} m")
     print(f"Steering Gain g Mean: {final_results['gain_mean']:.3f}")
-    print(f"Saved Checkpoints   : {args.out}.zip & COMPLETE_BTP_MODEL.zip")
+    print(f"Saved Checkpoint    : {args.out}.zip (+ {args.out}_vecnormalize.pkl)")
     print(f"Summary JSON        : {summary_path}")
     print("=" * 80)
 

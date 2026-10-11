@@ -1,0 +1,20 @@
+\multicolumn{10}{l}{\textit{Bead plant (holonomic point mass, damping-limited)}}\\
+Geometric expert (4) & \textbf{98.6} & \textbf{99.2} & 1.07 & 2.55 & 5.02 & \textbf{99.1} & 100 & 42.5 & 1.25\\
+Bead-DAgger & 98.4 & 99.1\,[99.1, 99.1] & 1.07\,[1.06, 1.07] & 2.48 & 5.46 & \textbf{99.1} & 100 & 42.4 & 1.25\\
+Bead-DAgger$\to$PPO & 85.4 & 98.0\,[97.0, 99.0] & 3.31\,[3.06, 3.57] & 6.43 & 11.46 & \textbf{99.1} & 100 & 40.8 & 1.29\\
+Bead-PPO (scratch) & 60.4 & 78.9\,[78.8, 79.0] & 7.40\,[7.16, 7.65] & 16.27 & 23.67 & 93.4 & 25 & 50.0 & 1.01\\
+Published Bead ckpt.$^\ast$ & 77.0 & 93.9 & 4.38 & 9.26 & 16.30 & 98.9 & 100 & 42.5 & 1.23\\
+\midrule
+\multicolumn{10}{l}{\textit{Bicycle plant, native speed profile (Track A)}}\\
+Fixed PP (orig.\ gains) & 84.8 & 94.3 & 3.89 & 8.71 & 18.98 & 97.8 & 100 & 17.8 & 2.90\\
+Fixed PP (tuned) & 97.4 & 98.2 & 0.90 & 2.09 & 4.94 & 98.1 & 100 & 18.2 & 2.87\\
+Adaptive PP (orig.) & 53.1 & 71.8 & 11.94 & 26.83 & 46.19 & 84.9 & 12 & 16.7 & 2.98\\
+Adaptive PP (tuned) & 97.9 & 98.1 & 0.63 & 1.40 & 4.11 & 98.1 & 100 & 18.2 & 2.87\\
+RL--PP (joint $L_d,g$) [4] & 97.5 & 98.2\,[98.1, 98.2] & 1.03\,[0.99, 1.07] & 2.23 & 5.70 & 98.1 & 100 & 18.2 & 2.87\\
+RL--PP ($L_d$ only) & 97.5 & 98.2\,[98.2, 98.2] & 0.98\,[0.98, 0.98] & 2.08 & 5.35 & 98.1 & 100 & 18.2 & 2.87\\
+Published RL--PP ckpt.$^\dagger$ & 76.2 & 92.4 & 5.00 & 10.78 & 22.08 & 97.3 & 100 & 17.8 & 2.90\\
+\midrule
+\multicolumn{10}{l}{\textit{Bicycle plant, speed capped at $v_{\mathrm{match}}=1.256$ m/s (Track B)}}\\
+Fixed PP (tuned) & 97.4 & 98.1 & 0.77 & 1.80 & 4.89 & 97.9 & 100 & 41.6 & 1.26\\
+Adaptive PP (tuned) & 97.8 & 98.1 & \textbf{0.54} & \textbf{1.17} & \textbf{4.04} & 97.9 & 100 & 41.7 & 1.26\\
+RL--PP (joint $L_d,g$) & 97.5 & 98.1\,[98.1, 98.1] & 0.88\,[0.66, 1.10] & 1.94 & 5.29 & 97.9 & 100 & 41.6 & 1.26\\

@@ -1,0 +1,61 @@
+{
+ "validation_circuits": [
+  "circuit_Melbourne",
+  "circuit_Shanghai",
+  "circuit_Spa",
+  "circuit_Spielberg"
+ ],
+ "noise_seeds": [
+  11,
+  22,
+  33
+ ],
+ "seed0": {
+  "std_start": 0.6065306597126334,
+  "std_end": 0.5865076780319214,
+  "dagger_det": {
+   "reward": 745.9630429571379,
+   "rmse_cm": 0.8710518039403375,
+   "time_s": 48.1
+  },
+  "dagger_ppo_det": {
+   "reward": 645.3679453274686,
+   "rmse_cm": 3.5417107570270696,
+   "time_s": 48.036
+  },
+  "dagger_stoch": {
+   "reward": 765.878417881895,
+   "rmse_cm": 2.844413353236018,
+   "time_s": 60.28666666666667
+  },
+  "dagger_ppo_stoch": {
+   "reward": 693.6437744175048,
+   "rmse_cm": 3.9002577350461864,
+   "time_s": 58.69733333333334
+  }
+ },
+ "seed1": {
+  "std_start": 0.6065306597126334,
+  "std_end": 0.501738965511322,
+  "dagger_det": {
+   "reward": 746.0892372056039,
+   "rmse_cm": 0.8648908809075321,
+   "time_s": 48.112
+  },
+  "dagger_ppo_det": {
+   "reward": 563.1223949570247,
+   "rmse_cm": 4.252680199910834,
+   "time_s": 42.04
+  },
+  "dagger_stoch": {
+   "reward": 766.4773052228442,
+   "rmse_cm": 2.837418056605678,
+   "time_s": 60.30400000000001
+  },
+  "dagger_ppo_stoch": {
+   "reward": 570.7387356998714,
+   "rmse_cm": 4.61609150118352,
+   "time_s": 47.00533333333333
+  }
+ }
+}

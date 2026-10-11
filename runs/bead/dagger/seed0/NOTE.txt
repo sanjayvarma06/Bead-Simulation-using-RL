@@ -1,0 +1,1 @@
+Stopped after round 6 of 8 because of the 30-minute compute budget set by the user (2026-10-11). best.zip = best validation round (4). val_log.csv reconstructed from runs/logs/dagger_s0.log.
