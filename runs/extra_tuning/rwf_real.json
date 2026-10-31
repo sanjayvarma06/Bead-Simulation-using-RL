@@ -1,0 +1,353 @@
+{
+ "job": "rwf_real",
+ "kind": "pp",
+ "kwargs": {
+  "path_set": "real",
+  "arena": false,
+  "dynamics": "dynamic",
+  "max_steer": 0.4189,
+  "v_cap": 1.256,
+  "L_max": 4.0,
+  "mode": "rwf",
+  "rwf_ke": 16,
+  "rwf_kpsi": 2
+ },
+ "best": {
+  "params": [
+   16,
+   2
+  ],
+  "completed_all": 1.0,
+  "score": 0.9883419926828726,
+  "geom010_circuits": 0.9902722310271027,
+  "rmse_circuits": 0.0019302383442300673,
+  "completed_circuits": 1.0,
+  "geom010_synth": NaN,
+  "rmse_synth": NaN,
+  "time_circuits": 295.80799999999994
+ },
+ "val": {
+  "score": 0.9588575751674817,
+  "geom010_circuits": 0.9655888675384272,
+  "rmse_circuits": 0.006731292370945523,
+  "completed_circuits": 0.75,
+  "geom010_synth": NaN,
+  "rmse_synth": NaN,
+  "time_circuits": 359.42400000000004
+ },
+ "any_eligible": true,
+ "on_edge": [
+  false,
+  false
+ ],
+ "grid_axes": [
+  [
+   0.25,
+   1,
+   4,
+   16,
+   64
+  ],
+  [
+   0.5,
+   2,
+   8,
+   32
+  ]
+ ],
+ "tuning_ids": [
+  "circuit_BrandsHatch",
+  "circuit_Budapest",
+  "circuit_Catalunya",
+  "circuit_IMS",
+  "circuit_MexicoCity",
+  "circuit_MoscowRaceway",
+  "circuit_Nuerburgring",
+  "circuit_Oschersleben",
+  "circuit_Sakhir",
+  "circuit_SaoPaulo",
+  "circuit_Sepang"
+ ],
+ "grid": [
+  {
+   "params": [
+    0.25,
+    0.5
+   ],
+   "completed_all": 1.0,
+   "score": 0.979341961803204,
+   "geom010_circuits": 0.9901958047211682,
+   "rmse_circuits": 0.01085384291796423,
+   "completed_circuits": 1.0,
+   "geom010_synth": NaN,
+   "rmse_synth": NaN,
+   "time_circuits": 295.9534545454546
+  },
+  {
+   "params": [
+    0.25,
+    2
+   ],
+   "completed_all": 1.0,
+   "score": 0.972188019818562,
+   "geom010_circuits": 0.9902722310271027,
+   "rmse_circuits": 0.01808421120854076,
+   "completed_circuits": 1.0,
+   "geom010_synth": NaN,
+   "rmse_synth": NaN,
+   "time_circuits": 295.6072727272727
+  },
+  {
+   "params": [
+    0.25,
+    8
+   ],
+   "completed_all": 1.0,
+   "score": 0.9640745121856011,
+   "geom010_circuits": 0.9902722310271027,
+   "rmse_circuits": 0.026197718841501547,
+   "completed_circuits": 1.0,
+   "geom010_synth": NaN,
+   "rmse_synth": NaN,
+   "time_circuits": 295.6741818181818
+  },
+  {
+   "params": [
+    0.25,
+    32
+   ],
+   "completed_all": 0.9090909090909091,
+   "score": 0.8150250258291115,
+   "geom010_circuits": 0.8750507424833942,
+   "rmse_circuits": 0.06002571665428267,
+   "completed_circuits": 0.9090909090909091,
+   "geom010_synth": NaN,
+   "rmse_synth": NaN,
+   "time_circuits": 282.2734545454545
+  },
+  {
+   "params": [
+    1,
+    0.5
+   ],
+   "completed_all": 1.0,
+   "score": 0.9824362338208905,
+   "geom010_circuits": 0.9902722310271027,
+   "rmse_circuits": 0.00783599720621225,
+   "completed_circuits": 1.0,
+   "geom010_synth": NaN,
+   "rmse_synth": NaN,
+   "time_circuits": 295.8923636363636
+  },
+  {
+   "params": [
+    1,
+    2
+   ],
+   "completed_all": 1.0,
+   "score": 0.9829375963517204,
+   "geom010_circuits": 0.9902722310271027,
+   "rmse_circuits": 0.007334634675382346,
+   "completed_circuits": 1.0,
+   "geom010_synth": NaN,
+   "rmse_synth": NaN,
+   "time_circuits": 295.68581818181815
+  },
+  {
+   "params": [
+    1,
+    8
+   ],
+   "completed_all": 1.0,
+   "score": 0.9779497243970805,
+   "geom010_circuits": 0.9900811652622664,
+   "rmse_circuits": 0.012131440865185873,
+   "completed_circuits": 1.0,
+   "geom010_synth": NaN,
+   "rmse_synth": NaN,
+   "time_circuits": 295.72654545454543
+  },
+  {
+   "params": [
+    1,
+    32
+   ],
+   "completed_all": 0.9090909090909091,
+   "score": 0.8996204863780989,
+   "geom010_circuits": 0.9346207573531693,
+   "rmse_circuits": 0.035000270975070365,
+   "completed_circuits": 0.9090909090909091,
+   "geom010_synth": NaN,
+   "rmse_synth": NaN,
+   "time_circuits": 282.3316363636364
+  },
+  {
+   "params": [
+    4,
+    0.5
+   ],
+   "completed_all": 1.0,
+   "score": 0.983384312948674,
+   "geom010_circuits": 0.9902722310271027,
+   "rmse_circuits": 0.006887918078428735,
+   "completed_circuits": 1.0,
+   "geom010_synth": NaN,
+   "rmse_synth": NaN,
+   "time_circuits": 295.87927272727273
+  },
+  {
+   "params": [
+    4,
+    2
+   ],
+   "completed_all": 1.0,
+   "score": 0.9872524329110027,
+   "geom010_circuits": 0.9902722310271027,
+   "rmse_circuits": 0.003019798116099959,
+   "completed_circuits": 1.0,
+   "geom010_synth": NaN,
+   "rmse_synth": NaN,
+   "time_circuits": 295.7687272727273
+  },
+  {
+   "params": [
+    4,
+    8
+   ],
+   "completed_all": 1.0,
+   "score": 0.9850569745508083,
+   "geom010_circuits": 0.9901193784152337,
+   "rmse_circuits": 0.005062403864425386,
+   "completed_circuits": 1.0,
+   "geom010_synth": NaN,
+   "rmse_synth": NaN,
+   "time_circuits": 295.7992727272727
+  },
+  {
+   "params": [
+    4,
+    32
+   ],
+   "completed_all": 0.9090909090909091,
+   "score": 0.9209504293233252,
+   "geom010_circuits": 0.9385752282625582,
+   "rmse_circuits": 0.01762479893923312,
+   "completed_circuits": 0.9090909090909091,
+   "geom010_synth": NaN,
+   "rmse_synth": NaN,
+   "time_circuits": 281.8923636363636
+  },
+  {
+   "params": [
+    16,
+    0.5
+   ],
+   "completed_all": 0.0,
+   "score": -0.18965310621240133,
+   "geom010_circuits": 0.035731134780087284,
+   "rmse_circuits": 0.22538424099248863,
+   "completed_circuits": 0.0,
+   "geom010_synth": NaN,
+   "rmse_synth": NaN,
+   "time_circuits": 17.697454545454548
+  },
+  {
+   "params": [
+    16,
+    2
+   ],
+   "completed_all": 1.0,
+   "score": 0.9883419926828726,
+   "geom010_circuits": 0.9902722310271027,
+   "rmse_circuits": 0.0019302383442300673,
+   "completed_circuits": 1.0,
+   "geom010_synth": NaN,
+   "rmse_synth": NaN,
+   "time_circuits": 295.80799999999994
+  },
+  {
+   "params": [
+    16,
+    8
+   ],
+   "completed_all": 1.0,
+   "score": 0.9877294621914846,
+   "geom010_circuits": 0.9901958047211682,
+   "rmse_circuits": 0.0024663425296835755,
+   "completed_circuits": 1.0,
+   "geom010_synth": NaN,
+   "rmse_synth": NaN,
+   "time_circuits": 295.83127272727273
+  },
+  {
+   "params": [
+    16,
+    32
+   ],
+   "completed_all": 0.9090909090909091,
+   "score": 0.9289031064428647,
+   "geom010_circuits": 0.9393209480224503,
+   "rmse_circuits": 0.01041784157958557,
+   "completed_circuits": 0.9090909090909091,
+   "geom010_synth": NaN,
+   "rmse_synth": NaN,
+   "time_circuits": 282.04218181818175
+  },
+  {
+   "params": [
+    64,
+    0.5
+   ],
+   "completed_all": 0.0,
+   "score": -0.5233419535724243,
+   "geom010_circuits": 0.00731303641199243,
+   "rmse_circuits": 0.5306549899844167,
+   "completed_circuits": 0.0,
+   "geom010_synth": NaN,
+   "rmse_synth": NaN,
+   "time_circuits": 8.09309090909091
+  },
+  {
+   "params": [
+    64,
+    2
+   ],
+   "completed_all": 0.0,
+   "score": -0.4767656849963467,
+   "geom010_circuits": 0.008421690209311583,
+   "rmse_circuits": 0.4851873752056583,
+   "completed_circuits": 0.0,
+   "geom010_synth": NaN,
+   "rmse_synth": NaN,
+   "time_circuits": 8.544
+  },
+  {
+   "params": [
+    64,
+    8
+   ],
+   "completed_all": 0.5454545454545454,
+   "score": 0.576771125932863,
+   "geom010_circuits": 0.6263372042984408,
+   "rmse_circuits": 0.049566078365577845,
+   "completed_circuits": 0.5454545454545454,
+   "geom010_synth": NaN,
+   "rmse_synth": NaN,
+   "time_circuits": 186.69527272727274
+  },
+  {
+   "params": [
+    64,
+    32
+   ],
+   "completed_all": 1.0,
+   "score": 0.9766413219050655,
+   "geom010_circuits": 0.989340130469675,
+   "rmse_circuits": 0.012698808564609441,
+   "completed_circuits": 1.0,
+   "geom010_synth": NaN,
+   "rmse_synth": NaN,
+   "time_circuits": 298.48727272727274
+  }
+ ]
+}

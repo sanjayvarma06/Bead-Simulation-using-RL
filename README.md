@@ -4,9 +4,12 @@ Image → ordered reference path → 2-D point-mass ("bead") simulation → dire
 compared against Pure Pursuit (PP) and RL-tuned PP [Elgouhary & El-Wakeel, arXiv:2602.18386]
 on held-out F1TENTH circuits and synthetic contours.
 
-**Status (2026-10-11):** the code, data split, training runs, test evaluation and revised paper in
-this repository were produced by an audit-and-correction pass. Start with
-`paper/Revised_Paper_Bead_Tracing.pdf`, then `docs/REPORT.md` and `docs/VERIFICATION.md`. Material
+**Status (2026-10-22):** the code, data split, training runs, test evaluation and paper in this
+repository were produced by an audit-and-correction pass, a revision after review (shared lap rule,
+wider PP grids, Bead-PP, five seeds, revised PPO fine-tuning, revised statistics) and a revision for the
+IJCAS submission (true-centerline metrics, DAgger with the Bead-PP teacher, BC-weight check, IJCAS
+template). Start with `paper/IJCAS_Manuscript.pdf` and `paper/IJCAS_Supplementary.pdf`, then
+`docs/05_IJCAS_REVISION.md`. `paper/Revised_Paper_Bead_Tracing.pdf` is the previous IEEE-format version. Material
 from the earlier version (original PDF, its tables/figures/videos) is in `archive/original_version/`
 for provenance only: its "Bead-PPO" model was **not** PPO-trained (expert regression + DAgger) and
 was trained on its own evaluation circuits.
@@ -14,15 +17,21 @@ was trained on its own evaluation circuits.
 ## Repository layout
 ```
 paper/
-  Revised_Paper_Bead_Tracing.pdf   the revised paper (10 pages)
-  revised/                         LaTeX source: main.tex, tables/ (generated), figures/ (generated)
+  IJCAS_Manuscript.pdf             the IJCAS submission (source: ijcas/main.tex, official IJCAS.cls)
+  IJCAS_Manuscript_Full.pdf        10-page version with all figures/tables in the body (source: ijcas/main_full.tex)
+  IJCAS_Supplementary.pdf          its supplementary material (source: ijcas/supplementary.tex)
+  Revised_Paper_Bead_Tracing.pdf   previous IEEE-format version (source: revised/main.tex)
+  revised/tables/, revised/figures/   generated tables, number macros and figures used by both versions
   scripts/                         make_figures_v2.py, make_tables_v2.py (built from raw records)
-docs/                              01_PHASE1_AUDIT, 02_PHASE2_PLAN, REPORT, VERIFICATION
+docs/                              01_PHASE1_AUDIT, 02_PHASE2_PLAN, 03_REVISION_PLAN, 04_REVISION_REPORT,
+                                   05_IJCAS_REVISION, REPORT, VERIFICATION
 our_model_code/                    bead environment, Gym wrapper, metrics, geometry; legacy bead scripts
 research_paper_code/               Pure Pursuit, RL-PP environment; legacy RL-PP scripts
 experiments/                       corrected pipeline: prepare_data, tune_pp, train_bead, train_rlpp,
-                                   evaluate, analyze, verify_results, ppo_diagnostic, run_queue
-tests/                             45 automated tests
+                                   bead_pursuit, evaluate, analyze, verify_results, ppo_diagnostic,
+                                   selection_sensitivity, car_lateral_accel, centerline_metrics,
+                                   bc_check, run_queue
+tests/                             56 automated tests
 datasets/
   f1tenth_circuits/                23 public centerlines (commit b95c4ef) + rasterised images
   closed_shapes_dataset/, curve_dataset/   synthetic images (700/150/150 each)
@@ -32,8 +41,9 @@ datasets/
 runs/                              training outputs per run: config, logs, checkpoints (best.zip used)
   queues/, logs/                   exact launch commands, stdout logs, exit codes
 results/
-  final/                           episodes.csv (2,940 test episodes), traj/ (raw trajectories),
-                                   tables/, verification/, controllers.json
+  final/                           episodes.csv (7,700 test episodes), traj/ (raw trajectories), expert_k/,
+                                   centerline/ (true-centerline metrics), tables/, verification/,
+                                   controllers.json
   models/                          checkpoints of the original version (re-evaluated in the paper)
 archive/original_version/          superseded paper, data, figures, plots, videos and metrics
 ```
@@ -41,41 +51,58 @@ archive/original_version/          superseded paper, data, figures, plots, video
 ## Reproduce
 ```bash
 pip install -r requirements.txt
-python -m pytest tests -q                                   # 45 tests
+python -m pytest tests -q                                   # 56 tests
 
 python experiments/prepare_data.py                          # rasterise, extract, split manifest
 python experiments/expert_trainval_probe.py                 # expert on train/val -> v_match
-python experiments/tune_pp.py 6                             # PP grid search (training refs only)
+python experiments/tune_pp.py 6                             # Fixed/Adaptive PP and Bead-PP grids (training refs only)
+python experiments/bead_pursuit.py 4                        # expert aiming k = 1..10 waypoints ahead
 
-# bead policies (seeds 0 and 1 were run)
-python experiments/train_bead.py --mode dagger --seed 0 --workers 4
-python experiments/train_bead.py --mode ppo --seed 0 --timesteps 400000 --eval_every 100000 --log_std_init=-0.5
-python experiments/train_bead.py --mode dagger_ppo --seed 0 --timesteps 400000 --eval_every 100000 --critic_warmup 50000 --log_std_init=-0.5
+# bead policies, seeds 0-4 (exact commands: runs/queues/q4_dagger.txt, q6_bead_ppo.txt)
+python experiments/train_bead.py --mode dagger --seed 0 --workers 2
+python experiments/train_bead.py --mode ppo --seed 0 --timesteps 3000000 --eval_every 250000 --log_std_init=-0.5
+python experiments/train_bead.py --mode dagger_ppo --seed 0 --timesteps 2000000 --eval_every 200000 \
+       --critic_warmup 50000 --log_std_init=-2.0 --lr 1e-4 --bc_coef 1.0
+#   add "--reward progress --tag _acc" for the per-progress centering reward
+#   DAgger with the tuned Bead-PP controller as teacher (runs/queues/q7_dagger_bpp.txt):
+python experiments/train_bead.py --mode dagger --teacher beadpp --tag _bpp --seed 0 --workers 1
+#   BC-weight check, lambda in {0.1, 10}, seeds 0-2 (runs/queues/q8_ppo_bc.txt), then:
+python experiments/bc_check.py                              # selects lambda on validation only
 
-# RL-PP baseline (joint, Ld-only, matched speed)
+# RL-PP adaptation of [4], seeds 0-4 (runs/queues/q5_rlpp.txt)
 python experiments/train_rlpp.py --mode joint --seed 0 --timesteps 100000 --eval_every 25000
 python experiments/train_rlpp.py --mode ld_only --seed 0 --timesteps 100000 --eval_every 25000
 python experiments/train_rlpp.py --mode joint --matched --seed 0 --timesteps 100000 --eval_every 25000
 
-python experiments/evaluate.py --workers 18                 # single test-set evaluation
-python experiments/analyze.py                               # tables + pre-declared statistics
+python experiments/evaluate.py --workers 16                 # single test-set evaluation
+#   controllers added later are evaluated with --only NAME --append (other rows stay unchanged)
+python experiments/analyze.py                               # summaries + statistics
+python experiments/centerline_metrics.py                    # metrics against the true centerlines
+python experiments/ppo_diagnostic.py                        # validation-only reward/noise diagnostic
+python experiments/selection_sensitivity.py                 # selection score vs RMSE-only selection
+python experiments/car_lateral_accel.py                     # lateral acceleration of the kinematic car
+python experiments/verify_results.py                        # integrity checks + re-execution
 python paper/scripts/make_figures_v2.py
 python paper/scripts/make_tables_v2.py                      # LaTeX tables + number macros
 ```
 The exact queue files used are in `runs/queues/`; per-run exit codes and wall times in
-`runs/logs/queue_status.jsonl`. The DAgger runs were stopped after 6 of 8 rounds (see
-`runs/bead/dagger/seed*/NOTE.txt`). Compile the paper with pdfLaTeX (e.g. Overleaf) from
-`paper/revised/`. To check the results: `python experiments/verify_results.py`.
+`runs/logs/queue_status.jsonl`. The analysis plan of the revision, written before the final
+evaluation, is `docs/03_REVISION_PLAN.md`. Superseded runs (kept for their validation logs) are in
+`runs/bead/superseded/`. Compile the IJCAS paper from `paper/ijcas/` (Tectonic or pdfLaTeX).
 
 ## Main test-set result (8 held-out circuits; full tables in the paper)
-| Controller | RMSE [cm] | Lap time [s] |
-|---|---|---|
-| Geometric expert (non-learned, bead) | 1.07 | 42.5 |
-| Bead-DAgger (2 seeds) | 1.07 | 42.4 |
-| Bead-DAgger→PPO (2 seeds) | 3.31 | 40.8 |
-| Bead-PPO from scratch (2 seeds, 4e5 steps) | 7.40 | 50.0 |
-| Fixed PP, gains tuned on training circuits | 0.90 | 18.2 |
-| RL-PP joint, retrained (2 seeds) | 1.03 | 18.2 |
-| Fixed PP tuned, speed matched to bead | 0.77 | 41.6 |
+| Controller | RMSE [cm] | RMSE vs true centerline [cm] | Lap time [s] |
+|---|---|---|---|
+| Geometric expert (non-learned, bead) | 1.07 | 1.60 | 42.5 |
+| Bead-PP: the Fixed PP law on the bead, at v_match | 0.28 | 1.24 | 42.5 |
+| Bead-DAgger, expert teacher (5 seeds) | 1.06 | 1.60 | 42.4 |
+| Bead-DAgger, Bead-PP teacher (5 seeds) | 0.42 | 1.24 | 42.8 |
+| Bead-DAgger→PPO (5 seeds, 2e6 steps, BC term) | 1.77 | 2.26 | 42.2 |
+| Bead-DAgger→PPO, BC weight 10 (selected on validation; 3 seeds) | 1.26 | 1.73 | 42.7 |
+| Bead-PPO from scratch (5 seeds, 3e6 steps) | 5.12 | 5.49 | 36.9 |
+| Fixed PP, gains tuned on training circuits | 0.34 | 1.25 | 18.5 |
+| RL-PP joint, adaptation of [4] (5 seeds) | 1.83 | 2.22 | 18.1 |
+| Fixed PP tuned, speed matched to bead | 0.31 | 1.23 | 42.2 |
 
-No pre-declared comparison is significant after Holm correction (n = 8 circuits, 2 seeds).
+All four pre-declared primary comparisons agree in sign on all 8 circuits (Holm-corrected p = 0.031),
+against the extracted references and against the true centerlines.

@@ -48,6 +48,104 @@ PPO_KW = dict(learning_rate=3e-4, n_steps=2048, batch_size=128, n_epochs=10, gam
 NET = dict(net_arch=dict(pi=[256, 256], vf=[256, 256]), activation_fn=torch.nn.Tanh)
 
 
+def expert_from_obs(obs: torch.Tensor) -> torch.Tensor:
+    """Expert action of Eq. (4) recovered from the observation: entries 2-3 are the vector to
+    waypoint w_t + 1 divided by the arena half-width, so its direction is the expert action."""
+    v = obs[:, 2:4]
+    return v / v.norm(dim=1, keepdim=True).clamp_min(1e-8)
+
+
+class PPOBC(PPO):
+    """PPO with an added behaviour-cloning term  bc_coef * || mu_theta(o) - u*(o) ||^2  on the
+    rollout states. train() is that of Stable-Baselines3 2.8 PPO, unchanged except for the
+    marked lines; with bc_coef = 0 it is identical to PPO.train()."""
+
+    def __init__(self, *args, bc_coef: float = 0.0, **kw):
+        super().__init__(*args, **kw)
+        self.bc_coef = float(bc_coef)
+
+    def train(self) -> None:
+        from gymnasium import spaces
+        from stable_baselines3.common.utils import explained_variance
+        th = torch
+        self.policy.set_training_mode(True)
+        self._update_learning_rate(self.policy.optimizer)
+        clip_range = self.clip_range(self._current_progress_remaining)
+        if self.clip_range_vf is not None:
+            clip_range_vf = self.clip_range_vf(self._current_progress_remaining)
+        entropy_losses, pg_losses, value_losses, clip_fractions, bc_losses = [], [], [], [], []
+        continue_training = True
+        for epoch in range(self.n_epochs):
+            approx_kl_divs = []
+            for rollout_data in self.rollout_buffer.get(self.batch_size):
+                actions = rollout_data.actions
+                if isinstance(self.action_space, spaces.Discrete):
+                    actions = rollout_data.actions.long().flatten()
+                values, log_prob, entropy = self.policy.evaluate_actions(rollout_data.observations, actions)
+                values = values.flatten()
+                advantages = rollout_data.advantages
+                if self.normalize_advantage and len(advantages) > 1:
+                    advantages = (advantages - advantages.mean()) / (advantages.std() + 1e-8)
+                ratio = th.exp(log_prob - rollout_data.old_log_prob)
+                policy_loss_1 = advantages * ratio
+                policy_loss_2 = advantages * th.clamp(ratio, 1 - clip_range, 1 + clip_range)
+                policy_loss = -th.min(policy_loss_1, policy_loss_2).mean()
+                pg_losses.append(policy_loss.item())
+                clip_fractions.append(th.mean((th.abs(ratio - 1) > clip_range).float()).item())
+                if self.clip_range_vf is None:
+                    values_pred = values
+                else:
+                    values_pred = rollout_data.old_values + th.clamp(
+                        values - rollout_data.old_values, -clip_range_vf, clip_range_vf)
+                value_loss = F.mse_loss(rollout_data.returns, values_pred)
+                value_losses.append(value_loss.item())
+                if entropy is None:
+                    entropy_loss = -th.mean(-log_prob)
+                else:
+                    entropy_loss = -th.mean(entropy)
+                entropy_losses.append(entropy_loss.item())
+                loss = policy_loss + self.ent_coef * entropy_loss + self.vf_coef * value_loss
+                # ---- added: behaviour-cloning term on the actor mean
+                if self.bc_coef > 0:
+                    obs = rollout_data.observations
+                    pol = self.policy
+                    mu = pol.action_net(pol.mlp_extractor.forward_actor(pol.extract_features(obs)))
+                    bc_loss = F.mse_loss(mu, expert_from_obs(obs))
+                    loss = loss + self.bc_coef * bc_loss
+                    bc_losses.append(bc_loss.item())
+                # ---- end of addition
+                with th.no_grad():
+                    log_ratio = log_prob - rollout_data.old_log_prob
+                    approx_kl_div = th.mean((th.exp(log_ratio) - 1) - log_ratio).cpu().numpy()
+                    approx_kl_divs.append(approx_kl_div)
+                if self.target_kl is not None and approx_kl_div > 1.5 * self.target_kl:
+                    continue_training = False
+                    break
+                self.policy.optimizer.zero_grad()
+                loss.backward()
+                th.nn.utils.clip_grad_norm_(self.policy.parameters(), self.max_grad_norm)
+                self.policy.optimizer.step()
+            self._n_updates += 1
+            if not continue_training:
+                break
+        explained_var = explained_variance(self.rollout_buffer.values.flatten(), self.rollout_buffer.returns.flatten())
+        self.logger.record("train/entropy_loss", np.mean(entropy_losses))
+        self.logger.record("train/policy_gradient_loss", np.mean(pg_losses))
+        self.logger.record("train/value_loss", np.mean(value_losses))
+        self.logger.record("train/approx_kl", np.mean(approx_kl_divs))
+        self.logger.record("train/clip_fraction", np.mean(clip_fractions))
+        self.logger.record("train/loss", loss.item())
+        self.logger.record("train/explained_variance", explained_var)
+        if bc_losses:
+            self.logger.record("train/bc_loss", np.mean(bc_losses))
+        if hasattr(self.policy, "log_std"):
+            self.logger.record("train/std", th.exp(self.policy.log_std).mean().item())
+        self.logger.record("train/n_updates", self._n_updates, exclude="tensorboard")
+        self.logger.record("train/clip_range", clip_range)
+        if self.clip_range_vf is not None:
+            self.logger.record("train/clip_range_vf", clip_range_vf)
+
+
 def training_pool():
     """Training references; circuits are duplicated so they make up ~half of all episodes."""
     circ = load_paths(split_ids("train", "f1tenth_circuit"))
@@ -60,30 +158,35 @@ def val_ids():
     return split_ids("val")
 
 
-def make_env_fn(pool, seed):
+def make_env_fn(pool, seed, reward_mode="base"):
     def _f():
-        return BeadTraceEnv(paths=pool, seed=seed)
+        return BeadTraceEnv(paths=pool, seed=seed, reward_mode=reward_mode)
     return _f
 
 
-def new_model(env, seed, log_std_init):
-    return PPO("MlpPolicy", env, seed=seed, device="cpu", verbose=0,
-               policy_kwargs=dict(**NET, log_std_init=log_std_init), **PPO_KW)
+def new_model(env, seed, log_std_init, lr=None, bc_coef=0.0):
+    kw = dict(PPO_KW, learning_rate=lr if lr is not None else PPO_KW["learning_rate"])
+    return PPOBC("MlpPolicy", env, seed=seed, device="cpu", verbose=0, bc_coef=bc_coef,
+                 policy_kwargs=dict(**NET, log_std_init=log_std_init), **kw)
 
 
 # ----------------------------------------------------------------------------- DAgger
 def _dagger_episode(args):
-    model_path, pts, brk, beta, seed, use_expert_only = args
+    """One DAgger episode. The executed action is chosen per step: the teacher's w.p. beta,
+    else the network's. Every visited state is labelled with the teacher's action."""
+    model_path, pts, brk, beta, seed, use_expert_only, teacher = args
     torch.set_num_threads(1)
     from stable_baselines3 import PPO as _PPO
+    from common import BeadPursuit
     model = None if use_expert_only else _PPO.load(model_path, device="cpu")
     env = BeadTraceEnv(paths=[(pts, brk)], seed=seed)
     obs, _ = env.reset(seed=seed)
     rng = np.random.default_rng(seed + 1)
+    pursuit = BeadPursuit(**teacher) if teacher else None     # stateful: one per episode
     O, A = [], []
     done = trunc = False
     while not (done or trunc):
-        ea = expert_action(env._env)
+        ea = pursuit.core_action(env._env) if pursuit else expert_action(env._env)
         O.append(obs.copy()); A.append(ea)
         act = ea if (use_expert_only or rng.random() < beta) else actor_mean(model, obs)
         obs, _, done, trunc, _ = env.step(act)
@@ -123,7 +226,11 @@ def train_dagger(args, out: Path, ev: Evaluator):
     tmp = out / "_current.zip"
     log = []
     with ProcessPoolExecutor(args.workers) as pool:
-        jobs = [(None, p, b, 1.0, args.seed * 100000 + 10 * i + k, True)
+        teacher = None
+        if args.teacher == "beadpp":     # the tuned Bead-PP controller (runs/pp_tuning.json) as teacher
+            kw = json.loads((RUNS / "pp_tuning.json").read_text())["beadpp_matched"]["kwargs"]
+            teacher = {"L_d": kw["L_d"], "g": kw["g"], "v_ref": kw["v_ref"]}
+        jobs = [(None, p, b, 1.0, args.seed * 100000 + 10 * i + k, True, teacher)
                 for i, (p, b) in enumerate(refs) for k in range(args.expert_eps)]
         data = list(pool.map(_dagger_episode, jobs))
         O = np.concatenate([d[0] for d in data]); A = np.concatenate([d[1] for d in data])
@@ -132,7 +239,7 @@ def train_dagger(args, out: Path, ev: Evaluator):
         best = -np.inf
         for rd in range(1, args.rounds + 1):
             model.save(tmp)
-            jobs = [(str(tmp), p, b, betas[rd - 1], args.seed * 100000 + 1000 * rd + i, False)
+            jobs = [(str(tmp), p, b, betas[rd - 1], args.seed * 100000 + 1000 * rd + i, False, teacher)
                     for i, (p, b) in enumerate(refs)]
             data = list(pool.map(_dagger_episode, jobs))
             O = np.concatenate([O] + [d[0] for d in data]); A = np.concatenate([A] + [d[1] for d in data])
@@ -215,10 +322,10 @@ def set_actor_trainable(model, flag: bool):
 def train_ppo(args, out: Path, ev: Evaluator):
     torch.manual_seed(args.seed); np.random.seed(args.seed)
     pool, _, _ = training_pool()
-    venv = SubprocVecEnv([make_env_fn(pool, args.seed * 1000 + i) for i in range(args.n_envs)])
+    venv = SubprocVecEnv([make_env_fn(pool, args.seed * 1000 + i, args.reward) for i in range(args.n_envs)])
     venv = VecMonitor(venv)
     venv.seed(args.seed * 1000)
-    model = new_model(venv, args.seed, args.log_std_init)
+    model = new_model(venv, args.seed, args.log_std_init, lr=args.lr, bc_coef=args.bc_coef)
     freeze = 0
     if args.mode == "dagger_ppo":
         init = Path(args.init or RUNS / "bead" / "dagger" / f"seed{args.seed}" / "best.zip")
@@ -259,6 +366,11 @@ def main():
     ap.add_argument("--expert_eps", type=int, default=1)
     ap.add_argument("--init", default=None)
     ap.add_argument("--tag", default="")
+    ap.add_argument("--lr", type=float, default=None, help="PPO learning rate (default: PPO_KW)")
+    ap.add_argument("--bc_coef", type=float, default=0.0, help="weight of the behaviour-cloning term")
+    ap.add_argument("--reward", choices=["base", "progress"], default="base")
+    ap.add_argument("--teacher", choices=["expert", "beadpp"], default="expert",
+                    help="DAgger teacher: the expert of Eq. (4) or the tuned Bead-PP controller")
     args = ap.parse_args()
     torch.set_num_threads(1)   # fastest for these small MLPs; lets runs share the CPU
     out = RUNS / "bead" / (args.mode + args.tag) / f"seed{args.seed}"

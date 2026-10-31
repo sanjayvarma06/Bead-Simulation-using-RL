@@ -17,6 +17,7 @@ class BeadEnvironment:
     BEAD_R    = 0.15
     BOUNDARY  = ARENA - BEAD_R
     MAX_STEPS = 3500
+    WAYPOINT_BUDGET = 350   # total waypoints of an extracted reference
     # The step cap grows with path length so that a bead moving at its damping-limited
     # terminal speed (Eq. 2) can traverse the path with this safety factor.
     STEP_CAP_MARGIN = 1.5
@@ -37,6 +38,7 @@ class BeadEnvironment:
     R_APPROACH    =  0.10
     R_WAYPOINT    =  0.40
     R_PRECISION   =  0.25   # Gaussian centering reward exp(-(e_lat/0.08)^2)
+    R_PRECISION_PROGRESS = 2.0   # same bonus per waypoint passed (reward_mode="progress")
     R_TANGENT     =  0.15   # Forward velocity alignment with path tangent
     R_TRACK_ERR   = -0.05
     R_OFF_CURVE   = -0.10
@@ -49,7 +51,10 @@ class BeadEnvironment:
     R_INCOMPLETE  = -5.0
 
     def __init__(self, image_path: Optional[str | list | tuple] = None, seed: int = 42,
-                 strict: bool = False, paths: Optional[list] = None):
+                 strict: bool = False, paths: Optional[list] = None, reward_mode: str = "base"):
+        if reward_mode not in ("base", "progress"):
+            raise ValueError(f"unknown reward_mode {reward_mode!r}")
+        self.reward_mode = reward_mode
         # Per-instance generator: the original code called np.random.seed(seed), which
         # silently reset the global stream for every other consumer in the process.
         self.rng = np.random.default_rng(seed)
@@ -208,7 +213,7 @@ class BeadEnvironment:
         total_len = sum(l for l,_ in infos)
         resampled, self.path_breaks = [], set()
         for ln, pts in infos:
-            n  = max(20, int(350*ln/total_len))
+            n  = max(20, int(self.WAYPOINT_BUDGET*ln/total_len))
             rp = self._resample(pts, n)
             if resampled:
                 self.path_breaks.add(sum(len(p) for p in resampled))
@@ -351,21 +356,11 @@ class BeadEnvironment:
         self.prev_dist = self._dist_to_waypoint()
         return obs, {}
 
-    def step(self, action) -> Tuple[np.ndarray, float, bool, bool, dict]:
-        if np.isscalar(action) or (hasattr(action, "__len__") and len(action) == 1):
-            action_arr = np.array(
-                {0:(0,1),1:(0,-1),2:(1,0),3:(-1,0),4:(0,0)}.get(int(action),(0,0)),
-                dtype=np.float32,
-            )
-        else:
-            action_arr = np.clip(np.asarray(action, dtype=np.float32), -1.0, 1.0)
-
-        self._physics(action_arr)
-        self.step_count += 1
-
-        curr_dist = self._dist_to_waypoint()
+    # Waypoint counter and episode end. Shared with the PP car (RLPurePursuitEnv), so that
+    # both plants finish a lap under exactly the same rule.
+    def advance_counter(self) -> int:
+        """Advance w_t to the farthest of w_t..w_t+4 within COV_RADIUS; return waypoints passed."""
         old_wp = self.waypoint_idx
-
         best_wp = old_wp
         upper = min(len(self.path_points) - 1, old_wp + 4)
         for candidate in range(old_wp, upper + 1):
@@ -385,6 +380,30 @@ class BeadEnvironment:
             self.no_progress_steps = 0
         else:
             self.no_progress_steps += 1
+        return advanced_count
+
+    def episode_end(self) -> Tuple[bool, bool, bool]:
+        """(terminated, stalled, truncated): lap finished when w_t reaches 99 % of the path."""
+        coverage = self.waypoint_idx / max(1, len(self.path_points) - 1)
+        terminated = bool(coverage >= 0.99 and self.step_count > 100)
+        stalled = self.no_progress_steps >= 400
+        truncated = bool((self.step_count >= self.max_steps or stalled) and not terminated)
+        return terminated, stalled, truncated
+
+    def step(self, action) -> Tuple[np.ndarray, float, bool, bool, dict]:
+        if np.isscalar(action) or (hasattr(action, "__len__") and len(action) == 1):
+            action_arr = np.array(
+                {0:(0,1),1:(0,-1),2:(1,0),3:(-1,0),4:(0,0)}.get(int(action),(0,0)),
+                dtype=np.float32,
+            )
+        else:
+            action_arr = np.clip(np.asarray(action, dtype=np.float32), -1.0, 1.0)
+
+        self._physics(action_arr)
+        self.step_count += 1
+
+        curr_dist = self._dist_to_waypoint()
+        advanced_count = self.advance_counter()
 
         nearest_idx, nearest_dist = self._local_path_info()
         if nearest_dist <= self.STRICT_RADIUS:
@@ -396,9 +415,7 @@ class BeadEnvironment:
 
         coverage = self.waypoint_idx / max(1, len(self.path_points) - 1)
         strict_coverage = len(self.strict_covered_points) / max(1, len(self.path_points))
-        terminated = bool(coverage >= 0.99 and self.step_count > 100)
-        stalled = self.no_progress_steps >= 400
-        truncated = bool((self.step_count >= self.max_steps or stalled) and not terminated)
+        terminated, stalled, truncated = self.episode_end()
 
         if terminated:
             ep_r = self.R_COMPLETION
@@ -513,7 +530,13 @@ class BeadEnvironment:
 
         # 3. High-precision centerline bonus: exp(-(e_lat / 0.08)^2)
         precision_bonus = float(np.exp(- (nearest_dist / 0.08) ** 2))
-        c["precision"] = self.R_PRECISION * precision_bonus
+        if self.reward_mode == "progress":
+            # Paid per waypoint passed instead of per step, so a slower traversal does not
+            # collect more of it; scaled to the per-lap budget of the base reward at the
+            # expert's pace (about 8 steps per waypoint).
+            c["precision"] = self.R_PRECISION_PROGRESS * precision_bonus * float(max(0, advanced_count))
+        else:
+            c["precision"] = self.R_PRECISION * precision_bonus
 
         # 4. Tangent velocity alignment (forward momentum along track contour)
         if 0 <= nearest_idx < len(self.path_points) - 1:

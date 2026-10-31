@@ -1,0 +1,30 @@
+start rlpp_joint_s0
+start rlpp_ld_s0
+{"name": "rlpp_ld_s0", "cmd": "python experiments/train_rlpp.py --mode ld_only --seed 0 --timesteps 100000 --eval_every 25000 --workers 2", "exit": 0, "wall_s": 295.1}
+start rlpp_jm_s0
+{"name": "rlpp_joint_s0", "cmd": "python experiments/train_rlpp.py --mode joint --seed 0 --timesteps 100000 --eval_every 25000 --workers 2", "exit": 0, "wall_s": 300.2}
+start rlpp_joint_s1
+{"name": "rlpp_joint_s1", "cmd": "python experiments/train_rlpp.py --mode joint --seed 1 --timesteps 100000 --eval_every 25000 --workers 2", "exit": 0, "wall_s": 275.1}
+start rlpp_ld_s1
+{"name": "rlpp_jm_s0", "cmd": "python experiments/train_rlpp.py --mode joint --matched --seed 0 --timesteps 100000 --eval_every 25000 --workers 2", "exit": 0, "wall_s": 365.2}
+start rlpp_jm_s1
+{"name": "rlpp_ld_s1", "cmd": "python experiments/train_rlpp.py --mode ld_only --seed 1 --timesteps 100000 --eval_every 25000 --workers 2", "exit": 0, "wall_s": 280.1}
+start rlpp_joint_s2
+{"name": "rlpp_jm_s1", "cmd": "python experiments/train_rlpp.py --mode joint --matched --seed 1 --timesteps 100000 --eval_every 25000 --workers 2", "exit": 0, "wall_s": 385.1}
+start rlpp_ld_s2
+{"name": "rlpp_joint_s2", "cmd": "python experiments/train_rlpp.py --mode joint --seed 2 --timesteps 100000 --eval_every 25000 --workers 2", "exit": 0, "wall_s": 325.1}
+start rlpp_jm_s2
+{"name": "rlpp_ld_s2", "cmd": "python experiments/train_rlpp.py --mode ld_only --seed 2 --timesteps 100000 --eval_every 25000 --workers 2", "exit": 0, "wall_s": 300.1}
+start rlpp_joint_s3
+{"name": "rlpp_jm_s2", "cmd": "python experiments/train_rlpp.py --mode joint --matched --seed 2 --timesteps 100000 --eval_every 25000 --workers 2", "exit": 0, "wall_s": 335.1}
+start rlpp_ld_s3
+{"name": "rlpp_joint_s3", "cmd": "python experiments/train_rlpp.py --mode joint --seed 3 --timesteps 100000 --eval_every 25000 --workers 2", "exit": 0, "wall_s": 260.1}
+start rlpp_jm_s3
+{"name": "rlpp_ld_s3", "cmd": "python experiments/train_rlpp.py --mode ld_only --seed 3 --timesteps 100000 --eval_every 25000 --workers 2", "exit": 0, "wall_s": 240.1}
+start rlpp_joint_s4
+{"name": "rlpp_jm_s3", "cmd": "python experiments/train_rlpp.py --mode joint --matched --seed 3 --timesteps 100000 --eval_every 25000 --workers 2", "exit": 0, "wall_s": 345.1}
+start rlpp_ld_s4
+{"name": "rlpp_joint_s4", "cmd": "python experiments/train_rlpp.py --mode joint --seed 4 --timesteps 100000 --eval_every 25000 --workers 2", "exit": 0, "wall_s": 280.1}
+start rlpp_jm_s4
+{"name": "rlpp_ld_s4", "cmd": "python experiments/train_rlpp.py --mode ld_only --seed 4 --timesteps 100000 --eval_every 25000 --workers 2", "exit": 0, "wall_s": 285.1}
+{"name": "rlpp_jm_s4", "cmd": "python experiments/train_rlpp.py --mode joint --matched --seed 4 --timesteps 100000 --eval_every 25000 --workers 2", "exit": 0, "wall_s": 520.4}

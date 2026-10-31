@@ -1,5 +1,10 @@
 # Final report — audit, correction, experiments and revised paper
 
+> **Superseded in part (2026-10-17).** The results below describe the state before the revision after review
+> (2 seeds, previous PP grid and lap rule). For the current results see `04_REVISION_REPORT.md`,
+> `03_REVISION_PLAN.md` and `results/final/verification/report.json`.
+
+
 Date: 2026-10-11. Companion documents: `01_PHASE1_AUDIT.md` (audit before any change),
 `02_PHASE2_PLAN.md` (plan, pre-declared analysis, budget deviations). Compute used for new
 training + evaluation after the user's budget instruction: about 30 CPU-minutes, plus earlier
@@ -171,3 +176,62 @@ only stay ≤ 9).
   `benchmark_summary.json`.
 * Figures are now generated directly into `paper/revised/figures/`. `.gitignore` added.
 * After the move: tables regenerate byte-identically, 45 tests pass, paper compiles (10 pages).
+
+## Addendum — revision of 2026-10-24 (IJCAS manuscript)
+* Fig. 4 (bars): added "Bead-DAgger, Bead-PP teacher" (0.42 cm, five seeds 0.41-0.43 cm).
+* Fig. 8 right panel: legend now "anchored on w_t (Eq. 3)". All figure legends now use the table row
+  names (e.g. "Bead, naive protocol", "prog. rew.", "Fixed PP (tuned)", "Geometric expert (3)").
+  The tables print the expert's equation number with \ref{eq:expert}; they previously said (4),
+  the number of the earlier manuscript.
+* Table 8: true-centerline difference and 95% bootstrap interval added for every row, from
+  results/final/centerline/comparisons.csv (recomputed from stored trajectories, paired over
+  circuits and seeds). Primary rows: +0.36 [+0.22,+0.51], +0.66 [+0.39,+0.97], +0.97 [+0.55,+1.49],
+  -0.36 [-0.49,-0.23] cm; identical to the values computed from rounded Table 5 means.
+* Table 1: Spielberg's 5.6 cm (and Austin's 10.5 cm) minimum is the final segment of a loop that the
+  extraction leaves 8.2 cm (4.6 cm) short of closure; not a junction (0 breaks). Footnote added;
+  minimum of the other segments 15.7 (12.9) cm. Values unchanged.
+* Stanley baseline: research_paper_code/rl_pure_pursuit_env.py mode "stanley"; tuned with the PP
+  protocol (experiments/tune_stanley.py, 153 settings after widening an edge optimum; plateau at
+  matched speed); test results in Tables 4, 5, 8. Front/rear-axle diagnostic: front_axle_check.py.
+* Dynamic model check: research_paper_code/dynamic_single_track.py (F1TENTH Gym single-track model,
+  commit 4fdb9c7; steering limit kept at 1.10 rad); experiments/dynamic_check.py; two variants
+  (tyres only / plus 3.2 rad/s steering-rate limit). Reported in Section 5.4 and threats.
+* All earlier episode rows, summaries and comparisons are unchanged (checked); 62 tests pass.
+
+## Addendum — paper frozen for submission (2026-10-24, evening)
+* Dynamic check rerun with the car's position at the rear axle (was the centre of gravity): tyres
+  only, Fixed PP 3.95 cm (88% laps), RL-PP 5.68 cm (73%); Fixed PP ahead on average by 1.73 cm
+  [-0.02, 3.38], RL-PP better on 2/8 circuits (earlier CG-based text said "all eight"; corrected).
+  With the rate limit: Fixed PP 0 laps, RL-PP 2%. Previous CG-based outputs kept in scratch only.
+* Austin closure check: closing the open loop changes RMSE by <= 0.012 cm, no lap outcome
+  (results/final/closure_check.json).
+* Abstract now states the Stanley and dynamic-model findings; threats list what is not yet tested.
+* Still running / not in the paper: retuning on the dynamic car, RL-PP retrained on it, real-scale
+  circuits, fast bead, sensor noise, dense waypoints, rear-wheel feedback, 150 contours per set,
+  lambda=10 seeds 3-4.
+
+## Addendum — supervisor comments of 2026-10-30 (IJCAS manuscript)
+* Figures: the PDFs in paper/ were checked pixel-for-pixel against the source files and captions; no
+  mismatch found there. The reported mismatch and the "Eq. 4" legend match older figure files, so
+  paper/ijcas_submission(.zip) was added as a self-contained package (tables + figures next to the .tex).
+* Dynamic model: Fixed PP and Stanley re-tuned on (a) tyres only and (b) tyres + 3.2 rad/s rate limit
+  with the kinematic study's grids, training references and score (tune_extra.py), RL-PP retrained;
+  8 test circuits x 5 episodes against extracted references and true centerlines (robustness_eval.py,
+  dynamic_stats.py). Fixed PP's gain lies on the shared grid's top (g = 1.4); in (b) no shared-grid
+  setting completes every training lap. Gains above 1.4 tested separately. New Table 7, Section 5.4.
+* Stanley grid: "flat for k >= 64" was disproved by extending the grid. Widened until interior:
+  (512, 0.01) native, (1024, 1) matched. Test: 4.12 and 3.56 cm. Text corrected; all rows regenerated.
+* Instance count now taken from episodes.csv (60); verification refreshed (8400 rows, 22 re-executed).
+* Fig. 3: Stanley bar added. Algorithm 1 moved after Section 3.3 text. Abstract 233 words.
+* Not in the paper: rear-wheel feedback test evaluation, true-scale circuits, fast bead, noise, dense
+  waypoints, 150 contours per set, lambda = 10 seeds 3-4.
+
+## Addendum — all figures restored to the full manuscript (2026-10-31)
+main_full.tex: 11 figures and 9 tables again (5 figures and the synthetic-contour table back from the
+supplement, all figures at column width); 11 pages. Only redundant wording was cut, each part being
+stated elsewhere. main.tex and supplementary.tex unchanged.
+
+## Addendum — text overlap reduced (2026-10-31)
+About 90 passages reworded in the IJCAS manuscripts; numbers, citations and equations unchanged.
+Own proxy (5-word runs against the original paper, the public GitHub paper, ref. [4] and 7 cited arXiv
+papers): full manuscript body 1.5%, 9.1% with references. Not a Turnitin result.

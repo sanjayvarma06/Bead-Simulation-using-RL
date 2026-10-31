@@ -3,7 +3,7 @@
  "seed": 1,
  "timesteps": 3000000,
  "n_envs": 4,
- "workers": 4,
+ "workers": 2,
  "eval_every": 250000,
  "log_std_init": -1.0,
  "critic_warmup": 300000,

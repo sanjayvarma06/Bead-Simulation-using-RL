@@ -27,6 +27,10 @@ from environment import BeadEnvironment
 from pure_pursuit import PurePursuitController, compute_path_curvature, compute_friction_speed_profile
 from geometry_utils import points_to_polyline_distance
 
+# Lower lookahead bound of every PP controller (classical grids and the RL-PP action range).
+# Lowered from 0.20 m, where the tuned optima sat on the bound, so that optima are interior.
+L_MIN = 0.05
+
 
 class RLPurePursuitEnv(gym.Env):
     """
@@ -47,6 +51,17 @@ class RLPurePursuitEnv(gym.Env):
         strict: bool = False,
         adapt_a: float = 0.35,
         adapt_b: float = 0.25,
+        stanley_k: float = 2.0,
+        stanley_ks: float = 1.0,
+        rwf_ke: float = 4.0,
+        rwf_kpsi: float = 2.0,
+        pos_noise: float = 0.0,        # std [m] of Gaussian noise on the position the controller sees
+        max_steer: float = 1.10,       # steering-angle limit [rad]
+        arena: bool = True,            # False: no arena wall (real-scale circuits)
+        L_max: float = 1.20,           # upper bound of the PP lookahead [m]
+        g_max: float = 1.40,           # upper bound of the PP gain
+        dynamics: str = "kinematic",   # "kinematic" bicycle; "dynamic" F1TENTH single-track with linear tyres and its
+                                       # 3.2 rad/s steering-rate limit; "dynamic_norate" the same without the rate limit
     ):
         super().__init__()
         self.seed_val = seed
@@ -57,6 +72,15 @@ class RLPurePursuitEnv(gym.Env):
         # (controlled) comparison against the damping-limited bead.
         self.v_cap = v_cap
         self.adapt_a, self.adapt_b = adapt_a, adapt_b
+        # Stanley law [Hoffmann et al. 2007]: delta = heading error + atan(k e_front / (k_s + v))
+        self.stanley_k, self.stanley_ks = stanley_k, stanley_ks
+        # Rear-wheel feedback [Samson 1995; Paden et al. 2016]: Lyapunov-based law on the rear axle
+        self.rwf_ke, self.rwf_kpsi = rwf_ke, rwf_kpsi
+        self.pos_noise = float(pos_noise)
+        self.noise_rng = np.random.default_rng(seed + 7919)
+        assert dynamics in ("kinematic", "dynamic", "dynamic_norate")
+        self.dynamics = dynamics
+        self.dyn_state = None
 
         # Track list handling for diverse training across all paper datasets
         if isinstance(image_path, (list, tuple)):
@@ -76,14 +100,16 @@ class RLPurePursuitEnv(gym.Env):
         # Pure Pursuit controller instance
         self.controller = PurePursuitController(
             wheelbase=0.33,
-            L_min=0.20,
-            L_max=1.20,
+            L_min=L_MIN,
+            L_max=L_max,
             g_min=0.60,
-            g_max=1.40,
+            g_max=g_max,
             beta_L=0.2,
             beta_g=0.2,
-            max_steer=1.10,  # Curvature up to 6.0 m^-1 for sharp hairpins
+            max_steer=max_steer,  # 1.10 rad allows curvature up to 6.0 m^-1 for sharp arena hairpins
         )
+        if not arena:
+            self._env.BOUNDARY = 1e9   # instance override: no wall
 
         # Precomputed/analyzed path curvature & speed profile (dynamically updated on reset)
         self.path_curvatures = np.empty(0, dtype=np.float32)
@@ -151,6 +177,7 @@ class RLPurePursuitEnv(gym.Env):
         if seed is not None:
             self.seed_val = seed
             self._env.rng = np.random.default_rng(seed)
+            self.noise_rng = np.random.default_rng(seed + 7919)
 
         if len(self.track_pool) > 1:
             chosen_track = str(self._env._pick(self.track_pool))
@@ -172,6 +199,12 @@ class RLPurePursuitEnv(gym.Env):
             self.heading = 0.0
 
         self.speed = 2.5 if self.v_cap is None else min(2.5, self.v_cap)
+        if self.dynamics != "kinematic":
+            # [x, y, delta, v, psi, psi_dot, beta] of the centre of gravity; the car's position
+            # (self._env.pos) stays the rear axle, as for the kinematic car
+            lr = 0.17145
+            self.dyn_state = np.array([self._env.pos_x + lr * np.cos(self.heading), self._env.pos_y + lr * np.sin(self.heading),
+                                       0.0, self.speed, self.heading, 0.0, 0.0])
         self.current_idx = 0
         self.prev_idx = 0
         self.step_count = 0
@@ -195,6 +228,8 @@ class RLPurePursuitEnv(gym.Env):
     def step(self, action: np.ndarray) -> Tuple[np.ndarray, float, bool, bool, Dict[str, Any]]:
         self.step_count += 1
         pos = np.array([self._env.pos_x, self._env.pos_y], dtype=np.float32)
+        if self.pos_noise > 0:     # the controller sees a noisy position; the vehicle moves from the true one
+            pos = (pos + self.noise_rng.normal(0.0, self.pos_noise, 2)).astype(np.float32)
 
         # 1. Decode Action depending on mode
         if self.mode == "joint":
@@ -260,28 +295,46 @@ class RLPurePursuitEnv(gym.Env):
             self.lookahead_pt = pos.copy()
             target_wp = 0
 
-        # 3. Pure Pursuit Steering Law
-        delta = self.controller.compute_steering(
-            pos, self.heading, self.lookahead_pt, L_d, g
-        )
+        # 3. Steering law
+        if self.mode == "stanley":
+            delta = self._stanley_steering(pos)
+        elif self.mode == "rwf":
+            delta = self._rwf_steering(pos)
+        else:
+            delta = self.controller.compute_steering(
+                pos, self.heading, self.lookahead_pt, L_d, g
+            )
 
         # 4. Reference Speed & Longitudinal Control
         target_speed = float(self.speed_profile[nearest_idx]) if len(self.speed_profile) > nearest_idx else 3.5
         accel = float(np.clip(3.0 * (target_speed - self.speed), -self._env.ACCEL, self._env.ACCEL))
 
-        # 5. Vehicle Motion Update (Kinematic Bicycle dynamics, Eq. 7-8 in paper)
+        # 5. Vehicle Motion Update
         dt = self._env.DT
-        self.speed = float(np.clip(self.speed + accel * dt, 0.5, self._env.MAX_SPEED))
-        
-        # Heading rate: dot(theta) = (v / L) * tan(delta)
-        yaw_rate = (self.speed / self.controller.wheelbase) * float(np.tan(delta))
-        self.heading = float((self.heading + yaw_rate * dt + np.pi) % (2.0 * np.pi) - np.pi)
-
-        # Update position
-        vx = self.speed * float(np.cos(self.heading))
-        vy = self.speed * float(np.sin(self.heading))
-        self._env.pos_x += vx * dt
-        self._env.pos_y += vy * dt
+        if self.dynamics != "kinematic":
+            from dynamic_single_track import step as st_step, F1TENTH_PARAMS
+            x = self.dyn_state
+            if x[3] + accel * dt < 0.5:            # same 0.5 m/s speed floor as the kinematic car
+                accel = (0.5 - x[3]) / dt
+            prm = F1TENTH_PARAMS if self.dynamics == "dynamic" else dict(F1TENTH_PARAMS, sv_max=1e9)
+            x = st_step(x, delta, accel, dt, max_steer=self.controller.max_steer, p=prm)
+            self.dyn_state = x
+            self.speed = float(x[3])
+            self.heading = float((x[4] + np.pi) % (2.0 * np.pi) - np.pi)
+            vx = self.speed * float(np.cos(x[4] + x[6]))
+            vy = self.speed * float(np.sin(x[4] + x[6]))
+            lr = 0.17145
+            self._env.pos_x = float(x[0] - lr * np.cos(x[4]))     # rear axle, as for the kinematic car
+            self._env.pos_y = float(x[1] - lr * np.sin(x[4]))
+        else:
+            # Kinematic bicycle, heading rate = (v / L) * tan(delta)
+            self.speed = float(np.clip(self.speed + accel * dt, 0.5, self._env.MAX_SPEED))
+            yaw_rate = (self.speed / self.controller.wheelbase) * float(np.tan(delta))
+            self.heading = float((self.heading + yaw_rate * dt + np.pi) % (2.0 * np.pi) - np.pi)
+            vx = self.speed * float(np.cos(self.heading))
+            vy = self.speed * float(np.sin(self.heading))
+            self._env.pos_x += vx * dt
+            self._env.pos_y += vy * dt
         self._env.vel_x = vx
         self._env.vel_y = vy
 
@@ -296,18 +349,18 @@ class RLPurePursuitEnv(gym.Env):
             self.heading = float(-self.heading)
             hit_boundary = True
 
+        if hit_boundary and self.dynamics != "kinematic":
+            self.dyn_state[4] = self.heading
+            self.dyn_state[0] = self._env.pos_x + 0.17145 * np.cos(self.heading)
+            self.dyn_state[1] = self._env.pos_y + 0.17145 * np.sin(self.heading)
         self.trajectory.append((float(self._env.pos_x), float(self._env.pos_y)))
 
         # Update coverage metrics
         if nearest_dist <= self._env.COV_RADIUS:
             self.covered_waypoints.add(nearest_idx)
-            # Advance sequential waypoint tracker in core env
-            if self.is_closed:
-                if (nearest_idx - self._env.waypoint_idx) % N < N // 2:
-                    self._env.waypoint_idx = max(self._env.waypoint_idx, nearest_idx)
-            else:
-                if nearest_idx > self._env.waypoint_idx:
-                    self._env.waypoint_idx = nearest_idx
+        # Sequential waypoint counter of the bead (same code, same rule for both plants)
+        self._env.step_count = self.step_count
+        self._env.advance_counter()
         if nearest_dist <= self._env.STRICT_RADIUS:
             self.strict_covered.add(nearest_idx)
 
@@ -330,23 +383,11 @@ class RLPurePursuitEnv(gym.Env):
             hit_boundary=hit_boundary
         )
 
-        # Termination criteria: complete circuit
+        # Termination: the bead's rule (lap finished when the counter reaches 99 % of the path;
+        # truncation at the step cap or after 400 steps without progress)
         coverage = len(self.covered_waypoints) / max(1, N)
-        sequential_cov = self._env.waypoint_idx / max(1, N - 1)
-        
-        lap_completed = False
-        if self.is_closed:
-            # Vehicle has navigated almost all waypoints and crossed back to the start region
-            if self.step_count > 150 and self._env.waypoint_idx >= N - 8 and nearest_idx <= 8:
-                lap_completed = True
-            elif self.step_count > 150 and coverage >= 0.98:
-                lap_completed = True
-        else:
-            if self.step_count > 50 and (self._env.waypoint_idx >= N - 4 or coverage >= 0.98):
-                lap_completed = True
-
-        terminated = bool(lap_completed)
-        truncated = bool(self.step_count >= self.max_steps and not terminated)
+        self._env.max_steps = self.max_steps
+        terminated, stalled, truncated = self._env.episode_end()
 
         if terminated:
             reward += self._env.R_COMPLETION
@@ -364,8 +405,67 @@ class RLPurePursuitEnv(gym.Env):
         info["steering_gain"] = g
         info["steering_angle"] = delta
         info["hit_boundary"] = hit_boundary
+        info["stalled"] = stalled
 
         return obs, float(reward), terminated, truncated, info
+
+    def _rwf_steering(self, pos: np.ndarray) -> float:
+        """Rear-wheel feedback: omega = v k cos(th)/(1 - k e) - K_psi |v| th - K_e v e sin(th)/th,
+        delta = atan(W omega / v), with e the signed lateral offset of the rear axle (> 0 left of the
+        path), th = heading - path heading and k the signed path curvature at the nearest point."""
+        pts = self._env.path_points
+        N = len(pts)
+        i = self.current_idx
+        a_i, b_i = (i, (i + 1) % N) if self.is_closed else (min(i, N - 2), min(i, N - 2) + 1)
+        a, b = pts[a_i], pts[b_i]
+        ab = b - a
+        L = float(np.linalg.norm(ab))
+        if L < 1e-9:
+            return 0.0
+        t = ab / L
+        e = float(t[0] * (pos[1] - a[1]) - t[1] * (pos[0] - a[0]))
+        th = float((self.heading - np.arctan2(t[1], t[0]) + np.pi) % (2 * np.pi) - np.pi)
+        k = float(self.path_curvatures[i % len(self.path_curvatures)])
+        v = max(self.speed, 0.1)
+        sinc = np.sin(th) / th if abs(th) > 1e-6 else 1.0
+        denom = 1.0 - k * e
+        denom = denom if abs(denom) > 0.1 else 0.1 * np.sign(denom or 1.0)
+        omega = v * k * np.cos(th) / denom - self.rwf_kpsi * abs(v) * th - self.rwf_ke * v * e * sinc
+        delta = float(np.arctan(self.controller.wheelbase * omega / v))
+        return float(np.clip(delta, -self.controller.max_steer, self.controller.max_steer))
+
+    def _stanley_steering(self, pos: np.ndarray) -> float:
+        """Stanley steering: heading error to the path tangent plus atan(k e / (k_s + v)), with the
+        signed cross-track error e of the front axle to the nearest path segment."""
+        pts = self._env.path_points
+        N = len(pts)
+        W = self.controller.wheelbase
+        front = np.array([pos[0] + W * np.cos(self.heading), pos[1] + W * np.sin(self.heading)])
+        cand = [(self.current_idx + k) % N for k in range(-3, 22)] if self.is_closed else             list(range(max(0, self.current_idx - 3), min(N, self.current_idx + 22)))
+        j = cand[int(np.argmin(np.hypot(pts[cand, 0] - front[0], pts[cand, 1] - front[1])))]
+        best = None
+        for a_i, b_i in ((j - 1, j), (j, j + 1)):
+            if self.is_closed:
+                a_i, b_i = a_i % N, b_i % N
+            elif a_i < 0 or b_i >= N:
+                continue
+            a, b = pts[a_i], pts[b_i]
+            ab = b - a
+            L2 = float(ab @ ab)
+            if L2 < 1e-12:
+                continue
+            t = float(np.clip((front - a) @ ab / L2, 0.0, 1.0))
+            d = float(np.linalg.norm(front - (a + t * ab)))
+            if best is None or d < best[0]:
+                best = (d, a, ab)
+        if best is None:
+            return 0.0
+        d, a, ab = best
+        tang = ab / np.linalg.norm(ab)
+        e_left = float(tang[0] * (front[1] - a[1]) - tang[1] * (front[0] - a[0]))   # > 0: front axle left of path
+        e_head = float((np.arctan2(tang[1], tang[0]) - self.heading + np.pi) % (2 * np.pi) - np.pi)
+        delta = e_head - np.arctan(self.stanley_k * e_left / (self.stanley_ks + self.speed))
+        return float(np.clip(delta, -self.controller.max_steer, self.controller.max_steer))
 
     def _compute_paper_reward(
         self,

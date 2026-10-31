@@ -32,6 +32,9 @@ import pandas as pd
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from common import ROOT, RUNS, EVAL_SEEDS, load_path, split_ids, load_manifest  # noqa: E402
 from metrics import trajectory_metrics  # noqa: E402
+from evaluate import SEEDS  # noqa: E402
+
+BEAD_MODES = ("dagger", "dagger_bpp", "ppo", "dagger_ppo", "ppo_acc", "dagger_ppo_acc")
 
 FINAL = ROOT / "results" / "final"
 OUT = FINAL / "verification"
@@ -116,9 +119,8 @@ def check_rerun():
     from valeval import Evaluator
     from evaluate import controllers
     ids = split_ids("test", "f1tenth_circuit")
-    want = {("expert", None), ("bead_dagger", 0), ("bead_dagger", 1), ("bead_dagger_ppo", 0), ("bead_dagger_ppo", 1),
-            ("bead_ppo", 0), ("bead_ppo", 1), ("pp_fixed_tuned", None), ("rlpp_joint", 0), ("rlpp_joint", 1),
-            ("pp_fixed_tuned_matched", None), ("bead_published", None)}
+    # every controller once: deterministic ones, and training seed 0 of every learned one
+    want = {(c["name"], c["seed"]) for c in controllers() if c["seed"] in (None, 0)}
     ev = Evaluator(8)
     out = {}
     for c in controllers():
@@ -158,9 +160,9 @@ def inventory():
     if qs.exists():
         for line in qs.read_text().splitlines():
             r = json.loads(line); status[r["name"]] = r
-    for kind, modes in (("bead", ("dagger", "ppo", "dagger_ppo")), ("rlpp", ("joint", "ld_only", "joint_matched"))):
+    for kind, modes in (("bead", BEAD_MODES), ("rlpp", ("joint", "ld_only", "joint_matched"))):
         for mode in modes:
-            for s in (0, 1):
+            for s in SEEDS:
                 d = RUNS / kind / mode / f"seed{s}"
                 e = {"dir": str(d.relative_to(ROOT)).replace("\\", "/"),
                      "best_ckpt_md5": md5(d / "best.zip") if (d / "best.zip").exists() else None,
@@ -180,8 +182,8 @@ def inventory():
 
 def ppo_diagnostics():
     out = {}
-    for mode in ("ppo", "dagger_ppo"):
-        for s in (0, 1):
+    for mode in ("ppo", "dagger_ppo", "ppo_acc", "dagger_ppo_acc"):
+        for s in SEEDS:
             pr = pd.read_csv(RUNS / "bead" / mode / f"seed{s}" / "progress.csv")
             fz = pr["train/actor_frozen"] == 1 if "train/actor_frozen" in pr else pd.Series(False, index=pr.index)
             tr = pr[~fz]
@@ -202,16 +204,47 @@ def ppo_diagnostics():
     return out
 
 
+def check_centerline(df, n_sample=60):
+    """True-centerline records: one per circuit episode, and a random sample recomputed independently."""
+    from centerline_metrics import true_centerline
+    cl = pd.read_csv(FINAL / "centerline" / "episodes.csv")
+    circ = df[df.family == "circuit"]
+    key = ["controller", "train_seed", "ref", "eval_seed"]
+    same_keys = (set(map(tuple, circ[key].astype(str).values)) == set(map(tuple, cl[key].astype(str).values)))
+    rng = np.random.default_rng(0)
+    worst = 0.0
+    for i in rng.choice(len(cl), size=min(n_sample, len(cl)), replace=False):
+        r = cl.iloc[i]
+        seed = "None" if int(r.train_seed) == -1 else int(r.train_seed)
+        traj = np.load(FINAL / "traj" / f"{r.controller}__s{seed}.npz")[f"{r.ref}__{int(r.eval_seed)}"].astype(float)
+        rmse, _ = independent_rmse_geom(true_centerline(r.ref), traj)
+        worst = max(worst, abs(rmse - r.rmse_true))
+    return {"rows": int(len(cl)), "circuit_episodes": int(len(circ)), "same_episode_keys": bool(same_keys),
+            "sampled": int(min(n_sample, len(cl))), "max_abs_diff_rmse_independent_code": worst}
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--skip_rerun", action="store_true")
+    ap.add_argument("--reuse_records", action="store_true",
+                    help="carry over checks B/C if episodes.csv is unchanged since they were run")
     args = ap.parse_args()
     OUT.mkdir(parents=True, exist_ok=True)
+    old = json.loads((OUT / "report.json").read_text()) if (OUT / "report.json").exists() else {}
     df = pd.read_csv(FINAL / "episodes.csv")
-    rep = {"A_accounting": check_accounting(df)}
+    ep_md5 = md5(FINAL / "episodes.csv")
+    rep = {"episodes_csv_md5": ep_md5, "A_accounting": check_accounting(df)}
     print(json.dumps(rep["A_accounting"], indent=1), flush=True)
-    rep["B_C_records"] = check_records(df)
+    unchanged = old.get("episodes_csv_md5") == ep_md5 or (
+        "episodes_csv_md5" not in old and (FINAL / "episodes.csv").stat().st_mtime < (OUT / "report.json").stat().st_mtime)
+    if args.reuse_records and "B_C_records" in old and unchanged:
+        rep["B_C_records"] = old["B_C_records"]
+        rep["B_C_records_carried_over_episodes_unchanged"] = True
+    else:
+        rep["B_C_records"] = check_records(df)
     print(json.dumps(rep["B_C_records"], indent=1), flush=True)
+    rep["H_centerline"] = check_centerline(df)
+    print(json.dumps(rep["H_centerline"]), flush=True)
     rep["E_tables_identical"] = check_tables()
     print(rep["E_tables_identical"], flush=True)
     rep["F_inventory"] = inventory()
@@ -219,6 +252,10 @@ def main():
     print(json.dumps(rep["G_ppo_diagnostics"], indent=1), flush=True)
     if not args.skip_rerun:
         rep["D_rerun"] = check_rerun()
+    elif "D_rerun" in old and unchanged:
+        # keep the re-execution result of the last full run, marked as such
+        rep["D_rerun"] = old["D_rerun"]
+        rep["D_rerun_carried_over_from_previous_full_run"] = True
     (OUT / "report.json").write_text(json.dumps(rep, indent=1, default=str))
     print("->", OUT / "report.json")
 

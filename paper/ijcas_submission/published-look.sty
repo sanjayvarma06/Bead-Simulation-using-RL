@@ -1,0 +1,115 @@
+%% published-look.sty -- visual style of IJCAS articles as printed by Springer, applied on top of the
+%% official IJCAS.cls (page size, margins, two columns and the first-page journal header are unchanged).
+%% Only typography and colour are changed: black and white, sans-serif bold headings, "1 Introduction"
+%% style section titles, Springer-style captions, running heads with a rule, and Springer-style
+%% back matter. No publisher-only elements (DOI, received/accepted dates, logo) are added.
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{published-look}[2026/10/23 IJCAS printed-article look]
+
+\RequirePackage[scaled=0.92]{helvet}   % sans-serif for headings, labels and running heads
+\RequirePackage{caption}
+
+\makeatletter
+
+%% ---------------------------------------------------------------- colour: everything black
+\hypersetup{colorlinks=true, allcolors=black}
+\renewcommand\refname{References}
+\renewcommand\figurename{Fig.}
+\renewcommand\tablename{Table}
+\renewcommand\abstractname{Abstract}
+\renewcommand\keywordname{Keywords}
+\def\fnum@figure{\figurename\nobreakspace\thefigure}
+\def\fnum@table{\tablename\nobreakspace\thetable}
+
+%% ---------------------------------------------------------------- title block
+%% Left-aligned bold sans title, bold sans author line; "Abstract" as a heading on its own line;
+%% "Keywords" run in. No coloured rules.
+\renewenvironment{abstract}{%
+   \lrbox\abstractbox
+     \minipage[b]{\textwidth}%
+     {\sffamily\bfseries\fontsize{11pt}{13pt}\selectfont\abstractname\par}\vskip 3pt
+     \normalfont\normalsize\ignorespaces}{%
+   \endminipage\endlrbox}
+\renewenvironment{keywords}{%
+   \lrbox\keywordbox
+     \minipage[b]{\textwidth}%
+     {\sffamily\bfseries\normalsize\keywordname}\enspace
+     \normalfont\normalsize\ignorespaces}{%
+   \endminipage\endlrbox}
+\def\@maketitle{%
+  \newpage
+  \null
+  \vskip 0.5em%
+  \begin{flushleft}%
+    {\sffamily\bfseries\fontsize{17pt}{20.5pt}\selectfont\raggedright\@title\par}%
+    \vskip 1.1em%
+    {\sffamily\bfseries\fontsize{10.5pt}{13pt}\selectfont\@author\par}%
+    \vskip 2.0em%
+    \abstract@produce
+    \vskip 0.9em%
+    \keyword@produce
+  \end{flushleft}%
+  \vskip 1.2pc}
+
+%% ---------------------------------------------------------------- section headings
+%% "1 Introduction", "2.1 Notations": bold sans, left-aligned, mixed case, black.
+\renewcommand\thesection{\@arabic\c@section}   % the class adds \normalsize here, which shrinks the number
+\def\@seccntformat#1{\csname the#1\endcsname\quad}
+\renewcommand\section{\@startsection{section}{1}{\z@}%
+   {-3.2ex \@plus -.5ex \@minus -.2ex}{1.6ex \@plus .2ex}%
+   {\raggedright\normalfont\sffamily\bfseries\fontsize{12pt}{14pt}\selectfont}}
+\renewcommand\subsection{\@startsection{subsection}{2}{\z@}%
+   {-2.6ex \@plus -.5ex \@minus -.2ex}{1.0ex \@plus .1ex}%
+   {\raggedright\normalfont\sffamily\bfseries\fontsize{10pt}{12pt}\selectfont}}
+\renewcommand\subsubsection{\@startsection{subsubsection}{3}{\z@}%
+   {-2.2ex \@plus -.5ex \@minus -.2ex}{0.8ex \@plus .1ex}%
+   {\raggedright\normalfont\sffamily\bfseries\normalsize}}
+
+%% ---------------------------------------------------------------- captions
+%% Bold sans label ("Fig. 1", "Table 2"), caption text in a smaller serif font, left-justified.
+\DeclareCaptionLabelSeparator{pubsep}{\enspace}
+\captionsetup{format=plain, font={small}, labelfont={sf,bf}, labelsep=pubsep,
+              justification=justified, singlelinecheck=false}
+\captionsetup[table]{skip=2pt}
+\captionsetup[figure]{skip=4pt}
+
+%% ---------------------------------------------------------------- running heads
+%% Pages after the first: page number outside, short title / authors inside, thin rule beneath.
+\let\pub@origrunningtitle\runningtitle
+\renewcommand{\runningtitle}[6]{%
+  \pub@origrunningtitle{#1}{#2}{#3}{#4}{#5}{#6}%
+  \fancyhead{}%
+  \fancyhead[LE]{\sffamily\footnotesize\thepage}%
+  \fancyhead[RE]{\sffamily\footnotesize #2}%
+  \fancyhead[LO]{\sffamily\footnotesize #3}%
+  \fancyhead[RO]{\sffamily\footnotesize\thepage}%
+  \renewcommand{\headrulewidth}{0.4pt}%
+}
+
+%% ---------------------------------------------------------------- references
+%% Heading as a section without number; entries 8.5 pt, numbered "1." with hanging indent.
+\renewcommand\@biblabel[1]{#1.}
+\renewenvironment{thebibliography}[1]
+     {\section*{\refname}%
+      \fontsize{8.5pt}{10.2pt}\selectfont
+      \list{\@biblabel{\@arabic\c@enumiv}}%
+           {\settowidth\labelwidth{\@biblabel{#1}}%
+            \leftmargin\labelwidth
+            \advance\leftmargin\labelsep
+            \setlength\itemsep{1pt}%
+            \usecounter{enumiv}%
+            \let\p@enumiv\@empty
+            \renewcommand\theenumiv{\@arabic\c@enumiv}}%
+      \sloppy
+      \clubpenalty4000\@clubpenalty\clubpenalty\widowpenalty4000%
+      \sfcode`\.\@m}
+     {\endlist}
+
+%% ---------------------------------------------------------------- back matter
+%% "Author Contributions  text", "Funding  text", ... as run-in bold sans headings in 9 pt.
+\newcommand\backmatteritem[2]{%
+  \par\vskip 0.6em\noindent
+  {\fontsize{9pt}{11pt}\selectfont{\sffamily\bfseries #1}\enspace #2\par}}
+
+\makeatother
+\endinput

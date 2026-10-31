@@ -9,6 +9,21 @@
   "learned": false
  },
  {
+  "name": "bead_pp",
+  "track": "B",
+  "plant": "bead",
+  "kind": "bead_geo",
+  "model": null,
+  "seed": null,
+  "learned": false,
+  "kw": {
+   "ctrl": "pp",
+   "L_d": 0.125,
+   "g": 1.2,
+   "v_ref": 1.256
+  }
+ },
+ {
   "name": "bead_dagger",
   "track": "A+B",
   "plant": "bead",
@@ -25,6 +40,33 @@
   "seed": 1,
   "learned": true,
   "model": "runs/bead/dagger/seed1/best.zip"
+ },
+ {
+  "name": "bead_dagger",
+  "track": "A+B",
+  "plant": "bead",
+  "kind": "bead",
+  "seed": 2,
+  "learned": true,
+  "model": "runs/bead/dagger/seed2/best.zip"
+ },
+ {
+  "name": "bead_dagger",
+  "track": "A+B",
+  "plant": "bead",
+  "kind": "bead",
+  "seed": 3,
+  "learned": true,
+  "model": "runs/bead/dagger/seed3/best.zip"
+ },
+ {
+  "name": "bead_dagger",
+  "track": "A+B",
+  "plant": "bead",
+  "kind": "bead",
+  "seed": 4,
+  "learned": true,
+  "model": "runs/bead/dagger/seed4/best.zip"
  },
  {
   "name": "bead_ppo",
@@ -45,6 +87,33 @@
   "model": "runs/bead/ppo/seed1/best.zip"
  },
  {
+  "name": "bead_ppo",
+  "track": "A+B",
+  "plant": "bead",
+  "kind": "bead",
+  "seed": 2,
+  "learned": true,
+  "model": "runs/bead/ppo/seed2/best.zip"
+ },
+ {
+  "name": "bead_ppo",
+  "track": "A+B",
+  "plant": "bead",
+  "kind": "bead",
+  "seed": 3,
+  "learned": true,
+  "model": "runs/bead/ppo/seed3/best.zip"
+ },
+ {
+  "name": "bead_ppo",
+  "track": "A+B",
+  "plant": "bead",
+  "kind": "bead",
+  "seed": 4,
+  "learned": true,
+  "model": "runs/bead/ppo/seed4/best.zip"
+ },
+ {
   "name": "bead_dagger_ppo",
   "track": "A+B",
   "plant": "bead",
@@ -61,6 +130,195 @@
   "seed": 1,
   "learned": true,
   "model": "runs/bead/dagger_ppo/seed1/best.zip"
+ },
+ {
+  "name": "bead_dagger_ppo",
+  "track": "A+B",
+  "plant": "bead",
+  "kind": "bead",
+  "seed": 2,
+  "learned": true,
+  "model": "runs/bead/dagger_ppo/seed2/best.zip"
+ },
+ {
+  "name": "bead_dagger_ppo",
+  "track": "A+B",
+  "plant": "bead",
+  "kind": "bead",
+  "seed": 3,
+  "learned": true,
+  "model": "runs/bead/dagger_ppo/seed3/best.zip"
+ },
+ {
+  "name": "bead_dagger_ppo",
+  "track": "A+B",
+  "plant": "bead",
+  "kind": "bead",
+  "seed": 4,
+  "learned": true,
+  "model": "runs/bead/dagger_ppo/seed4/best.zip"
+ },
+ {
+  "name": "bead_ppo_acc",
+  "track": "A+B",
+  "plant": "bead",
+  "kind": "bead",
+  "seed": 0,
+  "learned": true,
+  "model": "runs/bead/ppo_acc/seed0/best.zip"
+ },
+ {
+  "name": "bead_ppo_acc",
+  "track": "A+B",
+  "plant": "bead",
+  "kind": "bead",
+  "seed": 1,
+  "learned": true,
+  "model": "runs/bead/ppo_acc/seed1/best.zip"
+ },
+ {
+  "name": "bead_ppo_acc",
+  "track": "A+B",
+  "plant": "bead",
+  "kind": "bead",
+  "seed": 2,
+  "learned": true,
+  "model": "runs/bead/ppo_acc/seed2/best.zip"
+ },
+ {
+  "name": "bead_ppo_acc",
+  "track": "A+B",
+  "plant": "bead",
+  "kind": "bead",
+  "seed": 3,
+  "learned": true,
+  "model": "runs/bead/ppo_acc/seed3/best.zip"
+ },
+ {
+  "name": "bead_ppo_acc",
+  "track": "A+B",
+  "plant": "bead",
+  "kind": "bead",
+  "seed": 4,
+  "learned": true,
+  "model": "runs/bead/ppo_acc/seed4/best.zip"
+ },
+ {
+  "name": "bead_dagger_ppo_acc",
+  "track": "A+B",
+  "plant": "bead",
+  "kind": "bead",
+  "seed": 0,
+  "learned": true,
+  "model": "runs/bead/dagger_ppo_acc/seed0/best.zip"
+ },
+ {
+  "name": "bead_dagger_ppo_acc",
+  "track": "A+B",
+  "plant": "bead",
+  "kind": "bead",
+  "seed": 1,
+  "learned": true,
+  "model": "runs/bead/dagger_ppo_acc/seed1/best.zip"
+ },
+ {
+  "name": "bead_dagger_ppo_acc",
+  "track": "A+B",
+  "plant": "bead",
+  "kind": "bead",
+  "seed": 2,
+  "learned": true,
+  "model": "runs/bead/dagger_ppo_acc/seed2/best.zip"
+ },
+ {
+  "name": "bead_dagger_ppo_acc",
+  "track": "A+B",
+  "plant": "bead",
+  "kind": "bead",
+  "seed": 3,
+  "learned": true,
+  "model": "runs/bead/dagger_ppo_acc/seed3/best.zip"
+ },
+ {
+  "name": "bead_dagger_ppo_acc",
+  "track": "A+B",
+  "plant": "bead",
+  "kind": "bead",
+  "seed": 4,
+  "learned": true,
+  "model": "runs/bead/dagger_ppo_acc/seed4/best.zip"
+ },
+ {
+  "name": "bead_dagger_bpp",
+  "track": "A+B",
+  "plant": "bead",
+  "kind": "bead",
+  "seed": 0,
+  "learned": true,
+  "model": "runs/bead/dagger_bpp/seed0/best.zip"
+ },
+ {
+  "name": "bead_dagger_bpp",
+  "track": "A+B",
+  "plant": "bead",
+  "kind": "bead",
+  "seed": 1,
+  "learned": true,
+  "model": "runs/bead/dagger_bpp/seed1/best.zip"
+ },
+ {
+  "name": "bead_dagger_bpp",
+  "track": "A+B",
+  "plant": "bead",
+  "kind": "bead",
+  "seed": 2,
+  "learned": true,
+  "model": "runs/bead/dagger_bpp/seed2/best.zip"
+ },
+ {
+  "name": "bead_dagger_bpp",
+  "track": "A+B",
+  "plant": "bead",
+  "kind": "bead",
+  "seed": 3,
+  "learned": true,
+  "model": "runs/bead/dagger_bpp/seed3/best.zip"
+ },
+ {
+  "name": "bead_dagger_bpp",
+  "track": "A+B",
+  "plant": "bead",
+  "kind": "bead",
+  "seed": 4,
+  "learned": true,
+  "model": "runs/bead/dagger_bpp/seed4/best.zip"
+ },
+ {
+  "name": "bead_dagger_ppo_bc10",
+  "track": "A+B",
+  "plant": "bead",
+  "kind": "bead",
+  "seed": 0,
+  "learned": true,
+  "model": "runs/bead/dagger_ppo_bc10/seed0/best.zip"
+ },
+ {
+  "name": "bead_dagger_ppo_bc10",
+  "track": "A+B",
+  "plant": "bead",
+  "kind": "bead",
+  "seed": 1,
+  "learned": true,
+  "model": "runs/bead/dagger_ppo_bc10/seed1/best.zip"
+ },
+ {
+  "name": "bead_dagger_ppo_bc10",
+  "track": "A+B",
+  "plant": "bead",
+  "kind": "bead",
+  "seed": 2,
+  "learned": true,
+  "model": "runs/bead/dagger_ppo_bc10/seed2/best.zip"
  },
  {
   "name": "bead_published",
@@ -112,7 +370,7 @@
   "kw": {
    "mode": "fixed",
    "v_cap": null,
-   "fixed_L": 0.25,
+   "fixed_L": 0.125,
    "fixed_g": 0.9
   }
  },
@@ -127,8 +385,8 @@
   "kw": {
    "mode": "adaptive",
    "v_cap": null,
-   "adapt_a": 0.1,
-   "adapt_b": 0.0,
+   "adapt_a": 0.05,
+   "adapt_b": 0.025,
    "fixed_g": 1.05
   }
  },
@@ -143,7 +401,7 @@
   "kw": {
    "mode": "fixed",
    "v_cap": 1.256,
-   "fixed_L": 0.25,
+   "fixed_L": 0.125,
    "fixed_g": 1.0
   }
  },
@@ -158,9 +416,39 @@
   "kw": {
    "mode": "adaptive",
    "v_cap": 1.256,
-   "adapt_a": 0.1,
-   "adapt_b": 0.0,
+   "adapt_a": 0.05,
+   "adapt_b": 0.05,
    "fixed_g": 1.05
+  }
+ },
+ {
+  "name": "stanley_tuned",
+  "track": "A",
+  "plant": "bicycle",
+  "kind": "pp",
+  "seed": null,
+  "learned": false,
+  "model": null,
+  "kw": {
+   "mode": "stanley",
+   "v_cap": null,
+   "stanley_k": 512.0,
+   "stanley_ks": 0.01
+  }
+ },
+ {
+  "name": "stanley_tuned_matched",
+  "track": "B",
+  "plant": "bicycle",
+  "kind": "pp",
+  "seed": null,
+  "learned": false,
+  "model": null,
+  "kw": {
+   "mode": "stanley",
+   "v_cap": 1.256,
+   "stanley_k": 1024.0,
+   "stanley_ks": 1.0
   }
  },
  {
@@ -192,6 +480,48 @@
   }
  },
  {
+  "name": "rlpp_joint",
+  "track": "A",
+  "plant": "bicycle",
+  "kind": "pp",
+  "seed": 2,
+  "learned": true,
+  "model": "runs/rlpp/joint/seed2/best.zip",
+  "kw": {
+   "mode": "joint",
+   "v_cap": null,
+   "vecnorm": "runs/rlpp/joint/seed2/best_vecnorm.pkl"
+  }
+ },
+ {
+  "name": "rlpp_joint",
+  "track": "A",
+  "plant": "bicycle",
+  "kind": "pp",
+  "seed": 3,
+  "learned": true,
+  "model": "runs/rlpp/joint/seed3/best.zip",
+  "kw": {
+   "mode": "joint",
+   "v_cap": null,
+   "vecnorm": "runs/rlpp/joint/seed3/best_vecnorm.pkl"
+  }
+ },
+ {
+  "name": "rlpp_joint",
+  "track": "A",
+  "plant": "bicycle",
+  "kind": "pp",
+  "seed": 4,
+  "learned": true,
+  "model": "runs/rlpp/joint/seed4/best.zip",
+  "kw": {
+   "mode": "joint",
+   "v_cap": null,
+   "vecnorm": "runs/rlpp/joint/seed4/best_vecnorm.pkl"
+  }
+ },
+ {
   "name": "rlpp_ld_only",
   "track": "A",
   "plant": "bicycle",
@@ -220,6 +550,48 @@
   }
  },
  {
+  "name": "rlpp_ld_only",
+  "track": "A",
+  "plant": "bicycle",
+  "kind": "pp",
+  "seed": 2,
+  "learned": true,
+  "model": "runs/rlpp/ld_only/seed2/best.zip",
+  "kw": {
+   "mode": "ld_only",
+   "v_cap": null,
+   "vecnorm": "runs/rlpp/ld_only/seed2/best_vecnorm.pkl"
+  }
+ },
+ {
+  "name": "rlpp_ld_only",
+  "track": "A",
+  "plant": "bicycle",
+  "kind": "pp",
+  "seed": 3,
+  "learned": true,
+  "model": "runs/rlpp/ld_only/seed3/best.zip",
+  "kw": {
+   "mode": "ld_only",
+   "v_cap": null,
+   "vecnorm": "runs/rlpp/ld_only/seed3/best_vecnorm.pkl"
+  }
+ },
+ {
+  "name": "rlpp_ld_only",
+  "track": "A",
+  "plant": "bicycle",
+  "kind": "pp",
+  "seed": 4,
+  "learned": true,
+  "model": "runs/rlpp/ld_only/seed4/best.zip",
+  "kw": {
+   "mode": "ld_only",
+   "v_cap": null,
+   "vecnorm": "runs/rlpp/ld_only/seed4/best_vecnorm.pkl"
+  }
+ },
+ {
   "name": "rlpp_joint_matched",
   "track": "B",
   "plant": "bicycle",
@@ -245,6 +617,48 @@
    "mode": "joint",
    "v_cap": 1.256,
    "vecnorm": "runs/rlpp/joint_matched/seed1/best_vecnorm.pkl"
+  }
+ },
+ {
+  "name": "rlpp_joint_matched",
+  "track": "B",
+  "plant": "bicycle",
+  "kind": "pp",
+  "seed": 2,
+  "learned": true,
+  "model": "runs/rlpp/joint_matched/seed2/best.zip",
+  "kw": {
+   "mode": "joint",
+   "v_cap": 1.256,
+   "vecnorm": "runs/rlpp/joint_matched/seed2/best_vecnorm.pkl"
+  }
+ },
+ {
+  "name": "rlpp_joint_matched",
+  "track": "B",
+  "plant": "bicycle",
+  "kind": "pp",
+  "seed": 3,
+  "learned": true,
+  "model": "runs/rlpp/joint_matched/seed3/best.zip",
+  "kw": {
+   "mode": "joint",
+   "v_cap": 1.256,
+   "vecnorm": "runs/rlpp/joint_matched/seed3/best_vecnorm.pkl"
+  }
+ },
+ {
+  "name": "rlpp_joint_matched",
+  "track": "B",
+  "plant": "bicycle",
+  "kind": "pp",
+  "seed": 4,
+  "learned": true,
+  "model": "runs/rlpp/joint_matched/seed4/best.zip",
+  "kw": {
+   "mode": "joint",
+   "v_cap": 1.256,
+   "vecnorm": "runs/rlpp/joint_matched/seed4/best_vecnorm.pkl"
   }
  },
  {

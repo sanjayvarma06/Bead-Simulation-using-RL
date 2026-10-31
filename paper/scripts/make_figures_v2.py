@@ -19,7 +19,7 @@ from matplotlib.patches import FancyBboxPatch, Rectangle  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "experiments"))
-from common import load_path, load_manifest, run_pp, vecnorm_obs_fn  # noqa: E402
+from common import load_path, load_manifest, run_pp, vecnorm_obs_fn, split_ids  # noqa: E402
 
 FINAL = ROOT / "results" / "final"
 RUNS = ROOT / "runs"
@@ -36,14 +36,22 @@ plt.rcParams.update({
 C = {"ref": "#555555", "expert": "#333333", "bead_dagger": "#2ca02c", "bead_dagger_ppo": "#17becf",
      "bead_ppo": "#8c564b", "bead_published": "#bcbd22", "rlpp_joint": "#1f77b4", "rlpp_ld_only": "#ff7f0e",
      "pp_adaptive_tuned": "#9467bd", "pp_fixed_tuned": "#d62728", "pp_fixed_original": "#e377c2",
-     "rlpp_published": "#7f7f7f"}
-LBL = {"expert": "Geometric expert", "bead_dagger": "Bead-DAgger", "bead_dagger_ppo": "Bead-DAgger→PPO",
-       "bead_ppo": "Bead-PPO (scratch)", "bead_published": "Bead (published ckpt.)",
+     "rlpp_published": "#7f7f7f", "bead_pp": "#000080", "bead_ppo_acc": "#c49c94",
+     "bead_dagger_ppo_acc": "#9edae5", "bead_dagger_bpp": "#98df8a", "stanley_tuned": "#8c6d31"}
+# Legend names are the row names of the tables (make_tables_v2.NAME) without the LaTeX footnote marks
+# and the citation; the expert is Eq. (3) of the IJCAS manuscript.
+EXPERT_EQ = 3
+LBL = {"expert": f"Geometric expert ({EXPERT_EQ})", "bead_dagger": "Bead-DAgger", "bead_dagger_ppo": "Bead-DAgger→PPO",
+       "bead_ppo": "Bead-PPO (scratch)", "bead_published": "Bead, naive protocol",
        "rlpp_joint": r"RL–PP (joint $L_d,g$)", "rlpp_ld_only": r"RL–PP ($L_d$ only)",
        "pp_adaptive_tuned": "Adaptive PP (tuned)", "pp_fixed_tuned": "Fixed PP (tuned)",
-       "pp_fixed_original": "Fixed PP (orig. gains)", "rlpp_published": "RL–PP (published ckpt.)"}
-MAIN = ["expert", "bead_dagger", "bead_dagger_ppo", "bead_ppo", "rlpp_joint", "rlpp_ld_only",
-        "pp_fixed_tuned", "pp_adaptive_tuned"]
+       "pp_fixed_original": "Fixed PP (hand-set gains)", "rlpp_published": "RL–PP, naive protocol",
+       "bead_pp": "Bead-PP (PP law on bead)", "bead_ppo_acc": "Bead-PPO (scratch), prog. rew.",
+       "bead_dagger_ppo_acc": "Bead-DAgger→PPO, prog. rew.",
+       "bead_dagger_bpp": "Bead-DAgger, Bead-PP teacher", "stanley_tuned": "Stanley (tuned)"}
+MAIN = ["expert", "bead_pp", "bead_dagger", "bead_dagger_bpp", "bead_dagger_ppo", "bead_ppo", "rlpp_joint", "rlpp_ld_only",
+        "pp_fixed_tuned", "pp_adaptive_tuned", "stanley_tuned"]
+SEEDS = [0, 1, 2, 3, 4]
 
 DF = pd.read_csv(FINAL / "episodes.csv")
 
@@ -58,11 +66,11 @@ def seed_means(family="circuit"):
 def fig_pipeline():
     fig, ax = plt.subplots(figsize=(3.5, 2.3))
     ax.set_xlim(0, 100); ax.set_ylim(0, 90); ax.axis("off")
-    bands = [("Data / Perception", "#0f7b7b", 61), ("Learning (DAgger, PPO, DAgger→PPO)", "#c9c9c9", 31),
+    bands = [("Data / Perception", "#0f7b7b", 61), ("Learning: DAgger, PPO, DAgger→PPO", "#c9c9c9", 31),
              ("Evaluation / Benchmark", "#f5b700", 1)]
     for title, col, y in bands:
         ax.add_patch(Rectangle((0.5, y), 99, 28, color=col, zorder=0))
-        ax.add_patch(Rectangle((22, y + 21.5), 56, 5, facecolor="white", edgecolor="#333", lw=0.5))
+        ax.add_patch(Rectangle((17, y + 21.5), 66, 5, facecolor="white", edgecolor="#333", lw=0.5))
         ax.text(50, y + 24, title, ha="center", va="center", fontsize=6.4, weight="bold")
 
     def box(x, y, txt, fs=5.4):
@@ -78,16 +86,16 @@ def fig_pipeline():
              "Zhang–Suen skeleton\n/ contour → ordered\npolyline $\\{p_i\\}$",
              "Arc-length resampling\n(350 pts) → 20×20 m\narena frame"),
             ("Bead environment\n16-D obs, 2-D accel.\naction, reward (3)",
-             "Expert + DAgger\n(supervised) and/or\nPPO on reward (3)",
+             "Expert + DAgger and/or\nPPO on reward (3)\n(base / progress)",
              "Selection on\nvalidation circuits\n+ shapes only"),
-            ("Expert, bead policies,\nFixed/Adaptive PP,\nRL–PP ($L_d$; $L_d,g$)",
-             "Common metrics:\nGeom@τ, RMSE, P95,\norder, time, speed",
+            ("Expert, bead policies,\nPP law on car and bead,\nRL–PP ($L_d$; $L_d,g$)",
+             "One lap rule, one metric\ncode: Geom@τ, RMSE,\nP95, order, time",
              "8 held-out circuits\n+ 100 held-out shapes\n(native / matched speed)")]
     for (t0, t1, t2), (_, _, y) in zip(rows, bands):
         yb = y + 4
         box(3, yb, t0); box(36, yb, t1); box(69, yb, t2)
         arrow(31.8, yb + 6.5, 35.2, yb + 6.5); arrow(64.8, yb + 6.5, 68.2, yb + 6.5)
-    arrow(83, 64.4, 83, 51.6); arrow(83, 34.4, 83, 21.6)
+    arrow(91, 64.4, 91, 51.6); arrow(91, 34.4, 91, 21.6)
     fig.savefig(FIG / "fig1_pipeline.png"); plt.close(fig)
 
 
@@ -164,26 +172,31 @@ def read_val(path):
 
 def fig_learning():
     fig, axs = plt.subplots(1, 2, figsize=(3.5, 1.6), sharey=True)
-    for mode, c in (("ppo", "bead_ppo"), ("dagger_ppo", "bead_dagger_ppo")):
-        for s in (0, 1):
-            r = read_val(RUNS / "bead" / mode / f"seed{s}" / "val_log.csv")
-            x = [float(v["timesteps"]) / 1e3 for v in r]; y = [100 * float(v["rmse_circuits"]) for v in r]
-            axs[0].plot(x, y, color=C[c], lw=0.9, marker="o", ms=2, label=LBL[c] if s == 0 else None)
-    for s in (0, 1):
+    for mode, c, ls in (("ppo", "bead_ppo", "-"), ("ppo_acc", "bead_ppo", "--"),
+                        ("dagger_ppo", "bead_dagger_ppo", "-"), ("dagger_ppo_acc", "bead_dagger_ppo", "--")):
+        for s in SEEDS:
+            r = [v for v in read_val(RUNS / "bead" / mode / f"seed{s}" / "val_log.csv")
+                 if str(v.get("actor_frozen", "False")) != "True"]
+            x = [float(v["timesteps"]) / 1e6 for v in r]; y = [100 * float(v["rmse_circuits"]) for v in r]
+            lab = (LBL[c] + (", prog. rew." if mode.endswith("_acc") else "")) if s == 0 else None
+            axs[0].plot(x, y, color=C[c], lw=0.6, ls=ls, marker="o", ms=1.2, alpha=0.8, label=lab)
+    for s in SEEDS:
         r = read_val(RUNS / "bead" / "dagger" / f"seed{s}" / "val_log.csv")
         axs[1].plot([int(v["round"]) for v in r], [100 * float(v["rmse_circuits"]) for v in r], color=C["bead_dagger"],
                     lw=0.9, marker="o", ms=2, label=LBL["bead_dagger"] if s == 0 else None)
     ex = json.loads((RUNS / "expert_trainval.json").read_text())["val"]["circuit_rmse"] * 100
     for ax in axs:
-        ax.axhline(ex, color=C["expert"], ls=":", lw=0.8, label="Expert")
+        ax.axhline(ex, color=C["expert"], ls=":", lw=0.8, label=LBL["expert"])
         ax.set_yscale("log"); ax.grid(alpha=0.3, which="both"); ax.tick_params(length=2)
         from matplotlib.ticker import FixedLocator, FormatStrFormatter, NullLocator
         ax.yaxis.set_major_locator(FixedLocator([0.5, 1, 2, 5, 10])); ax.yaxis.set_minor_locator(NullLocator())
         ax.yaxis.set_major_formatter(FormatStrFormatter("%g"))
-        ax.legend(frameon=False, fontsize=5.6, loc="center right")
-    axs[0].legend(frameon=False, fontsize=5.6, loc="lower left", bbox_to_anchor=(0.0, 0.08))
-    axs[0].set_xlabel("PPO environment steps [k]"); axs[1].set_xlabel("DAgger round")
+    axs[0].set_xlabel("PPO environment steps [M]"); axs[1].set_xlabel("DAgger round")
     axs[0].set_ylabel("Val. circuit RMSE [cm]")
+    h0, l0 = axs[0].get_legend_handles_labels()
+    h1, l1 = axs[1].get_legend_handles_labels()
+    fig.legend(h0 + h1[:1], l0 + l1[:1], loc="lower center", ncol=2, bbox_to_anchor=(0.5, -0.30),
+               frameon=False, fontsize=5.6)
     fig.tight_layout(w_pad=0.5)
     fig.savefig(FIG / "fig5_learning.png"); plt.close(fig)
 
@@ -244,18 +257,37 @@ def fig_interp():
     tr = ex["traj"][1:]
     idx = np.argmin(((tr[:, None, :] - pts[None]) ** 2).sum(-1), axis=1)
     kmax = np.max(np.stack([k[(idx + o) % len(k)] for o in (0, 5, 12)]), axis=0)
+    tune = json.loads((RUNS / "pp_tuning.json").read_text())
     fig, axs = plt.subplots(1, 2, figsize=(3.5, 1.45))
+    axs[0].axhspan(0.26, 0.85, color="#999", alpha=0.18, lw=0, label="teacher $L^*$ range")
+    axs[0].axhline(tune["fixed_native"]["best"]["params"][0], color=C["pp_fixed_tuned"], ls="--", lw=0.8,
+                   label="Fixed PP (tuned)")
     axs[0].scatter(kmax, L, s=1.5, color=C["rlpp_joint"], alpha=0.5, rasterized=True)
     axs[1].scatter(kmax, G, s=1.5, color=C["pp_adaptive_tuned"], alpha=0.5, rasterized=True)
     axs[0].set_ylabel("$L_d$ [m]"); axs[1].set_ylabel("$g$")
+    axs[0].legend(frameon=False, fontsize=5.0, loc="upper right")
     for ax in axs:
         ax.set_xlabel(r"$\kappa^{\max}$ [m$^{-1}$]"); ax.grid(alpha=0.3); ax.tick_params(length=2)
     fig.tight_layout(w_pad=0.6)
     fig.savefig(FIG / "fig7_interp.png"); plt.close(fig)
     r = lambda a, b: float(np.corrcoef(a, b)[0, 1])  # noqa: E731
+    # lookahead used over all test circuits and all training seeds (first evaluation episode)
+    from evaluate import SEEDS
+    allL = []
+    for s in SEEDS:
+        ds = RUNS / "rlpp" / "joint" / f"seed{s}"
+        mdl = PPO.load(ds / "best.zip", device="cpu")
+        nf = vecnorm_obs_fn(ds / "best_vecnorm.pkl")
+        for ref in split_ids("test", "f1tenth_circuit"):
+            p2, b2 = load_path(ref)
+            allL.append(run_pp("joint", p2, b2, 50000, model=mdl, obs_norm=nf)[1]["L"])
+    allL = np.concatenate(allL)
     stats = {"L_min": float(L.min()), "L_max": float(L.max()), "L_mean": float(L.mean()),
              "g_min": float(G.min()), "g_max": float(G.max()), "g_std": float(G.std()),
-             "r_L_kmax": r(L, kmax), "r_g_kmax": r(G, kmax)}
+             "r_L_kmax": r(L, kmax), "r_g_kmax": r(G, kmax),
+             "all_L_median": float(np.median(allL)), "all_L_p05": float(np.percentile(allL, 5)),
+             "all_L_p95": float(np.percentile(allL, 95)),
+             "all_L_frac_teacher_band": float(np.mean((allL >= 0.26) & (allL <= 0.85)))}
     (FIG / "fig7_stats.json").write_text(json.dumps(stats, indent=1))
 
 
@@ -340,7 +372,7 @@ def fig_shapes():
 # ---------------------------------------------------------------- Fig. 11 error CDF
 def fig_cdf():
     from geometry_utils import points_to_polyline_distance
-    ctrls = [("expert", None), ("bead_dagger", 0), ("bead_dagger_ppo", 0), ("bead_ppo", 0),
+    ctrls = [("expert", None), ("bead_pp", None), ("bead_dagger", 0), ("bead_dagger_ppo", 0), ("bead_ppo", 0),
              ("rlpp_joint", 0), ("pp_fixed_tuned", None), ("pp_adaptive_tuned", None)]
     from common import split_ids
     refs = split_ids("test", "f1tenth_circuit")
@@ -356,10 +388,59 @@ def fig_cdf():
     fig.savefig(FIG / "fig11_cdf.png"); plt.close(fig)
 
 
+# ---------------------------------------------------------------- Fig. 12 same plant, different controller
+def fig_bead_pursuit():
+    """Left: the same Fixed PP law on both plants versus L_d (training tuning references, best g per L_d).
+    Right: test-circuit RMSE of the expert of Eq. (3) versus the number k of waypoints it aims ahead."""
+    tune = json.loads((RUNS / "pp_tuning.json").read_text())
+    fig, axs = plt.subplots(1, 2, figsize=(3.5, 1.8))
+    def best_per_L(rows):
+        out = {}
+        for r in rows:
+            if r["completed_all"] < 1.0:
+                continue
+            L = round(r["params"][0], 3)
+            if L not in out or r["score"] > out[L]["score"]:
+                out[L] = r
+        Ls = sorted(out)
+        return Ls, [100 * out[L]["rmse_circuits"] for L in Ls]
+    for key, c, lab in (("fixed_matched", "pp_fixed_tuned", "Fixed PP (tuned), car"), ("beadpp_matched", "bead_pp", LBL["bead_pp"])):
+        x, y = best_per_L(tune[key]["grid"])
+        axs[0].plot(x, y, color=C[c], lw=0.9, marker="o", ms=2, label=lab)
+        axs[0].plot([tune[key]["best"]["params"][0]], [100 * tune[key]["best"]["rmse_circuits"]], marker="*",
+                    ms=6, color=C[c], ls="none")
+    axs[0].set_xlabel("Lookahead $L_d$ [m]"); axs[0].set_ylabel("Train circuit RMSE [cm]")
+    axs[0].set_title("Fixed PP @ $v_{match}$, both plants", fontsize=6.4, pad=2)
+    d = pd.read_csv(FINAL / "expert_k" / "episodes.csv")
+    d["completed"] = d["completed"].astype(str).str.lower().eq("true").astype(float)
+    d = d[d.family == "circuit"].groupby(["controller", "ref"]).mean(numeric_only=True).groupby("controller").mean()
+    ks = list(range(1, 11))
+    for anchor, ls, lab in (("counter", "-", f"anchored on $w_t$ (Eq. {EXPERT_EQ})"), ("nearest", "--", "anchored on nearest point")):
+        y = [100 * d.loc[f"expert_k{k}_{anchor}", "rmse"] for k in ks]
+        full = [d.loc[f"expert_k{k}_{anchor}", "completed"] >= 1.0 for k in ks]
+        axs[1].plot(ks, y, color=C["expert"], ls=ls, lw=0.9, label=lab)
+        axs[1].scatter([k for k, f in zip(ks, full) if f], [v for v, f in zip(y, full) if f], s=6, color=C["expert"], zorder=3)
+        axs[1].scatter([k for k, f in zip(ks, full) if not f], [v for v, f in zip(y, full) if not f], s=6,
+                       facecolors="white", edgecolors=C["expert"], lw=0.6, zorder=3)
+    axs[1].scatter([], [], s=6, facecolors="white", edgecolors=C["expert"], lw=0.6, label="not all laps completed")
+    axs[1].set_xlabel("Expert target $k$ [waypoints]"); axs[1].set_ylabel("Test circuit RMSE [cm]")
+    axs[1].set_xticks([1, 2, 4, 6, 8, 10])
+    for ax in axs:
+        ax.set_yscale("log"); ax.grid(alpha=0.3, which="both"); ax.tick_params(length=2)
+        from matplotlib.ticker import FixedLocator, FormatStrFormatter, NullLocator
+        ax.yaxis.set_major_locator(FixedLocator([0.2, 0.5, 1, 2, 5, 10, 20, 50])); ax.yaxis.set_minor_locator(NullLocator())
+        ax.yaxis.set_major_formatter(FormatStrFormatter("%g"))
+    axs[0].legend(frameon=False, fontsize=5.0, loc="lower right")
+    axs[1].set_ylim(0.8, 90)
+    axs[1].legend(frameon=False, fontsize=5.0, loc="upper left")
+    fig.tight_layout(w_pad=0.6)
+    fig.savefig(FIG / "fig12_bead_pursuit.png"); plt.close(fig)
+
+
 if __name__ == "__main__":
     only = set(sys.argv[1:])          # e.g. "python make_figures_v2.py fig_cdf fig_traces"
     for f in (fig_pipeline, fig_split, fig_bars, fig_pace, fig_learning, fig_zoom, fig_interp,
-              fig_inputs, fig_traces, fig_cdf):
+              fig_inputs, fig_traces, fig_cdf, fig_bead_pursuit):
         if not only or f.__name__ in only:
             f()
     print("figures ->", FIG)

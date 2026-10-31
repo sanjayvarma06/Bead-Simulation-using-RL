@@ -4,9 +4,10 @@ Aggregation (learned controllers): episode -> mean over evaluation episodes per 
 training seed) -> mean over references per training seed -> mean +- std over training seeds.
 Non-learned controllers are deterministic given the start seed and have one "seed".
 
-Statistics (docs/02_PHASE2_PLAN.md, section F): paired over the 8 test circuits, exact two-sided
-Wilcoxon signed-rank, mean difference with a 95 % bootstrap CI (circuits resampled; training seeds
-resampled within learned controllers), Holm correction across the 14 pre-declared tests.
+Statistics (docs/03_REVISION_PLAN.md, section C): paired over the 8 test circuits. Primary evidence
+is the mean difference with a 95 % bootstrap CI (circuits resampled; training seeds resampled within
+learned controllers). Four primary RMSE comparisons get an exact two-sided Wilcoxon signed-rank test
+with Holm correction over those four; every other comparison is exploratory (CI, unadjusted p).
 
 Usage: python experiments/analyze.py
 """
@@ -25,13 +26,22 @@ from common import ROOT  # noqa: E402
 FINAL = ROOT / "results" / "final"
 METRICS = ["geom005", "geom010", "rmse", "p95", "max_err", "off_path_frac", "sequential", "ordered_cov",
            "completed", "time_s", "mean_speed", "rms_accel", "action_change", "boundary_hits"]
-ORDER = ["expert", "bead_dagger", "bead_ppo", "bead_dagger_ppo", "bead_published",
-         "pp_fixed_original", "pp_fixed_tuned", "pp_adaptive_original", "pp_adaptive_tuned",
+ORDER = ["expert", "bead_dagger", "bead_dagger_bpp", "bead_dagger_ppo", "bead_dagger_ppo_bc10", "bead_dagger_ppo_acc",
+         "bead_ppo", "bead_ppo_acc",
+         "bead_pp", "bead_published",
+         "pp_fixed_original", "pp_fixed_tuned", "pp_adaptive_original", "pp_adaptive_tuned", "stanley_tuned",
          "rlpp_joint", "rlpp_ld_only", "rlpp_published",
-         "pp_fixed_tuned_matched", "pp_adaptive_tuned_matched", "rlpp_joint_matched"]
-PLANNED = [("bead_dagger_ppo", "bead_dagger"), ("bead_ppo", "bead_dagger_ppo"), ("bead_dagger_ppo", "expert"),
-           ("bead_dagger_ppo", "pp_fixed_tuned"), ("bead_dagger_ppo", "pp_fixed_tuned_matched"),
-           ("rlpp_joint", "rlpp_ld_only"), ("rlpp_joint", "pp_fixed_tuned")]
+         "pp_fixed_tuned_matched", "pp_adaptive_tuned_matched", "stanley_tuned_matched", "rlpp_joint_matched"]
+# Primary family (Holm over these four, metric RMSE); declared in docs/03_REVISION_PLAN.md.
+PRIMARY_TESTS = [("bead_dagger", "pp_fixed_tuned_matched"), ("bead_dagger_ppo", "bead_dagger"),
+                 ("rlpp_joint", "pp_fixed_tuned"), ("bead_pp", "expert")]
+EXPLORATORY = [("bead_dagger", "expert"), ("bead_dagger_bpp", "bead_dagger"), ("bead_dagger_bpp", "bead_pp"),
+               ("bead_dagger_bpp", "pp_fixed_tuned_matched"),
+               ("bead_dagger_ppo_bc10", "bead_dagger"), ("bead_dagger_ppo_bc10", "bead_dagger_ppo"), ("bead_dagger_ppo", "expert"), ("bead_ppo", "bead_dagger_ppo"),
+               ("bead_dagger_ppo_acc", "bead_dagger_ppo"), ("bead_ppo_acc", "bead_ppo"),
+               ("bead_pp", "pp_fixed_tuned_matched"), ("pp_fixed_tuned_matched", "expert"),
+               ("rlpp_joint", "rlpp_ld_only"), ("pp_adaptive_tuned", "pp_fixed_tuned"),
+               ("stanley_tuned", "pp_fixed_tuned"), ("stanley_tuned_matched", "pp_fixed_tuned_matched")]
 PRIMARY = ["rmse", "geom010"]
 
 
@@ -85,7 +95,10 @@ def wilcoxon_exact(diff):
     return float(min(1.0, p)), float(w_plus)
 
 
-def bootstrap_ci(prs, a, b, metric, family="circuit", reps=10000, rng=np.random.default_rng(0)):
+def bootstrap_ci(prs, a, b, metric, family="circuit", reps=10000, rng=None):
+    if rng is None:   # one fixed stream per comparison, so an interval does not depend on the order of the list
+        import zlib
+        rng = np.random.default_rng(zlib.crc32(f"{a}|{b}|{metric}|{family}".encode()))
     d = prs[prs.family == family]
     refs = sorted(d.ref.unique())
     A = d[d.controller == a].pivot_table(index="ref", columns="train_seed", values=metric).reindex(refs)
@@ -115,7 +128,7 @@ def holm(pvals):
 
 def comparisons(prs, family="circuit"):
     rows = []
-    for a, b in PLANNED:
+    for a, b in PRIMARY_TESTS + EXPLORATORY:
         if not ({a, b} <= set(prs.controller)):
             continue
         for m in PRIMARY + ["time_s"]:
@@ -123,9 +136,9 @@ def comparisons(prs, family="circuit"):
             p, w = wilcoxon_exact(per_ref) if family == "circuit" else wilcoxon_normal(per_ref)
             rows.append({"A": a, "B": b, "metric": m, "mean_diff_A_minus_B": point, "ci95_lo": lo, "ci95_hi": hi,
                          "n_refs": int(len(per_ref)), "A_better_on": int(np.sum(per_ref < 0) if m != "geom010" else np.sum(per_ref > 0)),
-                         "wilcoxon_p": p, "planned": m in PRIMARY})
+                         "wilcoxon_p": p, "primary": (a, b) in PRIMARY_TESTS and m == "rmse"})
     df = pd.DataFrame(rows)
-    mask = df.planned.to_numpy()
+    mask = df.primary.to_numpy()
     df["holm_p"] = np.nan
     df.loc[mask, "holm_p"] = holm(df.loc[mask, "wilcoxon_p"].to_numpy())
     return df
@@ -162,7 +175,7 @@ def main():
     for fam, s in res.items():
         print(f"\n=== {fam} ===")
         print(s[cols].round(4).to_string(index=False))
-    print("\n=== planned comparisons (test circuits) ===")
+    print("\n=== comparisons (test circuits) ===")
     print(comp.round(4).to_string(index=False))
     meta = {"n_episodes": int(len(df)), "controllers": sorted(df.controller.unique()),
             "refs_per_family": df.groupby("family").ref.nunique().to_dict()}

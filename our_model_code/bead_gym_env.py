@@ -11,9 +11,10 @@ class BeadTraceEnv(gym.Env):
     metadata = {"render_modes": []}
 
     def __init__(self, image_path: str | list | tuple | None = None, seed: int = 42,
-                 paths: list | None = None, strict: bool = False):
+                 paths: list | None = None, strict: bool = False, reward_mode: str = "base"):
         super().__init__()
-        self._env = BeadEnvironment(image_path=image_path, seed=seed, strict=strict, paths=paths)
+        self._env = BeadEnvironment(image_path=image_path, seed=seed, strict=strict, paths=paths,
+                                    reward_mode=reward_mode)
         self._image_path = image_path
         self._seed = seed
         self.observation_space = spaces.Box(-1.0, 1.0, shape=(OBS_DIM,), dtype=np.float32)

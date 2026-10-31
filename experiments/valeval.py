@@ -18,8 +18,14 @@ def _worker(args):
     torch.set_num_threads(1)
     from common import load_path, run_bead, run_pp, actor_mean, vecnorm_obs_fn
     from stable_baselines3 import PPO
-    pts, brk = load_path(pid)
-    if kind == "bead":
+    pts, brk = load_path(pid, kw.get("path_set"))
+    bead_kw = {k: kw[k] for k in ("pos_noise", "accel", "arena") if k in kw}
+    if kind == "bead_geo":                 # geometric controllers on the bead plant (new object per episode)
+        from common import ExpertK, BeadPursuit
+        policy = (ExpertK(kw["k"], kw.get("anchor", "counter")) if kw["ctrl"] == "expert_k"
+                  else BeadPursuit(kw["L_d"], kw["g"], kw["v_ref"]))
+        m, extra = run_bead(policy, pts, brk, seed, **bead_kw)
+    elif kind == "bead":
         if model_path == "expert":
             policy = "expert"
         else:
@@ -29,7 +35,7 @@ def _worker(args):
                 _MODEL_CACHE[key] = PPO.load(model_path, device="cpu")
             model = _MODEL_CACHE[key]
             policy = lambda o: actor_mean(model, o)  # noqa: E731
-        m, extra = run_bead(policy, pts, brk, seed)
+        m, extra = run_bead(policy, pts, brk, seed, **bead_kw)
     else:
         model = norm = None
         if model_path is not None:
@@ -40,7 +46,8 @@ def _worker(args):
             model = _MODEL_CACHE[key]
             if kw.get("vecnorm"):
                 norm = vecnorm_obs_fn(Path(kw["vecnorm"]))
-        pp_kw = {k: v for k, v in kw.items() if k in ("fixed_L", "fixed_g", "v_cap", "adapt_a", "adapt_b")}
+        pp_kw = {k: v for k, v in kw.items() if k in ("fixed_L", "fixed_g", "v_cap", "adapt_a", "adapt_b", "stanley_k", "stanley_ks", "dynamics",
+                                                       "rwf_ke", "rwf_kpsi", "pos_noise", "max_steer", "arena", "L_max", "g_max")}
         m, extra = run_pp(kw["mode"], pts, brk, seed, model=model, obs_norm=norm, **pp_kw)
     m["id"] = pid
     m["seed"] = seed

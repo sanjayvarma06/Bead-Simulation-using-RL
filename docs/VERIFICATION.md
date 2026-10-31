@@ -1,5 +1,10 @@
 # Verification of the reported results
 
+> **Superseded in part (2026-10-17).** The results below describe the state before the revision after review
+> (2 seeds, previous PP grid and lap rule). For the current results see `04_REVISION_REPORT.md`,
+> `03_REVISION_PLAN.md` and `results/final/verification/report.json`.
+
+
 Date: 2026-10-11. This document answers three questions: (1) do the reported counts reconcile,
 (2) are the reported numbers produced by the code and data in this repository, and (3) does the
 PPO implementation and evidence support the PPO conclusions. Everything below was produced by

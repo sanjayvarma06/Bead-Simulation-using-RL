@@ -1,0 +1,39 @@
+stanley None (256.0, 0.01) 0.9351 1.0
+stanley None (256.0, 0.02) 0.9346 1.0
+stanley None (256.0, 0.05) 0.9343 1.0
+stanley None (256.0, 0.1) 0.9339 1.0
+stanley None (256.0, 0.25) 0.9342 1.0
+stanley None (256.0, 0.5) 0.9336 1.0
+stanley None (256.0, 1.0) 0.93 1.0
+stanley None (256.0, 2.0) 0.9247 1.0
+stanley None (256.0, 4.0) 0.9308 1.0
+stanley None (512.0, 0.01) 0.94 1.0
+stanley None (512.0, 0.02) 0.9395 1.0
+stanley None (512.0, 0.05) 0.9386 1.0
+stanley None (512.0, 0.1) 0.9391 1.0
+stanley None (512.0, 0.25) 0.9387 1.0
+stanley None (512.0, 0.5) 0.9382 1.0
+stanley None (512.0, 1.0) 0.938 1.0
+stanley None (512.0, 2.0) 0.9351 1.0
+stanley None (512.0, 4.0) 0.9298 1.0
+SELECTED stanley native [512.0, 0.01] edge [True, True] val 0.8878
+stanley 1.256 (256.0, 0.01) 0.9422 1.0
+stanley 1.256 (256.0, 0.02) 0.942 1.0
+stanley 1.256 (256.0, 0.05) 0.9421 1.0
+stanley 1.256 (256.0, 0.1) 0.9417 1.0
+stanley 1.256 (256.0, 0.25) 0.9406 1.0
+stanley 1.256 (256.0, 0.5) 0.939 1.0
+stanley 1.256 (256.0, 1.0) 0.9368 1.0
+stanley 1.256 (256.0, 2.0) 0.9402 1.0
+stanley 1.256 (256.0, 4.0) 0.9406 1.0
+stanley 1.256 (512.0, 0.01) 0.9458 1.0
+stanley 1.256 (512.0, 0.02) 0.9455 1.0
+stanley 1.256 (512.0, 0.05) 0.9456 1.0
+stanley 1.256 (512.0, 0.1) 0.9453 1.0
+stanley 1.256 (512.0, 0.25) 0.9455 1.0
+stanley 1.256 (512.0, 0.5) 0.9446 1.0
+stanley 1.256 (512.0, 1.0) 0.9428 1.0
+stanley 1.256 (512.0, 2.0) 0.9399 1.0
+stanley 1.256 (512.0, 4.0) 0.9382 1.0
+SELECTED stanley matched [512.0, 0.01] edge [True, True] val 0.932
+EXIT=0

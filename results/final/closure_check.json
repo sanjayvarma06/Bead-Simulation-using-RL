@@ -1,0 +1,37 @@
+{
+ "closure_gap_m": 0.04647207202360318,
+ "episodes": 300,
+ "max_abs_change": {
+  "rmse": 0.00011915114731725655,
+  "p95": 0.00028882435824060734,
+  "max_err": 0.005924454809760105,
+  "geom010": 0.0020187220187219967,
+  "ordered_cov": 0.0028245828245828664,
+  "completed": 0.0
+ },
+ "completion_flips": 0,
+ "max_rmse_change_cm_per_controller": {
+  "bead_dagger": 0.003398949397014593,
+  "bead_dagger_bpp": 0.00784332705094544,
+  "bead_dagger_ppo": 0.0028005685559407203,
+  "bead_dagger_ppo_acc": 0.0022744294719271446,
+  "bead_dagger_ppo_bc10": 0.002901859119109132,
+  "bead_pp": 0.011915114731725655,
+  "bead_ppo": 0.0011034945820553865,
+  "bead_ppo_acc": 0.0011036047713165742,
+  "bead_published": 0.0008434671863219445,
+  "expert": 0.0030248476660240872,
+  "pp_adaptive_original": 0.0003883712614866086,
+  "pp_adaptive_tuned": 0.004752723444855812,
+  "pp_adaptive_tuned_matched": 0.003135572576964084,
+  "pp_fixed_original": 0.0005169829995627095,
+  "pp_fixed_tuned": 0.005522750298187808,
+  "pp_fixed_tuned_matched": 0.0033584908538831105,
+  "rlpp_joint": 0.0017096831893891745,
+  "rlpp_joint_matched": 0.0008008574230874976,
+  "rlpp_ld_only": 0.001736669711956823,
+  "rlpp_published": 0.0005289079033403421,
+  "stanley_tuned": 0.000501546664383179,
+  "stanley_tuned_matched": 0.0003330145269979379
+ }
+}

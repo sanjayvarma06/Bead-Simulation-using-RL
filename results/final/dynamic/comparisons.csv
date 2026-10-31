@@ -1,0 +1,7 @@
+A,B,mean_diff_A_minus_B,ci95_lo,ci95_hi,A_better_on,n_refs,wilcoxon_p
+dynamic_norate:pp_fixed_tuned_matched,kinematic:pp_fixed_tuned_matched,0.03639368460153082,0.02122211145405277,0.05644080686159254,0,8,0.0078125
+dynamic_norate:rlpp_joint_matched,kinematic:rlpp_joint_matched,0.0327813621359828,0.010307215789073775,0.05251405677276423,1,8,0.015625
+dynamic_norate:rlpp_joint_matched,dynamic_norate:pp_fixed_tuned_matched,0.017274061959286543,-0.0001640487127776074,0.03378020460209362,2,8,0.0546875
+dynamic:pp_fixed_tuned_matched,kinematic:pp_fixed_tuned_matched,0.34533394964652886,0.32766056417677075,0.36418510192292186,0,8,0.0078125
+dynamic:rlpp_joint_matched,kinematic:rlpp_joint_matched,0.21127359109967836,0.1453189900084983,0.27655009929522206,0,8,0.0078125
+dynamic:rlpp_joint_matched,dynamic:pp_fixed_tuned_matched,-0.11317397412201596,-0.17529986259825037,-0.04709385656251147,8,8,0.0078125

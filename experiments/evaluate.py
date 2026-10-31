@@ -22,8 +22,8 @@ from common import ROOT, RUNS, EVAL_SEEDS, split_ids  # noqa: E402
 from valeval import Evaluator  # noqa: E402
 
 OUT = ROOT / "results" / "final"
-SEEDS = [0, 1]          # reduced from 5 by the user's compute budget
-N_SYNTH = 50            # first 50 test references per synthetic family (of 150), same reason
+SEEDS = [0, 1, 2, 3, 4]
+N_SYNTH = 50            # first 50 test references per synthetic family (of 150); all rows of episodes.csv use this
 SYNTH_SEED = [777]
 
 
@@ -39,10 +39,20 @@ def controllers():
     C = []
     add = lambda **k: C.append(k)  # noqa: E731
     add(name="expert", track="A+B", plant="bead", kind="bead", model="expert", seed=None, learned=False)
-    for mode in ("dagger", "ppo", "dagger_ppo"):
+    add(name="bead_pp", track="B", plant="bead", kind="bead_geo", model=None, seed=None, learned=False,
+        kw=tune["beadpp_matched"]["kwargs"])
+    for mode in ("dagger", "ppo", "dagger_ppo", "ppo_acc", "dagger_ppo_acc", "dagger_bpp"):
         for s in SEEDS:
             add(name=f"bead_{mode}", track="A+B", plant="bead", kind="bead", seed=s, learned=True,
                 model=str(RUNS / "bead" / mode / f"seed{s}" / "best.zip"))
+    # BC-weight check: the lambda selected on validation (experiments/bc_check.py), seeds 0-4, exploratory
+    bc = ROOT / "results" / "final" / "verification" / "bc_check.json"
+    if bc.exists():
+        lam = json.loads(bc.read_text())["selected_lambda"]
+        if lam != "1":
+            for s in SEEDS:
+                add(name=f"bead_dagger_ppo_bc{lam}", track="A+B", plant="bead", kind="bead", seed=s, learned=True,
+                    model=str(RUNS / "bead" / f"dagger_ppo_bc{lam}" / f"seed{s}" / "best.zip"))
     add(name="bead_published", track="A+B", plant="bead", kind="bead", seed=None, learned=True,
         model=str(ROOT / "results/models/PPO_BTP_MODEL.zip"),
         note="original checkpoint; trained and selected on Hockenheim/Montreal/YasMarina (test circuits)")
@@ -55,6 +65,18 @@ def controllers():
                              ("adaptive_matched", "pp_adaptive_tuned_matched", "B")):
         add(name=name, track=track, plant="bicycle", kind="pp", seed=None, learned=False, model=None,
             kw=tune[key]["kwargs"])
+    # Stanley on the same car, gains tuned on training references (experiments/tune_stanley.py)
+    if (RUNS / "stanley_tuning.json").exists():
+        st = json.loads((RUNS / "stanley_tuning.json").read_text())
+        for key, name, track in (("stanley_native", "stanley_tuned", "A"), ("stanley_matched", "stanley_tuned_matched", "B")):
+            add(name=name, track=track, plant="bicycle", kind="pp", seed=None, learned=False, model=None,
+                kw=st[key]["kwargs"])
+    # Rear-wheel feedback on the same car, gains tuned on training references (experiments/tune_extra.py)
+    for job, name, track in (("rwf_native", "rwf_tuned", "A"), ("rwf_matched", "rwf_tuned_matched", "B")):
+        jf = RUNS / "extra_tuning" / f"{job}.json"
+        if jf.exists():
+            add(name=name, track=track, plant="bicycle", kind="pp", seed=None, learned=False, model=None,
+                kw=json.loads(jf.read_text())["kwargs"])
     for mode, sub, track, v in (("joint", "joint", "A", None), ("ld_only", "ld_only", "A", None),
                                 ("joint", "joint_matched", "B", v_match)):
         for s in SEEDS:
@@ -72,7 +94,10 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--only", default="")
     ap.add_argument("--workers", type=int, default=18)
+    ap.add_argument("--append", action="store_true", help="with --only: merge the new rows into episodes.csv")
     args = ap.parse_args()
+    if args.append and not args.only:
+        ap.error("--append requires --only")
     OUT.mkdir(parents=True, exist_ok=True)
     (OUT / "traj").mkdir(exist_ok=True)
     circ = split_ids("test", "f1tenth_circuit")
@@ -103,6 +128,15 @@ def main():
         print(f"{c['name']:28s} seed {c['seed']}: {len(res)} episodes  ({time.time() - t0:.0f}s)", flush=True)
     ev.close()
     keys = []
+    if args.append:
+        # Merge into episodes.csv: earlier rows of the same controllers are replaced, all other rows are
+        # copied unchanged (as text), so a full re-evaluation would give the same file.
+        csv_path = OUT / "episodes.csv"
+        with open(csv_path, newline="") as f:
+            rd = csv.DictReader(f)
+            keys = list(rd.fieldnames)
+            kept = [r for r in rd if r["controller"] not in keep]
+        rows_all = kept + rows_all
     for r in rows_all:
         for k in r:
             if k not in keys:
@@ -111,8 +145,11 @@ def main():
         w = csv.DictWriter(f, fieldnames=keys, restval="")
         w.writeheader()
         w.writerows(rows_all)
-    if not args.only:
-        (OUT / "controllers.json").write_text(relative_paths(json.dumps(C, indent=1, default=str)))
+    if not args.only or args.append:
+        # record only the instances that have rows in episodes.csv
+        have = {(r["controller"], str(r["train_seed"])) for r in rows_all}
+        rec = [c for c in controllers() if (c["name"], str(-1 if c["seed"] is None else c["seed"])) in have]
+        (OUT / "controllers.json").write_text(relative_paths(json.dumps(rec, indent=1, default=str)))
     print("wrote", csv_path, len(rows_all), "rows")
 
 

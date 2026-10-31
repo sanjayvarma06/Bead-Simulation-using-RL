@@ -1,14 +1,23 @@
-DAgger$\to$PPO vs DAgger & RMSE & +2.24 cm & [+1.79, +2.68] & 0/8 & 0.0078 & 0.109\\
-DAgger$\to$PPO vs DAgger & Geom@0.10 & -1.15 pp & [-2.91, -0.04] & 0/8 & 0.0078 & 0.109\\
-PPO (scratch) vs DAgger$\to$PPO & RMSE & +4.09 cm & [+2.89, +5.44] & 0/8 & 0.0078 & 0.109\\
-PPO (scratch) vs DAgger$\to$PPO & Geom@0.10 & -19.06 pp & [-23.97, -13.98] & 0/8 & 0.0078 & 0.109\\
-DAgger$\to$PPO vs Expert & RMSE & +2.24 cm & [+1.80, +2.65] & 0/8 & 0.0078 & 0.109\\
-DAgger$\to$PPO vs Expert & Geom@0.10 & -1.19 pp & [-2.89, -0.07] & 0/8 & 0.0078 & 0.109\\
-DAgger$\to$PPO vs Fixed PP & RMSE & +2.41 cm & [+1.95, +2.83] & 0/8 & 0.0078 & 0.109\\
-DAgger$\to$PPO vs Fixed PP & Geom@0.10 & -0.23 pp & [-1.95, +0.91] & 4/8 & 0.6406 & 1.000\\
-DAgger$\to$PPO vs Fixed PP @$v_{\mathrm{match}}$ & RMSE & +2.54 cm & [+2.09, +2.95] & 0/8 & 0.0078 & 0.109\\
-DAgger$\to$PPO vs Fixed PP @$v_{\mathrm{match}}$ & Geom@0.10 & -0.17 pp & [-1.97, +0.99] & 4/8 & 0.7422 & 1.000\\
-RL--PP joint vs RL--PP $L_d$ & RMSE & +0.05 cm & [-0.01, +0.13] & 2/8 & 0.0547 & 0.328\\
-RL--PP joint vs RL--PP $L_d$ & Geom@0.10 & -0.03 pp & [-0.09, +0.01] & 1/8 & 0.5000 & 1.000\\
-RL--PP joint vs Fixed PP & RMSE & +0.13 cm & [-0.06, +0.31] & 3/8 & 0.3125 & 1.000\\
-RL--PP joint vs Fixed PP & Geom@0.10 & -0.05 pp & [-0.11, +0.00] & 0/8 & 0.2500 & 1.000\\
+\multicolumn{8}{l}{\textit{Primary (Holm over these four)}}\\
+DAgger vs Fixed PP @$v_{\mathrm{match}}$ & +0.75 & [+0.62, +0.87] & 0/8 & 0.0078 & 0.031 & +0.36 & [+0.22, +0.51]\\
+DAgger$\to$PPO vs DAgger & +0.71 & [+0.53, +0.93] & 0/8 & 0.0078 & 0.031 & +0.66 & [+0.39, +0.97]\\
+RL--PP joint vs Fixed PP & +1.49 & [+1.06, +2.02] & 0/8 & 0.0078 & 0.031 & +0.97 & [+0.55, +1.49]\\
+Bead-PP vs Expert & $-$0.79 & [$-$0.92, $-$0.64] & 8/8 & 0.0078 & 0.031 & $-$0.36 & [$-$0.49, $-$0.23]\\
+\midrule
+\multicolumn{8}{l}{\textit{Exploratory (no correction)}}\\
+DAgger vs Expert & $-$0.01 & [$-$0.06, +0.04] & 5/8 & 0.8438 & -- & $-$0.00 & [$-$0.04, +0.04]\\
+DAgger (Bead-PP teacher) vs DAgger & $-$0.64 & [$-$0.77, $-$0.48] & 8/8 & 0.0078 & -- & $-$0.36 & [$-$0.52, $-$0.19]\\
+DAgger (Bead-PP teacher) vs Bead-PP & +0.15 & [+0.11, +0.18] & 0/8 & 0.0078 & -- & +0.00 & [$-$0.03, +0.04]\\
+DAgger (Bead-PP teacher) vs Fixed PP @$v_{\mathrm{match}}$ & +0.12 & [+0.08, +0.15] & 0/8 & 0.0078 & -- & +0.01 & [$-$0.03, +0.05]\\
+DAgger$\to$PPO ($\lambda=10$) vs DAgger & +0.20 & [+0.15, +0.26] & 0/8 & 0.0078 & -- & +0.13 & [+0.05, +0.21]\\
+DAgger$\to$PPO ($\lambda=10$) vs DAgger$\to$PPO & $-$0.50 & [$-$0.75, $-$0.31] & 8/8 & 0.0078 & -- & $-$0.53 & [$-$0.84, $-$0.24]\\
+DAgger$\to$PPO vs Expert & +0.69 & [+0.53, +0.94] & 0/8 & 0.0078 & -- & +0.66 & [+0.41, +0.99]\\
+PPO (scratch) vs DAgger$\to$PPO & +3.36 & [+2.35, +4.92] & 0/8 & 0.0078 & -- & +3.23 & [+2.23, +4.83]\\
+DAgger$\to$PPO (prog.) vs DAgger$\to$PPO & +0.37 & [+0.08, +0.64] & 0/8 & 0.0078 & -- & +0.30 & [$-$0.05, +0.66]\\
+PPO (scratch, prog.) vs PPO (scratch) & +1.37 & [+0.19, +2.33] & 0/8 & 0.0078 & -- & +1.38 & [+0.17, +2.42]\\
+Bead-PP vs Fixed PP @$v_{\mathrm{match}}$ & $-$0.03 & [$-$0.08, +0.03] & 5/8 & 0.5469 & -- & +0.01 & [$-$0.01, +0.02]\\
+Fixed PP @$v_{\mathrm{match}}$ vs Expert & $-$0.76 & [$-$0.86, $-$0.66] & 8/8 & 0.0078 & -- & $-$0.36 & [$-$0.49, $-$0.25]\\
+RL--PP joint vs RL--PP $L_d$ & +0.26 & [$-$0.30, +0.87] & 1/8 & 0.0234 & -- & +0.27 & [$-$0.24, +0.82]\\
+Adaptive PP vs Fixed PP & +0.08 & [+0.06, +0.11] & 0/8 & 0.0078 & -- & +0.03 & [+0.02, +0.05]\\
+Stanley vs Fixed PP & +3.78 & [+3.45, +4.05] & 0/8 & 0.0078 & -- & +3.19 & [+2.88, +3.44]\\
+Stanley @$v_{\mathrm{match}}$ vs Fixed PP @$v_{\mathrm{match}}$ & +3.25 & [+2.88, +3.54] & 0/8 & 0.0078 & -- & +2.67 & [+2.31, +2.97]\\
