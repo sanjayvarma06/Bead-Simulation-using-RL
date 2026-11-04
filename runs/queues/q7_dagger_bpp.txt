@@ -1,6 +1,0 @@
-# DAgger (Algorithm 1, 8 rounds) with the tuned Bead-PP controller as teacher, seeds 0-4.
-dagger_bpp_s0|python experiments/train_bead.py --mode dagger --teacher beadpp --tag _bpp --seed 0 --workers 1
-dagger_bpp_s1|python experiments/train_bead.py --mode dagger --teacher beadpp --tag _bpp --seed 1 --workers 1
-dagger_bpp_s2|python experiments/train_bead.py --mode dagger --teacher beadpp --tag _bpp --seed 2 --workers 1
-dagger_bpp_s3|python experiments/train_bead.py --mode dagger --teacher beadpp --tag _bpp --seed 3 --workers 1
-dagger_bpp_s4|python experiments/train_bead.py --mode dagger --teacher beadpp --tag _bpp --seed 4 --workers 1

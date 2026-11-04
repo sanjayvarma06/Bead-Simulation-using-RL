@@ -1,9 +1,0 @@
-# Final DAgger runs (seeds 0-4) and a validation-only PPO pilot (seed 100) for log_std_init.
-pilot_ls-1.0|python experiments/train_bead.py --mode ppo --seed 100 --timesteps 3000000 --log_std_init=-1.0 --tag _pilot_ls-1.0 --workers 4
-pilot_ls-0.5|python experiments/train_bead.py --mode ppo --seed 100 --timesteps 3000000 --log_std_init=-0.5 --tag _pilot_ls-0.5 --workers 4
-pilot_ls0.0|python experiments/train_bead.py --mode ppo --seed 100 --timesteps 3000000 --log_std_init=0.0 --tag _pilot_ls0.0 --workers 4
-dagger_s0|python experiments/train_bead.py --mode dagger --seed 0 --workers 4
-dagger_s1|python experiments/train_bead.py --mode dagger --seed 1 --workers 4
-dagger_s2|python experiments/train_bead.py --mode dagger --seed 2 --workers 4
-dagger_s3|python experiments/train_bead.py --mode dagger --seed 3 --workers 4
-dagger_s4|python experiments/train_bead.py --mode dagger --seed 4 --workers 4
