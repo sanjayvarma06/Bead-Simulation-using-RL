@@ -235,3 +235,15 @@ stated elsewhere. main.tex and supplementary.tex unchanged.
 About 90 passages reworded in the IJCAS manuscripts; numbers, citations and equations unchanged.
 Own proxy (5-word runs against the original paper, the public GitHub paper, ref. [4] and 7 cited arXiv
 papers): full manuscript body 1.5%, 9.1% with references. Not a Turnitin result.
+
+## Addendum: supervisor comments on the dynamic-model result and contributions (2026-11-01)
+
+No experiment was re-run; all numbers come from existing result files.
+
+- Main dynamic Fixed PP result is now the inside-range optimum from the extended gain grids: (0.175, 2.5) with 1.83 cm in (a) and (0.45, 1.6) with 3.09 cm in (b). The shared-grid result, whose gain sits on the top edge (1.91 / 3.23 cm), stays in the dynamic table as a secondary row.
+- Comparison macros now use `fixed_retuned_highg` as A. Against Stanley: (a) -0.82 cm [-1.44, -0.10], better on 7/8, exact Wilcoxon p=0.078; (b) -0.49 cm [-1.22, 0.18], better on 6/8, p=0.195. Against retrained RL-PP: (a) -3.42 cm [-4.96, -2.22]; (b) -3.64 cm [-5.90, -2.06], both better on 8/8.
+- Stanley wording: clear with tyres only, unclear with the rate limit. "Clear" rests on the interval excluding zero; the Wilcoxon p in (a) is above 0.05.
+- Data Availability now gives the GitHub URL. Contributions gain a Stanley and dynamic-model bullet; the PP finding is restricted to the kinematic car and the bead.
+- `main_full` is now 12 pages (11 figures); `main` 9 pages.
+
+Later on 2026-11-01: overlap rewording round, wording only. Numbers, citations, equations, math, figures and the reference list were checked unchanged. Overlap proxy (5-word runs): `main_full` body 0.5%, 8.2% with references; `main` body 0.3%, 9.1% with references; supplement 0.0%. `main_full` is back to 11 pages.

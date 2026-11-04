@@ -4,7 +4,7 @@ Image → ordered reference path → 2-D point-mass ("bead") simulation → dire
 compared against Pure Pursuit (PP) and RL-tuned PP [Elgouhary & El-Wakeel, arXiv:2602.18386]
 on held-out F1TENTH circuits and synthetic contours.
 
-**Status (2026-10-22):** the code, data split, training runs, test evaluation and paper in this
+**Status (2026-11-04):** the code, data split, training runs, test evaluation and paper in this
 repository were produced by an audit-and-correction pass, a revision after review (shared lap rule,
 wider PP grids, Bead-PP, five seeds, revised PPO fine-tuning, revised statistics) and a revision for the
 IJCAS submission (true-centerline metrics, DAgger with the Bead-PP teacher, BC-weight check, IJCAS
@@ -31,7 +31,7 @@ experiments/                       corrected pipeline: prepare_data, tune_pp, tr
                                    bead_pursuit, evaluate, analyze, verify_results, ppo_diagnostic,
                                    selection_sensitivity, car_lateral_accel, centerline_metrics,
                                    bc_check, run_queue
-tests/                             56 automated tests
+tests/                             67 automated tests
 datasets/
   f1tenth_circuits/                23 public centerlines (commit b95c4ef) + rasterised images
   closed_shapes_dataset/, curve_dataset/   synthetic images (700/150/150 each)
@@ -51,7 +51,7 @@ archive/original_version/          superseded paper, data, figures, plots, video
 ## Reproduce
 ```bash
 pip install -r requirements.txt
-python -m pytest tests -q                                   # 56 tests
+python -m pytest tests -q                                   # 67 tests
 
 python experiments/prepare_data.py                          # rasterise, extract, split manifest
 python experiments/expert_trainval_probe.py                 # expert on train/val -> v_match

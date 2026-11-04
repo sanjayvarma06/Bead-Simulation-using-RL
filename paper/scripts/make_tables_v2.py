@@ -211,7 +211,7 @@ def dynamic_table(ds):
     def settings(job):
         p = json.loads((RUNS / "extra_tuning" / f"{job}.json").read_text())["best"]["params"]
         return f"({p[0]:g}, {p[1]:g})"
-    rows = [("Fixed PP, re-tuned", "fixed_retuned", "fixed"), ("Fixed PP, re-tuned, $g>1.4$", "fixed_retuned_highg", "fixedhigh"),
+    rows = [("Fixed PP, re-tuned", "fixed_retuned_highg", "fixedhigh"), ("Fixed PP, re-tuned, $g\\le1.4$", "fixed_retuned", "fixed"),
             ("Stanley, re-tuned", "stanley_retuned", "stanley"), ("RL--PP, retrained", "rlpp_retrained", None),
             ("Fixed PP, unchanged", "fixed_transfer", None), ("Stanley, unchanged", "stanley_transfer", None),
             ("RL--PP, unchanged", "rlpp_transfer", None)]
@@ -501,11 +501,12 @@ def numbers():
                 d[f"trueRmse{mk}{key}"] = float(r.rmse_true_cm)
                 d[f"comp{mk}{key}"] = float(r.completed_pct)
             for b, key in (("stanley_retuned", "St"), ("rlpp_retrained", "RL")):
-                r = dc[(dc.experiment == exp) & (dc.A == "fixed_retuned") & (dc.B == b) & (dc.metric == "rmse")].iloc[0]
+                r = dc[(dc.experiment == exp) & (dc.A == "fixed_retuned_highg") & (dc.B == b) & (dc.metric == "rmse")].iloc[0]
                 pre = f"dyn{mk}Fix{key}"
                 d[f"{pre}Diff"], d[f"{pre}Lo"], d[f"{pre}Hi"] = float(r["diff"] if "diff" in r else r.diff_cm), float(r.lo), float(r.hi)
                 d[f"{pre}Better"], d[f"{pre}P"] = int(r.A_better_on), float(r.p)
-        d["bppGainHighDr"] = float(json.loads((RUNS / "extra_tuning" / "fixedhigh_dr.json").read_text())["best"]["params"][1])
+        for job, key in (("fixedhigh_dt", "gHiDt"), ("fixedhigh_dr", "gHiDr")):
+            d[key] = f'{max(json.loads((RUNS / "extra_tuning" / f"{job}.json").read_text())["grid_axes"][1]):g}'
         dynamic_table(ds)
 
     lines = [f"\\newcommand{{\\VfrozenKL}}{{{kl_frozen_text}}}"]   # approx. KL while the actor is frozen
