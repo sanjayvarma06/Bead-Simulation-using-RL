@@ -1,0 +1,308 @@
+{
+ "job": "rwf_dt",
+ "kind": "pp",
+ "kwargs": {
+  "v_cap": 1.256,
+  "dynamics": "dynamic_norate",
+  "mode": "rwf",
+  "rwf_ke": 64,
+  "rwf_kpsi": 16
+ },
+ "best": {
+  "params": [
+   64,
+   16
+  ],
+  "completed_all": 1.0,
+  "score": 0.97391151096794,
+  "geom010_circuits": 0.9893461839020578,
+  "rmse_circuits": 0.009928419558470035,
+  "completed_circuits": 1.0,
+  "geom010_synth": 0.9874285714285719,
+  "rmse_synth": 0.01902331383627951,
+  "time_circuits": 50.73163636363636
+ },
+ "val": {
+  "score": 0.9576847597426091,
+  "geom010_circuits": 0.9835714285714287,
+  "rmse_circuits": 0.020593563692660233,
+  "completed_circuits": 1.0,
+  "geom010_synth": 0.9730277527629965,
+  "rmse_synth": 0.02063609815654663,
+  "time_circuits": 48.856
+ },
+ "any_eligible": true,
+ "on_edge": [
+  false,
+  true
+ ],
+ "grid_axes": [
+  [
+   1,
+   4,
+   16,
+   64,
+   128
+  ],
+  [
+   1,
+   4,
+   16
+  ]
+ ],
+ "tuning_ids": [
+  "circuit_BrandsHatch",
+  "circuit_Budapest",
+  "circuit_Catalunya",
+  "circuit_IMS",
+  "circuit_MexicoCity",
+  "circuit_MoscowRaceway",
+  "circuit_Nuerburgring",
+  "circuit_Oschersleben",
+  "circuit_Sakhir",
+  "circuit_SaoPaulo",
+  "circuit_Sepang",
+  "closed_shape_shape_train_0000",
+  "closed_shape_shape_train_0001",
+  "closed_shape_shape_train_0002",
+  "closed_shape_shape_train_0003",
+  "closed_shape_shape_train_0004",
+  "closed_shape_shape_train_0005",
+  "closed_shape_shape_train_0006",
+  "closed_shape_shape_train_0007",
+  "closed_shape_shape_train_0008",
+  "closed_shape_shape_train_0009",
+  "closed_shape_shape_train_0010",
+  "closed_shape_shape_train_0011",
+  "closed_shape_shape_train_0012",
+  "closed_shape_shape_train_0013",
+  "closed_shape_shape_train_0014",
+  "open_curve_curve_train_0000",
+  "open_curve_curve_train_0001",
+  "open_curve_curve_train_0002",
+  "open_curve_curve_train_0003",
+  "open_curve_curve_train_0004",
+  "open_curve_curve_train_0005",
+  "open_curve_curve_train_0006",
+  "open_curve_curve_train_0007",
+  "open_curve_curve_train_0008",
+  "open_curve_curve_train_0009",
+  "open_curve_curve_train_0010",
+  "open_curve_curve_train_0011",
+  "open_curve_curve_train_0012",
+  "open_curve_curve_train_0013",
+  "open_curve_curve_train_0014"
+ ],
+ "grid": [
+  {
+   "params": [
+    1,
+    1
+   ],
+   "completed_all": 0.7073170731707317,
+   "score": 0.7339449966677516,
+   "geom010_circuits": 0.8810605440404867,
+   "rmse_circuits": 0.05657715536123964,
+   "completed_circuits": 0.8181818181818182,
+   "geom010_synth": 0.7439047619047618,
+   "rmse_synth": 0.10049815724850573,
+   "time_circuits": 47.11709090909091
+  },
+  {
+   "params": [
+    1,
+    4
+   ],
+   "completed_all": 0.975609756097561,
+   "score": 0.9027048437414882,
+   "geom010_circuits": 0.8925121869534478,
+   "rmse_circuits": 0.04682562360320843,
+   "completed_circuits": 0.9090909090909091,
+   "geom010_synth": 0.9811428571428574,
+   "rmse_synth": 0.021419733010120564,
+   "time_circuits": 47.39781818181818
+  },
+  {
+   "params": [
+    1,
+    16
+   ],
+   "completed_all": 1.0,
+   "score": 0.8913844505313644,
+   "geom010_circuits": 0.8851821530904627,
+   "rmse_circuits": 0.058723528913104214,
+   "completed_circuits": 1.0,
+   "geom010_synth": 0.9822857142857145,
+   "rmse_synth": 0.02597543740034428,
+   "time_circuits": 50.49454545454546
+  },
+  {
+   "params": [
+    4,
+    1
+   ],
+   "completed_all": 0.8536585365853658,
+   "score": 0.8245674676900246,
+   "geom010_circuits": 0.8865314628065345,
+   "rmse_circuits": 0.04244660258446686,
+   "completed_circuits": 0.9090909090909091,
+   "geom010_synth": 0.8593333333333334,
+   "rmse_synth": 0.054283258175351706,
+   "time_circuits": 47.82836363636363
+  },
+  {
+   "params": [
+    4,
+    4
+   ],
+   "completed_all": 1.0,
+   "score": 0.9661054102049658,
+   "geom010_circuits": 0.9883035016559372,
+   "rmse_circuits": 0.02316869228753152,
+   "completed_circuits": 1.0,
+   "geom010_synth": 0.9850476190476194,
+   "rmse_synth": 0.01797160800609371,
+   "time_circuits": 50.34763636363637
+  },
+  {
+   "params": [
+    4,
+    16
+   ],
+   "completed_all": 1.0,
+   "score": 0.9503850288695301,
+   "geom010_circuits": 0.9771302050385144,
+   "rmse_circuits": 0.03791219592938281,
+   "completed_circuits": 1.0,
+   "geom010_synth": 0.9853333333333336,
+   "rmse_synth": 0.023781284703405157,
+   "time_circuits": 50.443636363636365
+  },
+  {
+   "params": [
+    16,
+    1
+   ],
+   "completed_all": 0.8292682926829268,
+   "score": 0.6877021984717813,
+   "geom010_circuits": 0.6415748148699438,
+   "rmse_circuits": 0.10290819415281115,
+   "completed_circuits": 0.5454545454545454,
+   "geom010_synth": 0.8877142857142858,
+   "rmse_synth": 0.0509765094878559,
+   "time_circuits": 48.64290909090909
+  },
+  {
+   "params": [
+    16,
+    4
+   ],
+   "completed_all": 1.0,
+   "score": 0.9699045415747553,
+   "geom010_circuits": 0.9864823428720277,
+   "rmse_circuits": 0.016679581315679384,
+   "completed_circuits": 1.0,
+   "geom010_synth": 0.9863809523809527,
+   "rmse_synth": 0.01637463078779058,
+   "time_circuits": 50.660363636363634
+  },
+  {
+   "params": [
+    16,
+    16
+   ],
+   "completed_all": 1.0,
+   "score": 0.9678948535640586,
+   "geom010_circuits": 0.9890849551594537,
+   "rmse_circuits": 0.019311356246961727,
+   "completed_circuits": 1.0,
+   "geom010_synth": 0.9866666666666669,
+   "rmse_synth": 0.02065055845104195,
+   "time_circuits": 50.50763636363637
+  },
+  {
+   "params": [
+    64,
+    1
+   ],
+   "completed_all": 0.0,
+   "score": -0.017540348848516213,
+   "geom010_circuits": 0.2769530755777174,
+   "rmse_circuits": 0.3058480117668526,
+   "completed_circuits": 0.0,
+   "geom010_synth": 0.2717142857142857,
+   "rmse_synth": 0.2779000472221829,
+   "time_circuits": 75.78763636363637
+  },
+  {
+   "params": [
+    64,
+    4
+   ],
+   "completed_all": 1.0,
+   "score": 0.8593921201542238,
+   "geom010_circuits": 0.9184050906113943,
+   "rmse_circuits": 0.0674251782368921,
+   "completed_circuits": 1.0,
+   "geom010_synth": 0.9225714285714287,
+   "rmse_synth": 0.05476710063748339,
+   "time_circuits": 58.69672727272727
+  },
+  {
+   "params": [
+    64,
+    16
+   ],
+   "completed_all": 1.0,
+   "score": 0.97391151096794,
+   "geom010_circuits": 0.9893461839020578,
+   "rmse_circuits": 0.009928419558470035,
+   "completed_circuits": 1.0,
+   "geom010_synth": 0.9874285714285719,
+   "rmse_synth": 0.01902331383627951,
+   "time_circuits": 50.73163636363636
+  },
+  {
+   "params": [
+    128,
+    1
+   ],
+   "completed_all": 0.0,
+   "score": 0.014160624581663062,
+   "geom010_circuits": 0.2850087448368251,
+   "rmse_circuits": 0.3279313094998674,
+   "completed_circuits": 0.0,
+   "geom010_synth": 0.37980952380952376,
+   "rmse_synth": 0.30856570998315536,
+   "time_circuits": 75.78763636363637
+  },
+  {
+   "params": [
+    128,
+    4
+   ],
+   "completed_all": 0.0,
+   "score": 0.13458633209797746,
+   "geom010_circuits": 0.3335935697540282,
+   "rmse_circuits": 0.19736242949955332,
+   "completed_circuits": 0.0,
+   "geom010_synth": 0.3119047619047619,
+   "rmse_synth": 0.17896323796328187,
+   "time_circuits": 75.78763636363637
+  },
+  {
+   "params": [
+    128,
+    16
+   ],
+   "completed_all": 1.0,
+   "score": 0.9701614670151992,
+   "geom010_circuits": 0.9885647303985412,
+   "rmse_circuits": 0.010294281839769014,
+   "completed_circuits": 1.0,
+   "geom010_synth": 0.9853333333333336,
+   "rmse_synth": 0.02328084786170747,
+   "time_circuits": 51.056
+  }
+ ]
+}

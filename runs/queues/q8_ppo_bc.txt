@@ -1,0 +1,7 @@
+# DAgger->PPO fine-tuning, BC weight check (lambda 0.1 and 10), seeds 0-2; otherwise as q6 (base reward).
+dagger_ppo_bc0.1_s0|python experiments/train_bead.py --mode dagger_ppo --seed 0 --timesteps 2000000 --eval_every 200000 --critic_warmup 50000 --log_std_init=-2.0 --lr 1e-4 --bc_coef 0.1 --tag _bc0.1 --workers 2
+dagger_ppo_bc0.1_s1|python experiments/train_bead.py --mode dagger_ppo --seed 1 --timesteps 2000000 --eval_every 200000 --critic_warmup 50000 --log_std_init=-2.0 --lr 1e-4 --bc_coef 0.1 --tag _bc0.1 --workers 2
+dagger_ppo_bc0.1_s2|python experiments/train_bead.py --mode dagger_ppo --seed 2 --timesteps 2000000 --eval_every 200000 --critic_warmup 50000 --log_std_init=-2.0 --lr 1e-4 --bc_coef 0.1 --tag _bc0.1 --workers 2
+dagger_ppo_bc10_s0|python experiments/train_bead.py --mode dagger_ppo --seed 0 --timesteps 2000000 --eval_every 200000 --critic_warmup 50000 --log_std_init=-2.0 --lr 1e-4 --bc_coef 10 --tag _bc10 --workers 2
+dagger_ppo_bc10_s1|python experiments/train_bead.py --mode dagger_ppo --seed 1 --timesteps 2000000 --eval_every 200000 --critic_warmup 50000 --log_std_init=-2.0 --lr 1e-4 --bc_coef 10 --tag _bc10 --workers 2
+dagger_ppo_bc10_s2|python experiments/train_bead.py --mode dagger_ppo --seed 2 --timesteps 2000000 --eval_every 200000 --critic_warmup 50000 --log_std_init=-2.0 --lr 1e-4 --bc_coef 10 --tag _bc10 --workers 2

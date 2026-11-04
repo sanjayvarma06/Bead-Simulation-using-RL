@@ -1,0 +1,23 @@
+{
+ "train": {
+  "n": 131,
+  "completed": 1.0,
+  "circuit_mean_speed": 1.2560191480580203,
+  "circuit_geom010": 0.9914263387042755,
+  "circuit_rmse": 0.008333114550769353,
+  "synth_geom010": 0.9888568017464866,
+  "synth_rmse": 0.010472194187499747,
+  "not_completed": []
+ },
+ "val": {
+  "n": 54,
+  "completed": 1.0,
+  "circuit_mean_speed": 1.254400676747556,
+  "circuit_geom010": 0.9914285714285714,
+  "circuit_rmse": 0.0091179502707273,
+  "synth_geom010": 0.9888563241915679,
+  "synth_rmse": 0.010141630559967127,
+  "not_completed": []
+ },
+ "v_match": 1.256
+}

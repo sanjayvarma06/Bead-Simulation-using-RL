@@ -1,0 +1,21 @@
+start rlpp_dt_s0
+start rlpp_dt_s1
+start rlpp_dt_s2
+start rlpp_dt_s3
+{"name": "rlpp_dt_s0", "cmd": "python experiments/train_rlpp.py --mode joint --matched --dynamics dynamic_norate --seed 0 --timesteps 100000 --eval_every 25000 --workers 2", "exit": 0, "wall_s": 892.9}
+start rlpp_dt_s4
+{"name": "rlpp_dt_s3", "cmd": "python experiments/train_rlpp.py --mode joint --matched --dynamics dynamic_norate --seed 3 --timesteps 100000 --eval_every 25000 --workers 2", "exit": 0, "wall_s": 897.8}
+start rlpp_dr_s0
+{"name": "rlpp_dt_s1", "cmd": "python experiments/train_rlpp.py --mode joint --matched --dynamics dynamic_norate --seed 1 --timesteps 100000 --eval_every 25000 --workers 2", "exit": 0, "wall_s": 912.9}
+{"name": "rlpp_dt_s2", "cmd": "python experiments/train_rlpp.py --mode joint --matched --dynamics dynamic_norate --seed 2 --timesteps 100000 --eval_every 25000 --workers 2", "exit": 0, "wall_s": 912.9}
+start rlpp_dr_s1
+start rlpp_dr_s2
+{"name": "rlpp_dr_s0", "cmd": "python experiments/train_rlpp.py --mode joint --matched --dynamics dynamic --seed 0 --timesteps 100000 --eval_every 25000 --workers 2", "exit": 0, "wall_s": 631.0}
+start rlpp_dr_s3
+{"name": "rlpp_dr_s2", "cmd": "python experiments/train_rlpp.py --mode joint --matched --dynamics dynamic --seed 2 --timesteps 100000 --eval_every 25000 --workers 2", "exit": 0, "wall_s": 620.9}
+start rlpp_dr_s4
+{"name": "rlpp_dr_s1", "cmd": "python experiments/train_rlpp.py --mode joint --matched --dynamics dynamic --seed 1 --timesteps 100000 --eval_every 25000 --workers 2", "exit": 0, "wall_s": 626.0}
+{"name": "rlpp_dt_s4", "cmd": "python experiments/train_rlpp.py --mode joint --matched --dynamics dynamic_norate --seed 4 --timesteps 100000 --eval_every 25000 --workers 2", "exit": 0, "wall_s": 666.1}
+{"name": "rlpp_dr_s3", "cmd": "python experiments/train_rlpp.py --mode joint --matched --dynamics dynamic --seed 3 --timesteps 100000 --eval_every 25000 --workers 2", "exit": 0, "wall_s": 1273.1}
+{"name": "rlpp_dr_s4", "cmd": "python experiments/train_rlpp.py --mode joint --matched --dynamics dynamic --seed 4 --timesteps 100000 --eval_every 25000 --workers 2", "exit": 0, "wall_s": 1278.0}
+DONE

@@ -1,0 +1,6 @@
+# DAgger, full 8 rounds of Algorithm 1, seeds 0-4.
+dagger_s0|python experiments/train_bead.py --mode dagger --seed 0 --workers 2
+dagger_s1|python experiments/train_bead.py --mode dagger --seed 1 --workers 2
+dagger_s2|python experiments/train_bead.py --mode dagger --seed 2 --workers 2
+dagger_s3|python experiments/train_bead.py --mode dagger --seed 3 --workers 2
+dagger_s4|python experiments/train_bead.py --mode dagger --seed 4 --workers 2

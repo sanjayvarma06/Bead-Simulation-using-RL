@@ -1,0 +1,7 @@
+# RL-PP retraining on the training split, original Table II recipe, 100k steps (budget), seeds 0-1.
+rlpp_joint_s0|python experiments/train_rlpp.py --mode joint --seed 0 --timesteps 100000 --eval_every 25000 --workers 2
+rlpp_joint_s1|python experiments/train_rlpp.py --mode joint --seed 1 --timesteps 100000 --eval_every 25000 --workers 2
+rlpp_ld_s0|python experiments/train_rlpp.py --mode ld_only --seed 0 --timesteps 100000 --eval_every 25000 --workers 2
+rlpp_ld_s1|python experiments/train_rlpp.py --mode ld_only --seed 1 --timesteps 100000 --eval_every 25000 --workers 2
+rlpp_jm_s0|python experiments/train_rlpp.py --mode joint --matched --seed 0 --timesteps 100000 --eval_every 25000 --workers 2
+rlpp_jm_s1|python experiments/train_rlpp.py --mode joint --matched --seed 1 --timesteps 100000 --eval_every 25000 --workers 2
