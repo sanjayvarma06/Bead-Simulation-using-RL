@@ -8,8 +8,6 @@ Checks
      point-to-segment implementation that does not use geometry_utils/metrics.
   D. Re-execution: saved checkpoints are reloaded and re-run on all test circuits; the new
      trajectories are compared with the stored ones.
-  E. Tables: the paper's LaTeX tables and quoted numbers are regenerated from episodes.csv into a
-     temporary directory and compared byte-for-byte with paper/revised/tables.
   F. Run inventory: checkpoint hashes, configs, training logs and exit codes of every reported run.
 
 Usage: python experiments/verify_results.py [--skip_rerun]
@@ -17,13 +15,9 @@ Output: results/final/verification/report.json and report.md
 """
 from __future__ import annotations
 import argparse
-import filecmp
 import hashlib
 import json
-import os
-import subprocess
 import sys
-import tempfile
 from pathlib import Path
 
 import numpy as np
@@ -142,17 +136,6 @@ def check_rerun():
     return out
 
 
-def check_tables():
-    tmp = Path(tempfile.mkdtemp())
-    env = dict(os.environ, TABLES_OUT=str(tmp))
-    subprocess.run([sys.executable, str(ROOT / "paper/scripts/make_tables_v2.py")], env=env, check=True,
-                   capture_output=True)
-    res = {}
-    for f in sorted((ROOT / "paper/revised/tables").glob("*.tex")):
-        res[f.name] = filecmp.cmp(f, tmp / f.name, shallow=False)
-    return res
-
-
 def inventory():
     inv = {}
     status = {}
@@ -245,8 +228,6 @@ def main():
     print(json.dumps(rep["B_C_records"], indent=1), flush=True)
     rep["H_centerline"] = check_centerline(df)
     print(json.dumps(rep["H_centerline"]), flush=True)
-    rep["E_tables_identical"] = check_tables()
-    print(rep["E_tables_identical"], flush=True)
     rep["F_inventory"] = inventory()
     rep["G_ppo_diagnostics"] = ppo_diagnostics()
     print(json.dumps(rep["G_ppo_diagnostics"], indent=1), flush=True)

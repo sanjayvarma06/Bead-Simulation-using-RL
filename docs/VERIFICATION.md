@@ -45,7 +45,7 @@ seeds {50000, 50137, 50274, 50411, 50548}; 50 closed + 50 open contours with see
 | B. Record integrity | All 2,940 rows: metrics recomputed from the stored raw trajectory (`results/final/traj/*.npz`) and the stored reference (`datasets/path_cache`) with `metrics.trajectory_metrics` | 0 missing trajectories; max difference ≤ 5e-7 for every metric used in the paper (float32 storage); off-path fraction 2e-4 and peak speed 7e-5 (threshold/rounding effects of float32 storage; neither is reported in the paper's tables) |
 | C. Independent code | RMSE and Geom@0.10 recomputed with a separate brute-force point-to-segment implementation (no shared code with `geometry_utils`/`metrics`) | max difference 2.2e-8 (RMSE), 1e-16 (Geom@0.10) |
 | D. Re-execution | 12 instances (expert, Bead-DAgger ×2, Bead-PPO ×2, Bead-DAgger→PPO ×2, published bead, Fixed PP tuned, Fixed PP tuned-matched, RL-PP joint ×2) reloaded from their saved checkpoints and re-run on all test circuits × 5 seeds (480 episodes) | **bit-identical trajectories** (max position difference 0.0 m, identical lengths) |
-| E. Tables | `paper/scripts/make_tables_v2.py` re-run into a temporary directory from `episodes.csv` | all 5 LaTeX table/number files **byte-identical** to `paper/revised/tables` |
+| E. Tables | `paper/scripts/make_tables_v2.py` re-run into a temporary directory from `episodes.csv` | all 5 LaTeX table/number files **byte-identical** to `paper/revised/tables` (manuscript and this check are no longer in the public repository) |
 | F. Training runs | exit codes from `runs/logs/queue_status.jsonl` | all 10 final runs exit 0 |
 
 The headline numbers quoted in the paper (e.g. 1.07 cm Bead-DAgger, 3.31 cm Bead-DAgger→PPO,
@@ -82,7 +82,6 @@ DAgger lines of `q1_dagger_pilot.txt` (seeds 0–1). Evaluation and analysis:
 ```
 python experiments/evaluate.py --workers 18      # writes results/final/episodes.csv, traj/, controllers.json
 python experiments/analyze.py                    # results/final/tables/*
-python paper/scripts/make_tables_v2.py           # paper/revised/tables/*
 python paper/scripts/make_figures_v2.py          # paper/revised/figures/*
 python experiments/verify_results.py             # this verification
 python experiments/ppo_diagnostic.py             # Section 3

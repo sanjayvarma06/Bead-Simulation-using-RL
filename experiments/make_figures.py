@@ -1,8 +1,8 @@
-"""Figures of the revised manuscript, built only from executed rollouts and training logs:
+"""Result figures (written to results/figures/), built only from executed rollouts and training logs:
 results/final/episodes.csv, results/final/traj/*.npz, runs/**/val_log.csv, datasets/path_cache.
-Visual style is that of make_figures.py (the original manuscript).
+Visual style is that of archive/original_version/paper/scripts/make_figures.py.
 
-Usage: python paper/scripts/make_figures_v2.py
+Usage: python experiments/make_figures.py
 """
 from __future__ import annotations
 import csv
@@ -17,13 +17,13 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
 from matplotlib.patches import FancyBboxPatch, Rectangle  # noqa: E402
 
-ROOT = Path(__file__).resolve().parents[2]
+ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "experiments"))
 from common import load_path, load_manifest, run_pp, vecnorm_obs_fn, split_ids  # noqa: E402
 
 FINAL = ROOT / "results" / "final"
 RUNS = ROOT / "runs"
-FIG = ROOT / "paper" / "revised" / "figures"   # used directly by main.tex
+FIG = ROOT / "results" / "figures"
 FIG.mkdir(parents=True, exist_ok=True)
 
 plt.rcParams.update({
@@ -38,8 +38,8 @@ C = {"ref": "#555555", "expert": "#333333", "bead_dagger": "#2ca02c", "bead_dagg
      "pp_adaptive_tuned": "#9467bd", "pp_fixed_tuned": "#d62728", "pp_fixed_original": "#e377c2",
      "rlpp_published": "#7f7f7f", "bead_pp": "#000080", "bead_ppo_acc": "#c49c94",
      "bead_dagger_ppo_acc": "#9edae5", "bead_dagger_bpp": "#98df8a", "stanley_tuned": "#8c6d31"}
-# Legend names are the row names of the tables (make_tables_v2.NAME) without the LaTeX footnote marks
-# and the citation; the expert is Eq. (3) of the IJCAS manuscript.
+# Legend names of the controllers
+# (the expert is Eq. (3) of the manuscript).
 EXPERT_EQ = 3
 LBL = {"expert": f"Geometric expert ({EXPERT_EQ})", "bead_dagger": "Bead-DAgger", "bead_dagger_ppo": "Bead-DAgger→PPO",
        "bead_ppo": "Bead-PPO (scratch)", "bead_published": "Bead, naive protocol",

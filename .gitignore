@@ -3,11 +3,9 @@ __pycache__/
 *.py[cod]
 .pytest_cache/
 
-# LaTeX build output (compile paper/revised/main.tex; the released PDF is paper/Revised_Paper_Bead_Tracing.pdf)
-paper/revised/*.log
-paper/revised/*.aux
-paper/revised/*.out
-paper/revised/main.pdf
+# Manuscripts are kept locally and are not part of the public repository
+/paper/
+*.pdf
 
 # OS / editor
 .DS_Store

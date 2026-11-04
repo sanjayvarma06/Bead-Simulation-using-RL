@@ -4,33 +4,24 @@ Image → ordered reference path → 2-D point-mass ("bead") simulation → dire
 compared against Pure Pursuit (PP) and RL-tuned PP [Elgouhary & El-Wakeel, arXiv:2602.18386]
 on held-out F1TENTH circuits and synthetic contours.
 
-**Status (2026-11-04):** the code, data split, training runs, test evaluation and paper in this
-repository were produced by an audit-and-correction pass, a revision after review (shared lap rule,
-wider PP grids, Bead-PP, five seeds, revised PPO fine-tuning, revised statistics) and a revision for the
-IJCAS submission (true-centerline metrics, DAgger with the Bead-PP teacher, BC-weight check, IJCAS
-template). Start with `paper/IJCAS_Manuscript.pdf` and `paper/IJCAS_Supplementary.pdf`, then
-`docs/05_IJCAS_REVISION.md`. `paper/Revised_Paper_Bead_Tracing.pdf` is the previous IEEE-format version. Material
-from the earlier version (original PDF, its tables/figures/videos) is in `archive/original_version/`
-for provenance only: its "Bead-PPO" model was **not** PPO-trained (expert regression + DAgger) and
-was trained on its own evaluation circuits.
+**Status (2026-11-04):** the code, data split, training runs, test evaluation and result figures in
+this repository were produced by an audit-and-correction pass and two later revisions (shared lap
+rule, wider PP grids, Bead-PP, five seeds, revised PPO fine-tuning, revised statistics, true-centerline
+metrics, DAgger with the Bead-PP teacher, BC-weight check, Stanley and dynamic-model baselines).
+Result figures are in `results/figures/`, result tables in `results/final/tables/`. Material from the
+earlier version (its figures, data, plots and videos) is in `archive/original_version/` for provenance
+only: its "Bead-PPO" model was **not** PPO-trained (expert regression + DAgger) and was trained on its
+own evaluation circuits.
 
 ## Repository layout
 ```
-paper/
-  IJCAS_Manuscript.pdf             the IJCAS submission (source: ijcas/main.tex, official IJCAS.cls)
-  IJCAS_Manuscript_Full.pdf        10-page version with all figures/tables in the body (source: ijcas/main_full.tex)
-  IJCAS_Supplementary.pdf          its supplementary material (source: ijcas/supplementary.tex)
-  Revised_Paper_Bead_Tracing.pdf   previous IEEE-format version (source: revised/main.tex)
-  revised/tables/, revised/figures/   generated tables, number macros and figures used by both versions
-  scripts/                         make_figures_v2.py, make_tables_v2.py (built from raw records)
-docs/                              01_PHASE1_AUDIT, 02_PHASE2_PLAN, 03_REVISION_PLAN, 04_REVISION_REPORT,
-                                   05_IJCAS_REVISION, REPORT, VERIFICATION
+docs/                              audit, revision plans and reports, verification report
 our_model_code/                    bead environment, Gym wrapper, metrics, geometry; legacy bead scripts
 research_paper_code/               Pure Pursuit, RL-PP environment; legacy RL-PP scripts
 experiments/                       corrected pipeline: prepare_data, tune_pp, train_bead, train_rlpp,
                                    bead_pursuit, evaluate, analyze, verify_results, ppo_diagnostic,
                                    selection_sensitivity, car_lateral_accel, centerline_metrics,
-                                   bc_check, run_queue
+                                   bc_check, make_figures, run_queue
 tests/                             67 automated tests
 datasets/
   f1tenth_circuits/                23 public centerlines (commit b95c4ef) + rasterised images
@@ -41,11 +32,12 @@ datasets/
 runs/                              training outputs per run: config, logs, checkpoints (best.zip used)
   queues/, logs/                   exact launch commands, stdout logs, exit codes
 results/
+  figures/                         result figures (experiments/make_figures.py)
   final/                           episodes.csv (7,700 test episodes), traj/ (raw trajectories), expert_k/,
                                    centerline/ (true-centerline metrics), tables/, verification/,
                                    controllers.json
-  models/                          checkpoints of the original version (re-evaluated in the paper)
-archive/original_version/          superseded paper, data, figures, plots, videos and metrics
+  models/                          checkpoints of the original version (re-evaluated in results/final)
+archive/original_version/          superseded data, figures, plots, videos and metrics
 ```
 
 ## Reproduce
@@ -82,15 +74,14 @@ python experiments/ppo_diagnostic.py                        # validation-only re
 python experiments/selection_sensitivity.py                 # selection score vs RMSE-only selection
 python experiments/car_lateral_accel.py                     # lateral acceleration of the kinematic car
 python experiments/verify_results.py                        # integrity checks + re-execution
-python paper/scripts/make_figures_v2.py
-python paper/scripts/make_tables_v2.py                      # LaTeX tables + number macros
+python experiments/make_figures.py                          # results/figures/
 ```
 The exact queue files used are in `runs/queues/`; per-run exit codes and wall times in
 `runs/logs/queue_status.jsonl`. The analysis plan of the revision, written before the final
 evaluation, is `docs/03_REVISION_PLAN.md`. Superseded runs (kept for their validation logs) are in
-`runs/bead/superseded/`. Compile the IJCAS paper from `paper/ijcas/` (Tectonic or pdfLaTeX).
+`runs/bead/superseded/`.
 
-## Main test-set result (8 held-out circuits; full tables in the paper)
+## Main test-set result (8 held-out circuits; full tables in `results/final/tables/`)
 | Controller | RMSE [cm] | RMSE vs true centerline [cm] | Lap time [s] |
 |---|---|---|---|
 | Geometric expert (non-learned, bead) | 1.07 | 1.60 | 42.5 |
