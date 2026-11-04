@@ -1,0 +1,43 @@
+expert-k counter 1 0.9807 1.0
+expert-k counter 2 0.9737 1.0
+expert-k counter 3 0.929 1.0
+expert-k counter 4 0.8505 0.9512195121951219
+expert-k counter 5 0.7565 0.7560975609756098
+expert-k counter 6 0.5207 0.7560975609756098
+expert-k counter 7 0.4534 0.6585365853658537
+expert-k counter 8 0.3854 0.5609756097560976
+expert-k counter 9 0.3689 0.5609756097560976
+expert-k counter 10 0.3427 0.5365853658536586
+expert-k nearest 1 0.9786 1.0
+expert-k nearest 2 0.9795 1.0
+expert-k nearest 3 0.9549 1.0
+expert-k nearest 4 0.8003 0.8780487804878049
+expert-k nearest 5 0.5731 0.7560975609756098
+expert-k nearest 6 0.5186 0.7560975609756098
+expert-k nearest 7 0.4791 0.7073170731707317
+expert-k nearest 8 0.406 0.6097560975609756
+expert-k nearest 9 0.3622 0.5609756097560976
+expert-k nearest 10 0.3198 0.5365853658536586
+SELECTED counter 1 val 0.9805
+SELECTED nearest 2 val 0.9789
+expert_k1_counter        140 episodes
+expert_k2_counter        140 episodes
+expert_k3_counter        140 episodes
+expert_k4_counter        140 episodes
+expert_k5_counter        140 episodes
+expert_k6_counter        140 episodes
+expert_k7_counter        140 episodes
+expert_k8_counter        140 episodes
+expert_k9_counter        140 episodes
+expert_k10_counter       140 episodes
+expert_k1_nearest        140 episodes
+expert_k2_nearest        140 episodes
+expert_k3_nearest        140 episodes
+expert_k4_nearest        140 episodes
+expert_k5_nearest        140 episodes
+expert_k6_nearest        140 episodes
+expert_k7_nearest        140 episodes
+expert_k8_nearest        140 episodes
+expert_k9_nearest        140 episodes
+expert_k10_nearest       140 episodes
+wrote C:\Users\Sanjay\Downloads\btp_overfitting_fix\btp_overfitting_fix\results\final\expert_k\episodes.csv 2800 rows

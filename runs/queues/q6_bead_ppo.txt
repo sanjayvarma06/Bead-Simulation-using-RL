@@ -1,0 +1,22 @@
+# Bead PPO, seeds 0-4. Fine-tuning: log_std_init -2, lr 1e-4, BC weight 1, 2e6 steps. Scratch: log_std_init -0.5 (pilot), 3e6 steps.
+# '_acc' runs use the per-progress centering reward (reward_mode=progress).
+dagger_ppo_s0|python experiments/train_bead.py --mode dagger_ppo --seed 0 --timesteps 2000000 --eval_every 200000 --critic_warmup 50000 --log_std_init=-2.0 --lr 1e-4 --bc_coef 1.0 --workers 2
+dagger_ppo_acc_s0|python experiments/train_bead.py --mode dagger_ppo --seed 0 --timesteps 2000000 --eval_every 200000 --critic_warmup 50000 --log_std_init=-2.0 --lr 1e-4 --bc_coef 1.0 --reward progress --tag _acc --workers 2
+dagger_ppo_s1|python experiments/train_bead.py --mode dagger_ppo --seed 1 --timesteps 2000000 --eval_every 200000 --critic_warmup 50000 --log_std_init=-2.0 --lr 1e-4 --bc_coef 1.0 --workers 2
+dagger_ppo_acc_s1|python experiments/train_bead.py --mode dagger_ppo --seed 1 --timesteps 2000000 --eval_every 200000 --critic_warmup 50000 --log_std_init=-2.0 --lr 1e-4 --bc_coef 1.0 --reward progress --tag _acc --workers 2
+dagger_ppo_s2|python experiments/train_bead.py --mode dagger_ppo --seed 2 --timesteps 2000000 --eval_every 200000 --critic_warmup 50000 --log_std_init=-2.0 --lr 1e-4 --bc_coef 1.0 --workers 2
+dagger_ppo_acc_s2|python experiments/train_bead.py --mode dagger_ppo --seed 2 --timesteps 2000000 --eval_every 200000 --critic_warmup 50000 --log_std_init=-2.0 --lr 1e-4 --bc_coef 1.0 --reward progress --tag _acc --workers 2
+dagger_ppo_s3|python experiments/train_bead.py --mode dagger_ppo --seed 3 --timesteps 2000000 --eval_every 200000 --critic_warmup 50000 --log_std_init=-2.0 --lr 1e-4 --bc_coef 1.0 --workers 2
+dagger_ppo_acc_s3|python experiments/train_bead.py --mode dagger_ppo --seed 3 --timesteps 2000000 --eval_every 200000 --critic_warmup 50000 --log_std_init=-2.0 --lr 1e-4 --bc_coef 1.0 --reward progress --tag _acc --workers 2
+dagger_ppo_s4|python experiments/train_bead.py --mode dagger_ppo --seed 4 --timesteps 2000000 --eval_every 200000 --critic_warmup 50000 --log_std_init=-2.0 --lr 1e-4 --bc_coef 1.0 --workers 2
+dagger_ppo_acc_s4|python experiments/train_bead.py --mode dagger_ppo --seed 4 --timesteps 2000000 --eval_every 200000 --critic_warmup 50000 --log_std_init=-2.0 --lr 1e-4 --bc_coef 1.0 --reward progress --tag _acc --workers 2
+ppo_s0|python experiments/train_bead.py --mode ppo --seed 0 --timesteps 3000000 --eval_every 250000 --log_std_init=-0.5 --workers 2
+ppo_acc_s0|python experiments/train_bead.py --mode ppo --seed 0 --timesteps 3000000 --eval_every 250000 --log_std_init=-0.5 --reward progress --tag _acc --workers 2
+ppo_s1|python experiments/train_bead.py --mode ppo --seed 1 --timesteps 3000000 --eval_every 250000 --log_std_init=-0.5 --workers 2
+ppo_acc_s1|python experiments/train_bead.py --mode ppo --seed 1 --timesteps 3000000 --eval_every 250000 --log_std_init=-0.5 --reward progress --tag _acc --workers 2
+ppo_s2|python experiments/train_bead.py --mode ppo --seed 2 --timesteps 3000000 --eval_every 250000 --log_std_init=-0.5 --workers 2
+ppo_acc_s2|python experiments/train_bead.py --mode ppo --seed 2 --timesteps 3000000 --eval_every 250000 --log_std_init=-0.5 --reward progress --tag _acc --workers 2
+ppo_s3|python experiments/train_bead.py --mode ppo --seed 3 --timesteps 3000000 --eval_every 250000 --log_std_init=-0.5 --workers 2
+ppo_acc_s3|python experiments/train_bead.py --mode ppo --seed 3 --timesteps 3000000 --eval_every 250000 --log_std_init=-0.5 --reward progress --tag _acc --workers 2
+ppo_s4|python experiments/train_bead.py --mode ppo --seed 4 --timesteps 3000000 --eval_every 250000 --log_std_init=-0.5 --workers 2
+ppo_acc_s4|python experiments/train_bead.py --mode ppo --seed 4 --timesteps 3000000 --eval_every 250000 --log_std_init=-0.5 --reward progress --tag _acc --workers 2

@@ -1,0 +1,3 @@
+# Seeds 3-4 of the lambda=10 DAgger->PPO check (seeds 0-2 in q8), same command; 2026-10-24.
+dagger_ppo_bc10_s3|python experiments/train_bead.py --mode dagger_ppo --seed 3 --timesteps 2000000 --eval_every 200000 --critic_warmup 50000 --log_std_init=-2.0 --lr 1e-4 --bc_coef 10 --tag _bc10 --workers 2
+dagger_ppo_bc10_s4|python experiments/train_bead.py --mode dagger_ppo --seed 4 --timesteps 2000000 --eval_every 200000 --critic_warmup 50000 --log_std_init=-2.0 --lr 1e-4 --bc_coef 10 --tag _bc10 --workers 2

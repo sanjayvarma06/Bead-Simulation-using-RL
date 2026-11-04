@@ -1,0 +1,1729 @@
+{
+ "job": "fixedhigh_dr",
+ "kind": "pp",
+ "kwargs": {
+  "v_cap": 1.256,
+  "dynamics": "dynamic",
+  "g_max": 2.5,
+  "mode": "fixed",
+  "fixed_L": 0.45,
+  "fixed_g": 1.6
+ },
+ "best": {
+  "params": [
+   0.45,
+   1.6
+  ],
+  "completed_all": 1.0,
+  "score": 0.9653288490802214,
+  "geom010_circuits": 0.9883020131730732,
+  "rmse_circuits": 0.016812763920888332,
+  "completed_circuits": 1.0,
+  "geom010_synth": 0.9785714285714288,
+  "rmse_synth": 0.019402979663170592,
+  "time_circuits": 50.11927272727273
+ },
+ "val": {
+  "score": 0.9502720342889721,
+  "geom010_circuits": 0.9850000000000001,
+  "rmse_circuits": 0.02129347632852821,
+  "completed_circuits": 1.0,
+  "geom010_synth": 0.9568563241915679,
+  "rmse_synth": 0.020018779285095684,
+  "time_circuits": 48.03600000000001
+ },
+ "any_eligible": true,
+ "on_edge": [
+  false,
+  false
+ ],
+ "grid_axes": [
+  [
+   0.05,
+   0.075,
+   0.1,
+   0.125,
+   0.15,
+   0.175,
+   0.2,
+   0.25,
+   0.3,
+   0.35,
+   0.4,
+   0.45,
+   0.5,
+   0.55,
+   0.6,
+   0.65,
+   0.7,
+   0.75,
+   0.8,
+   0.85,
+   0.9,
+   0.95,
+   1.0
+  ],
+  [
+   1.5,
+   1.6,
+   1.8,
+   2.0,
+   2.5
+  ]
+ ],
+ "tuning_ids": [
+  "circuit_BrandsHatch",
+  "circuit_Budapest",
+  "circuit_Catalunya",
+  "circuit_IMS",
+  "circuit_MexicoCity",
+  "circuit_MoscowRaceway",
+  "circuit_Nuerburgring",
+  "circuit_Oschersleben",
+  "circuit_Sakhir",
+  "circuit_SaoPaulo",
+  "circuit_Sepang",
+  "closed_shape_shape_train_0000",
+  "closed_shape_shape_train_0001",
+  "closed_shape_shape_train_0002",
+  "closed_shape_shape_train_0003",
+  "closed_shape_shape_train_0004",
+  "closed_shape_shape_train_0005",
+  "closed_shape_shape_train_0006",
+  "closed_shape_shape_train_0007",
+  "closed_shape_shape_train_0008",
+  "closed_shape_shape_train_0009",
+  "closed_shape_shape_train_0010",
+  "closed_shape_shape_train_0011",
+  "closed_shape_shape_train_0012",
+  "closed_shape_shape_train_0013",
+  "closed_shape_shape_train_0014",
+  "open_curve_curve_train_0000",
+  "open_curve_curve_train_0001",
+  "open_curve_curve_train_0002",
+  "open_curve_curve_train_0003",
+  "open_curve_curve_train_0004",
+  "open_curve_curve_train_0005",
+  "open_curve_curve_train_0006",
+  "open_curve_curve_train_0007",
+  "open_curve_curve_train_0008",
+  "open_curve_curve_train_0009",
+  "open_curve_curve_train_0010",
+  "open_curve_curve_train_0011",
+  "open_curve_curve_train_0012",
+  "open_curve_curve_train_0013",
+  "open_curve_curve_train_0014"
+ ],
+ "grid": [
+  {
+   "params": [
+    0.05,
+    1.5
+   ],
+   "completed_all": 0.0,
+   "score": -0.22900183462613485,
+   "geom010_circuits": 0.026502437390689536,
+   "rmse_circuits": 0.27722575652836173,
+   "completed_circuits": 0.0,
+   "geom010_synth": 0.05247619047619046,
+   "rmse_synth": 0.25975654059078795,
+   "time_circuits": 9.201454545454546
+  },
+  {
+   "params": [
+    0.05,
+    1.6
+   ],
+   "completed_all": 0.0,
+   "score": -0.22919430471107677,
+   "geom010_circuits": 0.026499460424961853,
+   "rmse_circuits": 0.2812906489798087,
+   "completed_circuits": 0.0,
+   "geom010_synth": 0.05504761904761905,
+   "rmse_synth": 0.2586450399149257,
+   "time_circuits": 10.130909090909093
+  },
+  {
+   "params": [
+    0.05,
+    1.8
+   ],
+   "completed_all": 0.0,
+   "score": -0.22801752756416643,
+   "geom010_circuits": 0.027279425445614555,
+   "rmse_circuits": 0.2830713303286692,
+   "completed_circuits": 0.0,
+   "geom010_synth": 0.05619047619047619,
+   "rmse_synth": 0.2564336264357544,
+   "time_circuits": 10.315636363636363
+  },
+  {
+   "params": [
+    0.05,
+    2.0
+   ],
+   "completed_all": 0.0,
+   "score": -0.2252804184140299,
+   "geom010_circuits": 0.027018940944442373,
+   "rmse_circuits": 0.27506783996165346,
+   "completed_circuits": 0.0,
+   "geom010_synth": 0.055238095238095225,
+   "rmse_synth": 0.25775003304894395,
+   "time_circuits": 10.321454545454545
+  },
+  {
+   "params": [
+    0.05,
+    2.5
+   ],
+   "completed_all": 0.0,
+   "score": -0.22666949600186226,
+   "geom010_circuits": 0.026500204666393776,
+   "rmse_circuits": 0.269569213894917,
+   "completed_circuits": 0.0,
+   "geom010_synth": 0.05523809523809524,
+   "rmse_synth": 0.26550807801329657,
+   "time_circuits": 10.16
+  },
+  {
+   "params": [
+    0.075,
+    1.5
+   ],
+   "completed_all": 0.0,
+   "score": -0.23830420663877847,
+   "geom010_circuits": 0.023644550292114763,
+   "rmse_circuits": 0.2649275854083839,
+   "completed_circuits": 0.0,
+   "geom010_synth": 0.06666666666666667,
+   "rmse_synth": 0.30199204482795444,
+   "time_circuits": 9.04
+  },
+  {
+   "params": [
+    0.075,
+    1.6
+   ],
+   "completed_all": 0.0,
+   "score": -0.23479975881337412,
+   "geom010_circuits": 0.024682767089643884,
+   "rmse_circuits": 0.25916520053911446,
+   "completed_circuits": 0.0,
+   "geom010_synth": 0.07095238095238096,
+   "rmse_synth": 0.30606946512965866,
+   "time_circuits": 10.158545454545456
+  },
+  {
+   "params": [
+    0.075,
+    1.8
+   ],
+   "completed_all": 0.0,
+   "score": -0.23139655909700838,
+   "geom010_circuits": 0.02364380605068284,
+   "rmse_circuits": 0.25458250526399895,
+   "completed_circuits": 0.0,
+   "geom010_synth": 0.06276190476190475,
+   "rmse_synth": 0.2946163237426054,
+   "time_circuits": 9.061818181818184
+  },
+  {
+   "params": [
+    0.075,
+    2.0
+   ],
+   "completed_all": 0.0,
+   "score": -0.23065790948393627,
+   "geom010_circuits": 0.02312432553120232,
+   "rmse_circuits": 0.2625958746894101,
+   "completed_circuits": 0.0,
+   "geom010_synth": 0.07733333333333334,
+   "rmse_synth": 0.2991776031429981,
+   "time_circuits": 9.351272727272727
+  },
+  {
+   "params": [
+    0.075,
+    2.5
+   ],
+   "completed_all": 0.0,
+   "score": -0.2222813041346764,
+   "geom010_circuits": 0.023644550292114763,
+   "rmse_circuits": 0.25591119758206,
+   "completed_circuits": 0.0,
+   "geom010_synth": 0.08533333333333334,
+   "rmse_synth": 0.29762929431274093,
+   "time_circuits": 9.112727272727271
+  },
+  {
+   "params": [
+    0.1,
+    1.5
+   ],
+   "completed_all": 0.0,
+   "score": -0.24174442597658302,
+   "geom010_circuits": 0.02650243739068954,
+   "rmse_circuits": 0.2769390815614288,
+   "completed_circuits": 0.0,
+   "geom010_synth": 0.11028571428571426,
+   "rmse_synth": 0.343337922068141,
+   "time_circuits": 9.044363636363636
+  },
+  {
+   "params": [
+    0.1,
+    1.6
+   ],
+   "completed_all": 0.0,
+   "score": -0.23729270012272846,
+   "geom010_circuits": 0.03014624344137238,
+   "rmse_circuits": 0.2767542184743273,
+   "completed_circuits": 0.0,
+   "geom010_synth": 0.11438095238095237,
+   "rmse_synth": 0.3423583775934544,
+   "time_circuits": 9.851636363636365
+  },
+  {
+   "params": [
+    0.1,
+    1.8
+   ],
+   "completed_all": 0.0,
+   "score": -0.23045207301445952,
+   "geom010_circuits": 0.02546273211029658,
+   "rmse_circuits": 0.2635291530237659,
+   "completed_circuits": 0.0,
+   "geom010_synth": 0.11723809523809522,
+   "rmse_synth": 0.340075820353545,
+   "time_circuits": 9.05018181818182
+  },
+  {
+   "params": [
+    0.1,
+    2.0
+   ],
+   "completed_all": 0.0,
+   "score": -0.22078860239380002,
+   "geom010_circuits": 0.0280683213634503,
+   "rmse_circuits": 0.2710006624248204,
+   "completed_circuits": 0.0,
+   "geom010_synth": 0.1343809523809524,
+   "rmse_synth": 0.33302581610718235,
+   "time_circuits": 9.492363636363638
+  },
+  {
+   "params": [
+    0.1,
+    2.5
+   ],
+   "completed_all": 0.0,
+   "score": -0.22930800003988672,
+   "geom010_circuits": 0.02884977486696684,
+   "rmse_circuits": 0.2682438209781016,
+   "completed_circuits": 0.0,
+   "geom010_synth": 0.1043809523809524,
+   "rmse_synth": 0.32360290634959105,
+   "time_circuits": 11.921454545454544
+  },
+  {
+   "params": [
+    0.125,
+    1.5
+   ],
+   "completed_all": 0.0,
+   "score": -0.2321486838722666,
+   "geom010_circuits": 0.04287202768578127,
+   "rmse_circuits": 0.3040276368953878,
+   "completed_circuits": 0.0,
+   "geom010_synth": 0.15685714285714286,
+   "rmse_synth": 0.35999890139206947,
+   "time_circuits": 16.081454545454545
+  },
+  {
+   "params": [
+    0.125,
+    1.6
+   ],
+   "completed_all": 0.0,
+   "score": -0.2417733603635831,
+   "geom010_circuits": 0.04494399583224798,
+   "rmse_circuits": 0.3317907592856565,
+   "completed_circuits": 0.0,
+   "geom010_synth": 0.16123809523809524,
+   "rmse_synth": 0.3579380525118529,
+   "time_circuits": 19.61454545454546
+  },
+  {
+   "params": [
+    0.125,
+    1.8
+   ],
+   "completed_all": 0.0,
+   "score": -0.2253558219092863,
+   "geom010_circuits": 0.048339225244669375,
+   "rmse_circuits": 0.3037389903961156,
+   "completed_circuits": 0.0,
+   "geom010_synth": 0.17542857142857143,
+   "rmse_synth": 0.3707404500956978,
+   "time_circuits": 19.18836363636364
+  },
+  {
+   "params": [
+    0.125,
+    2.0
+   ],
+   "completed_all": 0.0,
+   "score": -0.23298373410166595,
+   "geom010_circuits": 0.05196516950098611,
+   "rmse_circuits": 0.31316394294573985,
+   "completed_circuits": 0.0,
+   "geom010_synth": 0.1366666666666667,
+   "rmse_synth": 0.3414353614252449,
+   "time_circuits": 20.63418181818182
+  },
+  {
+   "params": [
+    0.125,
+    2.5
+   ],
+   "completed_all": 0.024390243902439025,
+   "score": -0.21751125067064314,
+   "geom010_circuits": 0.034035649164588996,
+   "rmse_circuits": 0.30313064276741175,
+   "completed_circuits": 0.0,
+   "geom010_synth": 0.19066666666666662,
+   "rmse_synth": 0.35659417440513014,
+   "time_circuits": 12.973090909090912
+  },
+  {
+   "params": [
+    0.15,
+    1.5
+   ],
+   "completed_all": 0.0,
+   "score": -0.19703619885671517,
+   "geom010_circuits": 0.05611580396680683,
+   "rmse_circuits": 0.3276929677985012,
+   "completed_circuits": 0.0,
+   "geom010_synth": 0.2595238095238095,
+   "rmse_synth": 0.38201904340554543,
+   "time_circuits": 20.119272727272726
+  },
+  {
+   "params": [
+    0.15,
+    1.6
+   ],
+   "completed_all": 0.0,
+   "score": -0.21893774437455726,
+   "geom010_circuits": 0.061323261265954686,
+   "rmse_circuits": 0.3421137264061401,
+   "completed_circuits": 0.0,
+   "geom010_synth": 0.23076190476190478,
+   "rmse_synth": 0.3878469283708339,
+   "time_circuits": 23.67127272727273
+  },
+  {
+   "params": [
+    0.15,
+    1.8
+   ],
+   "completed_all": 0.0,
+   "score": -0.2150710489487287,
+   "geom010_circuits": 0.05300189781565139,
+   "rmse_circuits": 0.3252232529783879,
+   "completed_circuits": 0.0,
+   "geom010_synth": 0.22780952380952377,
+   "rmse_synth": 0.3857302665442447,
+   "time_circuits": 17.031272727272725
+  },
+  {
+   "params": [
+    0.15,
+    2.0
+   ],
+   "completed_all": 0.024390243902439025,
+   "score": -0.21477980309927974,
+   "geom010_circuits": 0.0696505786477133,
+   "rmse_circuits": 0.35557580701867875,
+   "completed_circuits": 0.0,
+   "geom010_synth": 0.2388571428571429,
+   "rmse_synth": 0.38249152068473696,
+   "time_circuits": 26.735999999999994
+  },
+  {
+   "params": [
+    0.15,
+    2.5
+   ],
+   "completed_all": 0.0,
+   "score": -0.24304727933158304,
+   "geom010_circuits": 0.05455810664979719,
+   "rmse_circuits": 0.38347170241285694,
+   "completed_circuits": 0.0,
+   "geom010_synth": 0.22533333333333333,
+   "rmse_synth": 0.3825142962334397,
+   "time_circuits": 18.84509090909091
+  },
+  {
+   "params": [
+    0.175,
+    1.5
+   ],
+   "completed_all": 0.0,
+   "score": -0.19991856819113987,
+   "geom010_circuits": 0.11251739664347112,
+   "rmse_circuits": 0.3797717213740206,
+   "completed_circuits": 0.0,
+   "geom010_synth": 0.2719047619047619,
+   "rmse_synth": 0.4044875735564922,
+   "time_circuits": 37.456
+  },
+  {
+   "params": [
+    0.175,
+    1.6
+   ],
+   "completed_all": 0.0,
+   "score": -0.21276893149121853,
+   "geom010_circuits": 0.09014698768280428,
+   "rmse_circuits": 0.363096963769726,
+   "completed_circuits": 0.0,
+   "geom010_synth": 0.25342857142857145,
+   "rmse_synth": 0.4060164583240868,
+   "time_circuits": 29.776
+  },
+  {
+   "params": [
+    0.175,
+    1.8
+   ],
+   "completed_all": 0.0,
+   "score": -0.21319719792602082,
+   "geom010_circuits": 0.09147620288021434,
+   "rmse_circuits": 0.402393166030221,
+   "completed_circuits": 0.0,
+   "geom010_synth": 0.28961904761904766,
+   "rmse_synth": 0.40509648032108264,
+   "time_circuits": 35.09090909090909
+  },
+  {
+   "params": [
+    0.175,
+    2.0
+   ],
+   "completed_all": 0.0,
+   "score": -0.2221683981649246,
+   "geom010_circuits": 0.07455810664979722,
+   "rmse_circuits": 0.37957862077406773,
+   "completed_circuits": 0.0,
+   "geom010_synth": 0.2683809523809524,
+   "rmse_synth": 0.40769723458653107,
+   "time_circuits": 28.349090909090908
+  },
+  {
+   "params": [
+    0.175,
+    2.5
+   ],
+   "completed_all": 0.0,
+   "score": -0.20603021944807157,
+   "geom010_circuits": 0.0917069177241097,
+   "rmse_circuits": 0.38260314333578244,
+   "completed_circuits": 0.0,
+   "geom010_synth": 0.2813333333333333,
+   "rmse_synth": 0.40249754661780374,
+   "time_circuits": 38.75636363636364
+  },
+  {
+   "params": [
+    0.2,
+    1.5
+   ],
+   "completed_all": 0.0,
+   "score": -0.140575968473307,
+   "geom010_circuits": 0.21147992408737395,
+   "rmse_circuits": 0.37949980790350374,
+   "completed_circuits": 0.0,
+   "geom010_synth": 0.2859047619047619,
+   "rmse_synth": 0.3990368150352461,
+   "time_circuits": 55.42836363636365
+  },
+  {
+   "params": [
+    0.2,
+    1.6
+   ],
+   "completed_all": 0.0,
+   "score": -0.12452148109229841,
+   "geom010_circuits": 0.19849216685892906,
+   "rmse_circuits": 0.3760705159136552,
+   "completed_circuits": 0.0,
+   "geom010_synth": 0.3291428571428572,
+   "rmse_synth": 0.40060747027272786,
+   "time_circuits": 56.85672727272727
+  },
+  {
+   "params": [
+    0.2,
+    1.8
+   ],
+   "completed_all": 0.0,
+   "score": -0.16866076589151258,
+   "geom010_circuits": 0.139784914226175,
+   "rmse_circuits": 0.380341531840099,
+   "completed_circuits": 0.0,
+   "geom010_synth": 0.30923809523809526,
+   "rmse_synth": 0.4060030094071964,
+   "time_circuits": 50.70254545454546
+  },
+  {
+   "params": [
+    0.2,
+    2.0
+   ],
+   "completed_all": 0.0,
+   "score": -0.180865248158446,
+   "geom010_circuits": 0.13303166747292822,
+   "rmse_circuits": 0.39543309180868713,
+   "completed_circuits": 0.0,
+   "geom010_synth": 0.30152380952380947,
+   "rmse_synth": 0.4008528815049426,
+   "time_circuits": 48.00727272727273
+  },
+  {
+   "params": [
+    0.2,
+    2.5
+   ],
+   "completed_all": 0.0,
+   "score": -0.19876939431826635,
+   "geom010_circuits": 0.12186283630409701,
+   "rmse_circuits": 0.39048897702422514,
+   "completed_circuits": 0.0,
+   "geom010_synth": 0.28695238095238096,
+   "rmse_synth": 0.4158650288687855,
+   "time_circuits": 47.19709090909091
+  },
+  {
+   "params": [
+    0.25,
+    1.5
+   ],
+   "completed_all": 0.0975609756097561,
+   "score": 0.04347126424868017,
+   "geom010_circuits": 0.5696595095448964,
+   "rmse_circuits": 0.26688924297128663,
+   "completed_circuits": 0.36363636363636365,
+   "geom010_synth": 0.21866666666666668,
+   "rmse_synth": 0.4344944047429161,
+   "time_circuits": 61.813818181818185
+  },
+  {
+   "params": [
+    0.25,
+    1.6
+   ],
+   "completed_all": 0.07317073170731707,
+   "score": 0.037079173096198584,
+   "geom010_circuits": 0.5462471625795408,
+   "rmse_circuits": 0.23876741999020756,
+   "completed_circuits": 0.2727272727272727,
+   "geom010_synth": 0.18942857142857142,
+   "rmse_synth": 0.42274996782550744,
+   "time_circuits": 56.91054545454545
+  },
+  {
+   "params": [
+    0.25,
+    1.8
+   ],
+   "completed_all": 0.07317073170731707,
+   "score": 0.04949588658254368,
+   "geom010_circuits": 0.5431734454657091,
+   "rmse_circuits": 0.2566970967461089,
+   "completed_circuits": 0.2727272727272727,
+   "geom010_synth": 0.23447619047619048,
+   "rmse_synth": 0.4219607660307033,
+   "time_circuits": 57.54909090909091
+  },
+  {
+   "params": [
+    0.25,
+    2.0
+   ],
+   "completed_all": 0.04878048780487805,
+   "score": -0.010164796123035932,
+   "geom010_circuits": 0.4912253935176571,
+   "rmse_circuits": 0.29130418279683884,
+   "completed_circuits": 0.18181818181818182,
+   "geom010_synth": 0.2087619047619048,
+   "rmse_synth": 0.4290127077287949,
+   "time_circuits": 66.67927272727273
+  },
+  {
+   "params": [
+    0.25,
+    2.5
+   ],
+   "completed_all": 0.0,
+   "score": -0.170129393439438,
+   "geom010_circuits": 0.2514858780188293,
+   "rmse_circuits": 0.38745445888974783,
+   "completed_circuits": 0.0,
+   "geom010_synth": 0.216,
+   "rmse_synth": 0.42029020600795747,
+   "time_circuits": 71.26545454545455
+  },
+  {
+   "params": [
+    0.3,
+    1.5
+   ],
+   "completed_all": 0.34146341463414637,
+   "score": 0.306323318680573,
+   "geom010_circuits": 0.6813098649201801,
+   "rmse_circuits": 0.18406072012376215,
+   "completed_circuits": 0.5454545454545454,
+   "geom010_synth": 0.41571428571428565,
+   "rmse_synth": 0.30031679314955756,
+   "time_circuits": 51.19272727272728
+  },
+  {
+   "params": [
+    0.3,
+    1.6
+   ],
+   "completed_all": 0.2926829268292683,
+   "score": 0.2246488908969651,
+   "geom010_circuits": 0.6239065232761507,
+   "rmse_circuits": 0.21949134741316853,
+   "completed_circuits": 0.45454545454545453,
+   "geom010_synth": 0.3736190476190477,
+   "rmse_synth": 0.3287364416880996,
+   "time_circuits": 49.31054545454546
+  },
+  {
+   "params": [
+    0.3,
+    1.8
+   ],
+   "completed_all": 0.17073170731707318,
+   "score": 0.1190583798785842,
+   "geom010_circuits": 0.6072861236185019,
+   "rmse_circuits": 0.2428742797428762,
+   "completed_circuits": 0.36363636363636365,
+   "geom010_synth": 0.26447619047619053,
+   "rmse_synth": 0.3907712745946478,
+   "time_circuits": 56.95127272727272
+  },
+  {
+   "params": [
+    0.3,
+    2.0
+   ],
+   "completed_all": 0.12195121951219512,
+   "score": 0.06804739091832582,
+   "geom010_circuits": 0.5896647192349197,
+   "rmse_circuits": 0.25415393663837155,
+   "completed_circuits": 0.36363636363636365,
+   "geom010_synth": 0.2277142857142857,
+   "rmse_synth": 0.4271302864741822,
+   "time_circuits": 58.95127272727272
+  },
+  {
+   "params": [
+    0.3,
+    2.5
+   ],
+   "completed_all": 0.07317073170731707,
+   "score": 0.0007144673395469703,
+   "geom010_circuits": 0.561394708443419,
+   "rmse_circuits": 0.28654265390659556,
+   "completed_circuits": 0.2727272727272727,
+   "geom010_synth": 0.17733333333333337,
+   "rmse_synth": 0.4507564531910629,
+   "time_circuits": 58.184727272727265
+  },
+  {
+   "params": [
+    0.35,
+    1.5
+   ],
+   "completed_all": 0.8048780487804879,
+   "score": 0.7555855865270842,
+   "geom010_circuits": 0.8162475347002567,
+   "rmse_circuits": 0.08469630122147716,
+   "completed_circuits": 0.7272727272727273,
+   "geom010_synth": 0.8403809523809525,
+   "rmse_synth": 0.060761012805563605,
+   "time_circuits": 47.28872727272728
+  },
+  {
+   "params": [
+    0.35,
+    1.6
+   ],
+   "completed_all": 0.6829268292682927,
+   "score": 0.628148924281458,
+   "geom010_circuits": 0.7543013433557846,
+   "rmse_circuits": 0.12138356207981804,
+   "completed_circuits": 0.6363636363636364,
+   "geom010_synth": 0.7315238095238096,
+   "rmse_synth": 0.1081437422368601,
+   "time_circuits": 46.35781818181818
+  },
+  {
+   "params": [
+    0.35,
+    1.8
+   ],
+   "completed_all": 0.4634146341463415,
+   "score": 0.4402637002886758,
+   "geom010_circuits": 0.6696237859561641,
+   "rmse_circuits": 0.16397473893289152,
+   "completed_circuits": 0.45454545454545453,
+   "geom010_synth": 0.5683809523809523,
+   "rmse_synth": 0.19350259882687332,
+   "time_circuits": 47.29454545454546
+  },
+  {
+   "params": [
+    0.35,
+    2.0
+   ],
+   "completed_all": 0.36585365853658536,
+   "score": 0.35912289811464615,
+   "geom010_circuits": 0.7189729468239496,
+   "rmse_circuits": 0.17356916704058792,
+   "completed_circuits": 0.5454545454545454,
+   "geom010_synth": 0.4328571428571428,
+   "rmse_synth": 0.26001512641121216,
+   "time_circuits": 52.27345454545455
+  },
+  {
+   "params": [
+    0.35,
+    2.5
+   ],
+   "completed_all": 0.1951219512195122,
+   "score": 0.14976251811403876,
+   "geom010_circuits": 0.5524779518475793,
+   "rmse_circuits": 0.24803264128708893,
+   "completed_circuits": 0.36363636363636365,
+   "geom010_synth": 0.3252380952380952,
+   "rmse_synth": 0.3301583695705081,
+   "time_circuits": 51.154909090909086
+  },
+  {
+   "params": [
+    0.4,
+    1.5
+   ],
+   "completed_all": 0.975609756097561,
+   "score": 0.9585780160657272,
+   "geom010_circuits": 0.9825735868715811,
+   "rmse_circuits": 0.02103327781284878,
+   "completed_circuits": 1.0,
+   "geom010_synth": 0.9751428571428573,
+   "rmse_synth": 0.019527134070135194,
+   "time_circuits": 50.63127272727274
+  },
+  {
+   "params": [
+    0.4,
+    1.6
+   ],
+   "completed_all": 0.9512195121951219,
+   "score": 0.9052919806802531,
+   "geom010_circuits": 0.9062516280281323,
+   "rmse_circuits": 0.04539402341867981,
+   "completed_circuits": 0.9090909090909091,
+   "geom010_synth": 0.9701904761904763,
+   "rmse_synth": 0.0204641194394226,
+   "time_circuits": 47.48945454545455
+  },
+  {
+   "params": [
+    0.4,
+    1.8
+   ],
+   "completed_all": 0.9512195121951219,
+   "score": 0.9072927325318378,
+   "geom010_circuits": 0.9350411193391135,
+   "rmse_circuits": 0.04306536670865321,
+   "completed_circuits": 0.9090909090909091,
+   "geom010_synth": 0.9500952380952383,
+   "rmse_synth": 0.027485525662022926,
+   "time_circuits": 49.54909090909091
+  },
+  {
+   "params": [
+    0.4,
+    2.0
+   ],
+   "completed_all": 0.8292682926829268,
+   "score": 0.7764270485931613,
+   "geom010_circuits": 0.8244289807613591,
+   "rmse_circuits": 0.09052999840880037,
+   "completed_circuits": 0.7272727272727273,
+   "geom010_synth": 0.8681904761904763,
+   "rmse_synth": 0.04923536135671239,
+   "time_circuits": 48.935272727272725
+  },
+  {
+   "params": [
+    0.4,
+    2.5
+   ],
+   "completed_all": 0.4634146341463415,
+   "score": 0.4181890619063206,
+   "geom010_circuits": 0.6852074572991478,
+   "rmse_circuits": 0.17695197732484305,
+   "completed_circuits": 0.5454545454545454,
+   "geom010_synth": 0.5238095238095238,
+   "rmse_synth": 0.1956868799711874,
+   "time_circuits": 52.359272727272725
+  },
+  {
+   "params": [
+    0.45,
+    1.5
+   ],
+   "completed_all": 0.975609756097561,
+   "score": 0.9564976649290369,
+   "geom010_circuits": 0.9883035016559372,
+   "rmse_circuits": 0.015920449463700543,
+   "completed_circuits": 1.0,
+   "geom010_synth": 0.9604761904761906,
+   "rmse_synth": 0.019863912810353424,
+   "time_circuits": 50.176
+  },
+  {
+   "params": [
+    0.45,
+    1.6
+   ],
+   "completed_all": 1.0,
+   "score": 0.9653288490802214,
+   "geom010_circuits": 0.9883020131730732,
+   "rmse_circuits": 0.016812763920888332,
+   "completed_circuits": 1.0,
+   "geom010_synth": 0.9785714285714288,
+   "rmse_synth": 0.019402979663170592,
+   "time_circuits": 50.11927272727273
+  },
+  {
+   "params": [
+    0.45,
+    1.8
+   ],
+   "completed_all": 1.0,
+   "score": 0.9606291704021759,
+   "geom010_circuits": 0.9854366836601792,
+   "rmse_circuits": 0.02236642040368023,
+   "completed_circuits": 1.0,
+   "geom010_synth": 0.9780952380952381,
+   "rmse_synth": 0.01990716054738553,
+   "time_circuits": 50.16727272727273
+  },
+  {
+   "params": [
+    0.45,
+    2.0
+   ],
+   "completed_all": 0.975609756097561,
+   "score": 0.9563925049128973,
+   "geom010_circuits": 0.9856979124027834,
+   "rmse_circuits": 0.026545031889994308,
+   "completed_circuits": 1.0,
+   "geom010_synth": 0.9746666666666667,
+   "rmse_synth": 0.02103453735366117,
+   "time_circuits": 50.18763636363636
+  },
+  {
+   "params": [
+    0.45,
+    2.5
+   ],
+   "completed_all": 0.8780487804878049,
+   "score": 0.8363958879095068,
+   "geom010_circuits": 0.8924801845718751,
+   "rmse_circuits": 0.06649720311334084,
+   "completed_circuits": 0.9090909090909091,
+   "geom010_synth": 0.8883809523809525,
+   "rmse_synth": 0.04157215802047316,
+   "time_circuits": 47.90254545454547
+  },
+  {
+   "params": [
+    0.5,
+    1.5
+   ],
+   "completed_all": 0.975609756097561,
+   "score": 0.9541286032225844,
+   "geom010_circuits": 0.9875227923938524,
+   "rmse_circuits": 0.018069799764600648,
+   "completed_circuits": 1.0,
+   "geom010_synth": 0.9599047619047619,
+   "rmse_synth": 0.021100548088844935,
+   "time_circuits": 49.98545454545455
+  },
+  {
+   "params": [
+    0.5,
+    1.6
+   ],
+   "completed_all": 0.975609756097561,
+   "score": 0.9538372987556866,
+   "geom010_circuits": 0.9877832768950247,
+   "rmse_circuits": 0.019115910168967368,
+   "completed_circuits": 1.0,
+   "geom010_synth": 0.960095238095238,
+   "rmse_synth": 0.021088007309922118,
+   "time_circuits": 49.91709090909091
+  },
+  {
+   "params": [
+    0.5,
+    1.8
+   ],
+   "completed_all": 0.975609756097561,
+   "score": 0.9518349077493726,
+   "geom010_circuits": 0.9864823428720277,
+   "rmse_circuits": 0.021706976400894914,
+   "completed_circuits": 1.0,
+   "geom010_synth": 0.9601904761904763,
+   "rmse_synth": 0.021296027162863686,
+   "time_circuits": 49.80218181818182
+  },
+  {
+   "params": [
+    0.5,
+    2.0
+   ],
+   "completed_all": 1.0,
+   "score": 0.9584569819159209,
+   "geom010_circuits": 0.9851836415733264,
+   "rmse_circuits": 0.02515879934217681,
+   "completed_circuits": 1.0,
+   "geom010_synth": 0.9780952380952382,
+   "rmse_synth": 0.021206116494546047,
+   "time_circuits": 49.74545454545455
+  },
+  {
+   "params": [
+    0.5,
+    2.5
+   ],
+   "completed_all": 0.975609756097561,
+   "score": 0.9445576677337084,
+   "geom010_circuits": 0.9747865887693968,
+   "rmse_circuits": 0.034975030229742174,
+   "completed_circuits": 1.0,
+   "geom010_synth": 0.9727619047619049,
+   "rmse_synth": 0.02345812783414267,
+   "time_circuits": 49.80072727272727
+  },
+  {
+   "params": [
+    0.55,
+    1.5
+   ],
+   "completed_all": 0.9512195121951219,
+   "score": 0.9480429915154862,
+   "geom010_circuits": 0.9833647155137126,
+   "rmse_circuits": 0.02149382129996475,
+   "completed_circuits": 1.0,
+   "geom010_synth": 0.9568571428571429,
+   "rmse_synth": 0.02264205403991837,
+   "time_circuits": 49.81236363636364
+  },
+  {
+   "params": [
+    0.55,
+    1.6
+   ],
+   "completed_all": 0.9512195121951219,
+   "score": 0.9478505171887117,
+   "geom010_circuits": 0.9838856845160571,
+   "rmse_circuits": 0.022822521828186722,
+   "completed_circuits": 1.0,
+   "geom010_synth": 0.9573333333333333,
+   "rmse_synth": 0.02269546164378006,
+   "time_circuits": 49.73236363636364
+  },
+  {
+   "params": [
+    0.55,
+    1.8
+   ],
+   "completed_all": 0.975609756097561,
+   "score": 0.9435054535118944,
+   "geom010_circuits": 0.9797276076359172,
+   "rmse_circuits": 0.02591958829476505,
+   "completed_circuits": 1.0,
+   "geom010_synth": 0.9561904761904764,
+   "rmse_synth": 0.022987588507839624,
+   "time_circuits": 49.59854545454546
+  },
+  {
+   "params": [
+    0.55,
+    2.0
+   ],
+   "completed_all": 0.975609756097561,
+   "score": 0.9387332198963131,
+   "geom010_circuits": 0.9747910542179884,
+   "rmse_circuits": 0.028943201377519656,
+   "completed_circuits": 1.0,
+   "geom010_synth": 0.954952380952381,
+   "rmse_synth": 0.023333794000223673,
+   "time_circuits": 49.501090909090905
+  },
+  {
+   "params": [
+    0.55,
+    2.5
+   ],
+   "completed_all": 1.0,
+   "score": 0.9305735587200313,
+   "geom010_circuits": 0.9511502251330332,
+   "rmse_circuits": 0.03722376717957009,
+   "completed_circuits": 1.0,
+   "geom010_synth": 0.9712380952380955,
+   "rmse_synth": 0.024017435751495824,
+   "time_circuits": 49.40654545454545
+  },
+  {
+   "params": [
+    0.6,
+    1.5
+   ],
+   "completed_all": 0.9512195121951219,
+   "score": 0.9386925826892443,
+   "geom010_circuits": 0.9755658095486176,
+   "rmse_circuits": 0.025704721278946532,
+   "completed_circuits": 1.0,
+   "geom010_synth": 0.9519047619047619,
+   "rmse_synth": 0.024380684795944598,
+   "time_circuits": 49.63927272727273
+  },
+  {
+   "params": [
+    0.6,
+    1.6
+   ],
+   "completed_all": 0.9512195121951219,
+   "score": 0.9365016384905327,
+   "geom010_circuits": 0.9734863989878317,
+   "rmse_circuits": 0.02732467187322908,
+   "completed_circuits": 1.0,
+   "geom010_synth": 0.9513333333333333,
+   "rmse_synth": 0.02449178346687045,
+   "time_circuits": 49.547636363636364
+  },
+  {
+   "params": [
+    0.6,
+    1.8
+   ],
+   "completed_all": 0.9512195121951219,
+   "score": 0.9300529070979882,
+   "geom010_circuits": 0.9646552301566627,
+   "rmse_circuits": 0.030976123054408864,
+   "completed_circuits": 1.0,
+   "geom010_synth": 0.9513333333333333,
+   "rmse_synth": 0.02490662623961061,
+   "time_circuits": 49.403636363636366
+  },
+  {
+   "params": [
+    0.6,
+    2.0
+   ],
+   "completed_all": 0.975609756097561,
+   "score": 0.9227446925895371,
+   "geom010_circuits": 0.954785844527965,
+   "rmse_circuits": 0.03450173241167917,
+   "completed_circuits": 1.0,
+   "geom010_synth": 0.9505714285714286,
+   "rmse_synth": 0.02536615550864028,
+   "time_circuits": 49.28290909090909
+  },
+  {
+   "params": [
+    0.6,
+    2.5
+   ],
+   "completed_all": 0.975609756097561,
+   "score": 0.8990047538932949,
+   "geom010_circuits": 0.9168615338815912,
+   "rmse_circuits": 0.04184280335007891,
+   "completed_circuits": 1.0,
+   "geom010_synth": 0.9494285714285714,
+   "rmse_synth": 0.026437794173493744,
+   "time_circuits": 49.11272727272728
+  },
+  {
+   "params": [
+    0.65,
+    1.5
+   ],
+   "completed_all": 0.9512195121951219,
+   "score": 0.9262431235031916,
+   "geom010_circuits": 0.9625713541472855,
+   "rmse_circuits": 0.030461387757498234,
+   "completed_circuits": 1.0,
+   "geom010_synth": 0.9466666666666668,
+   "rmse_synth": 0.0262903860500708,
+   "time_circuits": 49.457454545454546
+  },
+  {
+   "params": [
+    0.65,
+    1.6
+   ],
+   "completed_all": 0.9512195121951219,
+   "score": 0.9230956028297065,
+   "geom010_circuits": 0.9581565139731328,
+   "rmse_circuits": 0.03235665120661113,
+   "completed_circuits": 1.0,
+   "geom010_synth": 0.9468571428571428,
+   "rmse_synth": 0.026465799964251576,
+   "time_circuits": 49.36000000000001
+  },
+  {
+   "params": [
+    0.65,
+    1.8
+   ],
+   "completed_all": 0.9512195121951219,
+   "score": 0.9132170265295427,
+   "geom010_circuits": 0.9441320284300225,
+   "rmse_circuits": 0.036580273681263646,
+   "completed_circuits": 1.0,
+   "geom010_synth": 0.9459047619047619,
+   "rmse_synth": 0.027022463594435376,
+   "time_circuits": 49.19709090909091
+  },
+  {
+   "params": [
+    0.65,
+    2.0
+   ],
+   "completed_all": 0.9512195121951219,
+   "score": 0.9007385071583329,
+   "geom010_circuits": 0.9236088267033825,
+   "rmse_circuits": 0.04059390959111872,
+   "completed_circuits": 1.0,
+   "geom010_synth": 0.9460952380952382,
+   "rmse_synth": 0.02763314089083618,
+   "time_circuits": 49.06909090909091
+  },
+  {
+   "params": [
+    0.65,
+    2.5
+   ],
+   "completed_all": 0.975609756097561,
+   "score": 0.8756955861709107,
+   "geom010_circuits": 0.8833513191679381,
+   "rmse_circuits": 0.0485637413194653,
+   "completed_circuits": 1.0,
+   "geom010_synth": 0.9454285714285715,
+   "rmse_synth": 0.028824976935222856,
+   "time_circuits": 48.848000000000006
+  },
+  {
+   "params": [
+    0.7,
+    1.5
+   ],
+   "completed_all": 0.9512195121951219,
+   "score": 0.9123608188339734,
+   "geom010_circuits": 0.9454255200387004,
+   "rmse_circuits": 0.03561167651524543,
+   "completed_circuits": 1.0,
+   "geom010_synth": 0.9432380952380954,
+   "rmse_synth": 0.02833030109360373,
+   "time_circuits": 49.27272727272727
+  },
+  {
+   "params": [
+    0.7,
+    1.6
+   ],
+   "completed_all": 0.9512195121951219,
+   "score": 0.9068665089942105,
+   "geom010_circuits": 0.9368526029844081,
+   "rmse_circuits": 0.03779355822429711,
+   "completed_circuits": 1.0,
+   "geom010_synth": 0.9432380952380954,
+   "rmse_synth": 0.028564122009785493,
+   "time_circuits": 49.168000000000006
+  },
+  {
+   "params": [
+    0.7,
+    1.8
+   ],
+   "completed_all": 0.926829268292683,
+   "score": 0.8735254290664048,
+   "geom010_circuits": 0.8780485989655045,
+   "rmse_circuits": 0.0433486053647262,
+   "completed_circuits": 0.9090909090909091,
+   "geom010_synth": 0.9416190476190476,
+   "rmse_synth": 0.029268183087016172,
+   "time_circuits": 47.49963636363637
+  },
+  {
+   "params": [
+    0.7,
+    2.0
+   ],
+   "completed_all": 0.926829268292683,
+   "score": 0.8573270050766078,
+   "geom010_circuits": 0.8518148327317381,
+   "rmse_circuits": 0.047785537429193496,
+   "completed_circuits": 0.9090909090909091,
+   "geom010_synth": 0.9406666666666668,
+   "rmse_synth": 0.030041951815995914,
+   "time_circuits": 47.365818181818184
+  },
+  {
+   "params": [
+    0.7,
+    2.5
+   ],
+   "completed_all": 0.7317073170731707,
+   "score": 0.7245853761899311,
+   "geom010_circuits": 0.6390868157630335,
+   "rmse_circuits": 0.05887779843508098,
+   "completed_circuits": 0.45454545454545453,
+   "geom010_synth": 0.9004761904761907,
+   "rmse_synth": 0.03151445542428092,
+   "time_circuits": 36.50181818181818
+  },
+  {
+   "params": [
+    0.75,
+    1.5
+   ],
+   "completed_all": 0.9024390243902439,
+   "score": 0.8776331743868513,
+   "geom010_circuits": 0.9228221635098426,
+   "rmse_circuits": 0.04110329331917863,
+   "completed_circuits": 1.0,
+   "geom010_synth": 0.9051428571428572,
+   "rmse_synth": 0.031595378559818546,
+   "time_circuits": 49.07927272727272
+  },
+  {
+   "params": [
+    0.75,
+    1.6
+   ],
+   "completed_all": 0.8536585365853658,
+   "score": 0.8287453392756489,
+   "geom010_circuits": 0.8297354221709522,
+   "rmse_circuits": 0.0455329074779413,
+   "completed_circuits": 0.8181818181818182,
+   "geom010_synth": 0.9051428571428571,
+   "rmse_synth": 0.03185469328457038,
+   "time_circuits": 45.153454545454544
+  },
+  {
+   "params": [
+    0.75,
+    1.8
+   ],
+   "completed_all": 0.8536585365853658,
+   "score": 0.8078676460283378,
+   "geom010_circuits": 0.7686957168905593,
+   "rmse_circuits": 0.051018201619736955,
+   "completed_circuits": 0.7272727272727273,
+   "geom010_synth": 0.929904761904762,
+   "rmse_synth": 0.03184698511890884,
+   "time_circuits": 42.9949090909091
+  },
+  {
+   "params": [
+    0.75,
+    2.0
+   ],
+   "completed_all": 0.7317073170731707,
+   "score": 0.7331822055223618,
+   "geom010_circuits": 0.6593428348156141,
+   "rmse_circuits": 0.05675193683119719,
+   "completed_circuits": 0.45454545454545453,
+   "geom010_synth": 0.8963809523809526,
+   "rmse_synth": 0.03260743932064577,
+   "time_circuits": 37.407999999999994
+  },
+  {
+   "params": [
+    0.75,
+    2.5
+   ],
+   "completed_all": 0.5365853658536586,
+   "score": 0.6224712673022224,
+   "geom010_circuits": 0.48920701075428874,
+   "rmse_circuits": 0.06542942783658362,
+   "completed_circuits": 0.09090909090909091,
+   "geom010_synth": 0.8556190476190475,
+   "rmse_synth": 0.034454095932307825,
+   "time_circuits": 27.886545454545455
+  },
+  {
+   "params": [
+    0.8,
+    1.5
+   ],
+   "completed_all": 0.8048780487804879,
+   "score": 0.7655439748306578,
+   "geom010_circuits": 0.7200357235887322,
+   "rmse_circuits": 0.053870242950512896,
+   "completed_circuits": 0.7272727272727273,
+   "geom010_synth": 0.898952380952381,
+   "rmse_synth": 0.0340299119292846,
+   "time_circuits": 40.30981818181818
+  },
+  {
+   "params": [
+    0.8,
+    1.6
+   ],
+   "completed_all": 0.7317073170731707,
+   "score": 0.7725140248063371,
+   "geom010_circuits": 0.7414207568935364,
+   "rmse_circuits": 0.05195847344749194,
+   "completed_circuits": 0.5454545454545454,
+   "geom010_synth": 0.8900952380952382,
+   "rmse_synth": 0.03452947192860843,
+   "time_circuits": 41.37018181818182
+  },
+  {
+   "params": [
+    0.8,
+    1.8
+   ],
+   "completed_all": 0.6341463414634146,
+   "score": 0.6723596472015785,
+   "geom010_circuits": 0.5907691735198898,
+   "rmse_circuits": 0.05635998317598128,
+   "completed_circuits": 0.36363636363636365,
+   "geom010_synth": 0.8448571428571429,
+   "rmse_synth": 0.03454703879789433,
+   "time_circuits": 32.779636363636364
+  },
+  {
+   "params": [
+    0.8,
+    2.0
+   ],
+   "completed_all": 0.5609756097560976,
+   "score": 0.6162801195240155,
+   "geom010_circuits": 0.49121050868901867,
+   "rmse_circuits": 0.06195071745058412,
+   "completed_circuits": 0.18181818181818182,
+   "geom010_synth": 0.8383809523809524,
+   "rmse_synth": 0.03508050457135605,
+   "time_circuits": 27.82254545454545
+  },
+  {
+   "params": [
+    0.8,
+    2.5
+   ],
+   "completed_all": 0.5365853658536586,
+   "score": 0.557854128547781,
+   "geom010_circuits": 0.40315781639563864,
+   "rmse_circuits": 0.07535753689644384,
+   "completed_circuits": 0.09090909090909091,
+   "geom010_synth": 0.8244761904761906,
+   "rmse_synth": 0.03656821287982331,
+   "time_circuits": 23.66690909090909
+  },
+  {
+   "params": [
+    0.85,
+    1.5
+   ],
+   "completed_all": 0.6097560975609756,
+   "score": 0.6640279700369405,
+   "geom010_circuits": 0.6205537156253488,
+   "rmse_circuits": 0.05971519605333028,
+   "completed_circuits": 0.45454545454545453,
+   "geom010_synth": 0.8051428571428573,
+   "rmse_synth": 0.037925436640994716,
+   "time_circuits": 35.153454545454544
+  },
+  {
+   "params": [
+    0.85,
+    1.6
+   ],
+   "completed_all": 0.5365853658536586,
+   "score": 0.6035618666712876,
+   "geom010_circuits": 0.5088646596956052,
+   "rmse_circuits": 0.06095902760297545,
+   "completed_circuits": 0.2727272727272727,
+   "geom010_synth": 0.7968571428571427,
+   "rmse_synth": 0.037639041607197214,
+   "time_circuits": 28.541090909090908
+  },
+  {
+   "params": [
+    0.85,
+    1.8
+   ],
+   "completed_all": 0.5121951219512195,
+   "score": 0.5863928214275365,
+   "geom010_circuits": 0.48653518401369406,
+   "rmse_circuits": 0.06457679080270312,
+   "completed_circuits": 0.18181818181818182,
+   "geom010_synth": 0.7881904761904761,
+   "rmse_synth": 0.037363226546394034,
+   "time_circuits": 27.674181818181818
+  },
+  {
+   "params": [
+    0.85,
+    2.0
+   ],
+   "completed_all": 0.5121951219512195,
+   "score": 0.5649196272940714,
+   "geom010_circuits": 0.43172924496706727,
+   "rmse_circuits": 0.07145492350462262,
+   "completed_circuits": 0.09090909090909091,
+   "geom010_synth": 0.8072380952380953,
+   "rmse_synth": 0.037673162112397136,
+   "time_circuits": 24.98909090909091
+  },
+  {
+   "params": [
+    0.85,
+    2.5
+   ],
+   "completed_all": 0.5121951219512195,
+   "score": 0.5057673333522568,
+   "geom010_circuits": 0.32679269154913854,
+   "rmse_circuits": 0.0807625170967504,
+   "completed_circuits": 0.09090909090909091,
+   "geom010_synth": 0.8046666666666666,
+   "rmse_synth": 0.039162174414541125,
+   "time_circuits": 18.651636363636367
+  },
+  {
+   "params": [
+    0.9,
+    1.5
+   ],
+   "completed_all": 0.4634146341463415,
+   "score": 0.5639109690205419,
+   "geom010_circuits": 0.4984757935474267,
+   "rmse_circuits": 0.06567765449056823,
+   "completed_circuits": 0.2727272727272727,
+   "geom010_synth": 0.7364761904761906,
+   "rmse_synth": 0.04145239149196523,
+   "time_circuits": 28.082909090909094
+  },
+  {
+   "params": [
+    0.9,
+    1.6
+   ],
+   "completed_all": 0.4878048780487805,
+   "score": 0.5618989932998377,
+   "geom010_circuits": 0.4743199493915826,
+   "rmse_circuits": 0.06826265677616694,
+   "completed_circuits": 0.18181818181818182,
+   "geom010_synth": 0.7583809523809525,
+   "rmse_synth": 0.04064025839669276,
+   "time_circuits": 26.901818181818182
+  },
+  {
+   "params": [
+    0.9,
+    1.8
+   ],
+   "completed_all": 0.4878048780487805,
+   "score": 0.5464158123249355,
+   "geom010_circuits": 0.4223785956164179,
+   "rmse_circuits": 0.07486001158483874,
+   "completed_circuits": 0.09090909090909091,
+   "geom010_synth": 0.7854285714285714,
+   "rmse_synth": 0.040115530810279555,
+   "time_circuits": 24.337454545454545
+  },
+  {
+   "params": [
+    0.9,
+    2.0
+   ],
+   "completed_all": 0.4634146341463415,
+   "score": 0.4934924274774104,
+   "geom010_circuits": 0.3314687604658952,
+   "rmse_circuits": 0.07743223733443781,
+   "completed_circuits": 0.09090909090909091,
+   "geom010_synth": 0.7739047619047618,
+   "rmse_synth": 0.04095643008139833,
+   "time_circuits": 18.69090909090909
+  },
+  {
+   "params": [
+    0.9,
+    2.5
+   ],
+   "completed_all": 0.5121951219512195,
+   "score": 0.49509325536651,
+   "geom010_circuits": 0.3189997395154988,
+   "rmse_circuits": 0.08916768772656963,
+   "completed_circuits": 0.09090909090909091,
+   "geom010_synth": 0.8025714285714286,
+   "rmse_synth": 0.04221696962733774,
+   "time_circuits": 18.58618181818182
+  },
+  {
+   "params": [
+    0.95,
+    1.5
+   ],
+   "completed_all": 0.4146341463414634,
+   "score": 0.5277401766482479,
+   "geom010_circuits": 0.4527600193502772,
+   "rmse_circuits": 0.07360487584386818,
+   "completed_circuits": 0.09090909090909091,
+   "geom010_synth": 0.7207619047619046,
+   "rmse_synth": 0.04443669497181771,
+   "time_circuits": 25.828363636363633
+  },
+  {
+   "params": [
+    0.95,
+    1.6
+   ],
+   "completed_all": 0.4146341463414634,
+   "score": 0.5095559412696787,
+   "geom010_circuits": 0.4189937855840435,
+   "rmse_circuits": 0.07725268112198715,
+   "completed_circuits": 0.09090909090909091,
+   "geom010_synth": 0.7220000000000001,
+   "rmse_synth": 0.04462922192269905,
+   "time_circuits": 24.224
+  },
+  {
+   "params": [
+    0.95,
+    1.8
+   ],
+   "completed_all": 0.43902439024390244,
+   "score": 0.46874900498654676,
+   "geom010_circuits": 0.32444833103858894,
+   "rmse_circuits": 0.08191231448309225,
+   "completed_circuits": 0.09090909090909091,
+   "geom010_synth": 0.7391428571428572,
+   "rmse_synth": 0.04418086372526046,
+   "time_circuits": 18.353454545454547
+  },
+  {
+   "params": [
+    0.95,
+    2.0
+   ],
+   "completed_all": 0.4634146341463415,
+   "score": 0.47676749302714716,
+   "geom010_circuits": 0.3187399992557586,
+   "rmse_circuits": 0.0872393095275042,
+   "completed_circuits": 0.09090909090909091,
+   "geom010_synth": 0.7658095238095238,
+   "rmse_synth": 0.043775227483483926,
+   "time_circuits": 18.38836363636364
+  },
+  {
+   "params": [
+    0.95,
+    2.5
+   ],
+   "completed_all": 0.5121951219512195,
+   "score": 0.46301993175276623,
+   "geom010_circuits": 0.26886763666133295,
+   "rmse_circuits": 0.09640697535910653,
+   "completed_circuits": 0.09090909090909091,
+   "geom010_synth": 0.7988571428571429,
+   "rmse_synth": 0.04527794065383686,
+   "time_circuits": 15.515636363636363
+  },
+  {
+   "params": [
+    1.0,
+    1.5
+   ],
+   "completed_all": 0.3902439024390244,
+   "score": 0.48164872726891966,
+   "geom010_circuits": 0.38081047891936143,
+   "rmse_circuits": 0.08121065843122396,
+   "completed_circuits": 0.09090909090909091,
+   "geom010_synth": 0.7111428571428572,
+   "rmse_synth": 0.047445223093155346,
+   "time_circuits": 21.91854545454546
+  },
+  {
+   "params": [
+    1.0,
+    1.6
+   ],
+   "completed_all": 0.3902439024390244,
+   "score": 0.4525390271971239,
+   "geom010_circuits": 0.3299028764931344,
+   "rmse_circuits": 0.08353501903622768,
+   "completed_circuits": 0.09090909090909091,
+   "geom010_synth": 0.7062857142857143,
+   "rmse_synth": 0.047575517348373175,
+   "time_circuits": 18.609454545454543
+  },
+  {
+   "params": [
+    1.0,
+    1.8
+   ],
+   "completed_all": 0.4146341463414634,
+   "score": 0.4489879900981406,
+   "geom010_circuits": 0.31535667770624787,
+   "rmse_circuits": 0.08997028010985164,
+   "completed_circuits": 0.09090909090909091,
+   "geom010_synth": 0.7202857142857144,
+   "rmse_synth": 0.047696131685829396,
+   "time_circuits": 18.292363636363635
+  },
+  {
+   "params": [
+    1.0,
+    2.0
+   ],
+   "completed_all": 0.43902439024390244,
+   "score": 0.4368774582723737,
+   "geom010_circuits": 0.271207531723291,
+   "rmse_circuits": 0.09429619130066307,
+   "completed_circuits": 0.09090909090909091,
+   "geom010_synth": 0.7442857142857143,
+   "rmse_synth": 0.047442138163594876,
+   "time_circuits": 15.35418181818182
+  },
+  {
+   "params": [
+    1.0,
+    2.5
+   ],
+   "completed_all": 0.4878048780487805,
+   "score": 0.4354869795872725,
+   "geom010_circuits": 0.24237413016782644,
+   "rmse_circuits": 0.10302751763940737,
+   "completed_circuits": 0.09090909090909091,
+   "geom010_synth": 0.7805714285714287,
+   "rmse_synth": 0.048944081925302724,
+   "time_circuits": 13.765818181818183
+  }
+ ]
+}

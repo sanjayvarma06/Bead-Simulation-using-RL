@@ -1,0 +1,5 @@
+start dagger_ppo_bc10_s3
+start dagger_ppo_bc10_s4
+{"name": "dagger_ppo_bc10_s3", "cmd": "python experiments/train_bead.py --mode dagger_ppo --seed 3 --timesteps 2000000 --eval_every 200000 --critic_warmup 50000 --log_std_init=-2.0 --lr 1e-4 --bc_coef 10 --tag _bc10 --workers 2", "exit": 0, "wall_s": 4244.5}
+{"name": "dagger_ppo_bc10_s4", "cmd": "python experiments/train_bead.py --mode dagger_ppo --seed 4 --timesteps 2000000 --eval_every 200000 --critic_warmup 50000 --log_std_init=-2.0 --lr 1e-4 --bc_coef 10 --tag _bc10 --workers 2", "exit": 0, "wall_s": 4254.5}
+DONE

@@ -1,0 +1,2 @@
+Stopped at ~750k of 3M steps (compute budget). Used only to select log_std_init on validation; never reported as a result.
+Checkpoints deleted during clean-up (2026-10-11): this pilot was used only to select log_std_init on validation (val_log.csv, progress.csv kept).

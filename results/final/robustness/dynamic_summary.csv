@@ -1,0 +1,17 @@
+experiment,controller,n_seeds,rmse_cm,rmse_lo,rmse_hi,rmse_true_cm,completed_pct,time_s
+dynamic_dt,fixed_retuned,1,1.905,1.905,1.905,2.302,100.0,43.131
+dynamic_dt,fixed_retuned_highg,1,1.834,1.834,1.834,2.313,100.0,43.147
+dynamic_dt,fixed_transfer,1,3.948,3.948,3.948,4.109,87.5,44.177
+dynamic_dt,rlpp_retrained,5,5.259,4.094,6.618,5.376,82.5,42.778
+dynamic_dt,rlpp_transfer,5,5.676,3.294,7.235,5.714,73.0,41.507
+dynamic_dt,rwf_retuned,1,2.336,2.336,2.336,2.691,100.0,43.266
+dynamic_dt,stanley_retuned,1,2.659,2.659,2.659,3.108,100.0,41.825
+dynamic_dt,stanley_transfer,1,2.796,2.796,2.796,3.228,100.0,43.088
+dynamic_dr,fixed_retuned,1,3.226,3.226,3.226,3.594,87.5,42.926
+dynamic_dr,fixed_retuned_highg,1,3.091,3.091,3.091,3.534,100.0,42.453
+dynamic_dr,fixed_transfer,1,34.842,34.842,34.842,34.774,0.0,17.892
+dynamic_dr,rlpp_retrained,5,6.727,4.898,8.715,6.824,50.0,31.455
+dynamic_dr,rlpp_transfer,5,23.525,13.287,29.659,23.393,2.5,14.414
+dynamic_dr,rwf_retuned,1,7.321,7.321,7.321,7.251,50.0,33.836
+dynamic_dr,stanley_retuned,1,3.584,3.584,3.584,3.833,87.5,38.21
+dynamic_dr,stanley_transfer,1,28.383,28.383,28.383,28.469,0.0,21.17
