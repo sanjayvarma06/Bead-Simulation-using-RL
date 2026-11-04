@@ -1,5 +1,0 @@
-# Reduced budget (user limit ~30 CPU-minutes): 2 seeds, 400k steps, log_std_init=-0.5 (pilot-selected).
-ppo_s0|python experiments/train_bead.py --mode ppo --seed 0 --timesteps 400000 --eval_every 100000 --log_std_init=-0.5 --workers 3
-ppo_s1|python experiments/train_bead.py --mode ppo --seed 1 --timesteps 400000 --eval_every 100000 --log_std_init=-0.5 --workers 3
-dagger_ppo_s0|python experiments/train_bead.py --mode dagger_ppo --seed 0 --timesteps 400000 --eval_every 100000 --critic_warmup 50000 --log_std_init=-0.5 --workers 3
-dagger_ppo_s1|python experiments/train_bead.py --mode dagger_ppo --seed 1 --timesteps 400000 --eval_every 100000 --critic_warmup 50000 --log_std_init=-0.5 --workers 3
